@@ -1,2 +1,4 @@
-doNotGitPush.js
+src/doNotGitPush.js
+src/ts/*.js
+src/tw-dest.css
 node_modules
