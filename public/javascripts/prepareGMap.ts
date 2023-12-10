@@ -71,4 +71,4 @@ async function initMap(): Promise<void> {
   });
 }
 
-initMap();
+window.onload=(() => initMap());
