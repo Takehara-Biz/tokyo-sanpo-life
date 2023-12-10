@@ -17,11 +17,8 @@
   * Always set the map height explicitly to define the size of the div element
   * that contains the map. 
   */
-    #map {
-      height: calc(100% - 66px - 48px);
-    }
 
-    /* 
+  /* 
   * Optional: Makes the sample page fill the window. 
   */
     html,
@@ -34,14 +31,16 @@
 </head>
 
 <body>
-  <%- include('../partials/header'); %>
+  <div class="flex flex-col min-h-screen">
+    <%- include('../partials/header'); %>
 
     <!-- Main Body -->
-    <div id="map" class=""></div>
+    <div id="map" style="flex-grow: 1;"></div>
 
     <!-- The Modal -->
-    <div id="info" class="overflow-y-scroll" style="display:none; height:200px; overflow-y: scroll;">情報ウィンドウ表示場所</div>
+    <div id="info" class="overflow-y-scroll" style="display:none; height:calc(50vh); overflow-y: scroll;">情報ウィンドウ表示場所</div>
     <%- include('../partials/footer', {currentMenu: 3}); %>
+  </div>
 </body>
 
 </html>

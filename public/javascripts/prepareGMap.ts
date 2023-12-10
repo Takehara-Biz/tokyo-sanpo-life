@@ -72,7 +72,7 @@ async function initMap(): Promise<void> {
       //   map: map,
       // });
       const map2 = document.getElementById('map');
-      map2!.style.height = 'calc(100% - 66px - 48px - 200px)';
+      //map2!.style.height = 'calc(100% - 66px - 48px - 200px)';
       const info = document.getElementById('info');
       info!.style.display = 'block';
       let contentString = createInfoContent(value);
@@ -83,11 +83,11 @@ async function initMap(): Promise<void> {
       //   anchor: marker,
       //   map: map,
       // });
-      const map2 = document.getElementById('map');
-      map2!.style.height = 'calc(100% - 66px - 48px)';
       const info = document.getElementById('info');
       info!.innerHTML = '';
-      info!.style.display = 'hidden';
+      info!.style.display = 'none';
+      const map2 = document.getElementById('map');
+      map2!.style.flexGrow = '1';
     });
 
     markers.push(marker);
