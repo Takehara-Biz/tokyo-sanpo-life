@@ -7,4 +7,5 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: npm i -D @types/google.maps
-    - run: tsc *.ts
+    - run: tsc ./public/javascripts/*.ts
+    - run: npx tailwindcss -i ./public/stylesheets/tw-src.css -o ./public/stylesheets/tw-dest.css

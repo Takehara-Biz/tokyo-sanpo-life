@@ -2,19 +2,57 @@
 <html>
   <head>
     <%- include('../partials/head'); %>
+    <style>
+      h1 {
+        font-family: 'Kaisei Decol';
+        font-size: x-large;
+        color: #ff0099;
+      }
+      h2 {
+        font-family: 'Kaisei Decol';
+        font-size: large;
+        color: #ff0099;
+      }
+    </style>
   </head>
   <body>
-    <div class="flex flex-col min-h-screen">
+    <div class="flex flex-col max-h-screen">
     <%- include('../partials/header'); %>
     <!-- Main Body -->
-    <div class="flex-grow">
-      <h1>東京散歩ライフとは</h1>
-      <p>近くに散歩するところ、ないかな？という人のために、地図で簡単に散歩場所が探せるサービスです！</p>
-      <p>できること</p>
-      <ol>
-        <li>近くの散歩の口コミが見れる</li>
-        <li>口コミを投稿・管理できる（ログイン後）</li>
-      </ol>
+    <div class="grow overflow-y-scroll">
+      <div class="bg-accent w-full h-16 flex items-center justify-center" style="font-family: 'Kaisei Decol';">
+        <h1 class="text-white">使い方</h1>
+      </div>
+      <div class="bg-gray w-full">
+        <div class="m-2 p-1 border rounded-lg">
+          <h2>💡近くで散歩に良い場所を簡単に見つけられる！</h2>
+          <p class="mt-1">
+            散歩の口コミ情報が閲覧できます！<br />
+            「マップ」から探してみましょう。
+          </p>
+        </div>
+        <div class="m-2 mt-0 p-1 border rounded-lg">
+          <h2>📸あなたのオススメの散歩場所を投稿しよう！</h2>
+          <p class="mt-1">
+            スマホから簡単に投稿できます！<br />
+            （ログインが必要です）
+          </p>
+        </div>
+        <div class="m-2 mt-0 p-1 border rounded-lg">
+          <h2>🗣SNSで交流しよう！</h2>
+          <p class="mt-1">X（ツイッター）やインスタグラムで、やりとりしましょう。</p>
+        </div>
+        <div class="m-2 mt-0 p-1 border rounded-lg">
+          <h2>👨‍👩‍👧‍👦オフ会に参加してみよう！</h2>
+          <p class="mt-1">
+            LINEのオープンチャットで、東京散歩ライフのオフ会を定期的にやってます。<br />
+            公園🏞や神社⛩などを巡っています。穏やかな雰囲気ですよ😌。
+            少人数制の承認方式を取っているので、メンバーは皆顔見知りです。<br />
+            興味のある方は、まずはゲストとしてご参加いただき、その後は任意で加入いただければと思います。<br />
+            ※参加を前提とした会なので、長期間参加されない方は、退出させられることがあります。
+          </p>
+        </div>
+      </div>
     </div>
     <%- include('../partials/footer', {currentMenu: 1}); %>
     </div>
