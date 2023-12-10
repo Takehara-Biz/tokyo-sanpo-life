@@ -1,5 +1,30 @@
 // Initialize and add the map
 let map: google.maps.Map;
+
+function createInfoContent(sanpoContent: SanpoContent): string {
+  let commentString = "";
+  sanpoContent.sanpoComment.map((comment: SanpoComment) => {
+    console.log('aaa' + comment.userName);
+    commentString += "<hr /><div>" +
+      "<p>" + comment.comment + "</p>" +
+      "<p>" + comment.commentDate.toLocaleDateString() + "</p>" +
+      "<p>" + comment.userName + "</p>" +
+      "</div>"
+  })
+
+  let contentString = '<div id="content">' +
+    '<h4 id="firstHeading">' + sanpoContent.title + '</h1>' +
+    '<div id="bodyContent">' +
+    "<img src='" + sanpoContent.imageUrl + "' width='200px' />" +
+    "<p>" + sanpoContent.insertDate.toLocaleDateString() + "</p>" +
+    "<p>" + sanpoContent.description + "</p>" +
+    "</div>" +
+    "<div>コメント一覧" + commentString + "</div>" +
+    "</div>";
+  
+  return contentString; 
+}
+
 async function initMap(): Promise<void> {
   // The location of Uluru
   let position = { lat: 35.6812405, lng: 139.7645499 };
@@ -19,35 +44,17 @@ async function initMap(): Promise<void> {
     }
   );
 
-  let commentString = "";
-  let contentString = "";
   let infoWindows: google.maps.InfoWindow[] = [];
   let markers: google.maps.marker.AdvancedMarkerElement[] = [];
 
   DummyData.map((value: SanpoContent) => {
-    commentString = "";
-    value.sanpoComment.map((comment: SanpoComment) => {
-      console.log('aaa' + comment.userName);
-      commentString += "<hr /><div>" +
-        "<p>" + comment.comment + "</p>" +
-        "<p>" + comment.commentDate.toLocaleDateString() + "</p>" +
-        "<p>" + comment.userName + "</p>" +
-        "</div>"
-    })
-
-    contentString = '<div id="content">' +
-      '<h4 id="firstHeading" class="firstHeading">' + value.title + '</h1>' +
-      '<div id="bodyContent">' +
-      "<img src='" + value.imageUrl + "' width='200px' />" +
-      "<p>" + value.insertDate.toLocaleDateString() + "</p>" +
-      "<p>" + value.description + "</p>" +
-      "</div>" +
-      "<div>コメント一覧" + commentString + "</div>" +
-      "</div>";
+    
+    let contentString = createInfoContent(value);
 
     let infoWindow = new google.maps.InfoWindow({
       content: contentString,
       ariaLabel: "Uluru",
+      minWidth: 1000,
     });
 
     position = { lat: value.lat, lng: value.lon };
@@ -60,10 +67,27 @@ async function initMap(): Promise<void> {
     });
 
     marker.addListener('click', function () {
-      infoWindow.open({
-        anchor: marker,
-        map: map,
-      });
+      // infoWindow.open({
+      //   anchor: marker,
+      //   map: map,
+      // });
+      const map2 = document.getElementById('map');
+      map2!.style.height = 'calc(100% - 66px - 48px - 200px)';
+      const info = document.getElementById('info');
+      info!.style.display = 'block';
+      let contentString = createInfoContent(value);
+      info!.innerHTML = contentString;
+    });
+    map.addListener('click', function () {
+      // infoWindow.open({
+      //   anchor: marker,
+      //   map: map,
+      // });
+      const map2 = document.getElementById('map');
+      map2!.style.height = 'calc(100% - 66px - 48px)';
+      const info = document.getElementById('info');
+      info!.innerHTML = '';
+      info!.style.display = 'hidden';
     });
 
     markers.push(marker);
