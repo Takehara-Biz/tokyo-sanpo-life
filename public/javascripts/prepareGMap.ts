@@ -40,9 +40,9 @@ async function initMap(): Promise<void> {
   map = new Map(
     document.getElementById('map') as HTMLElement,
     {
-      
       center: position,
       mapId: 'DEMO_MAP_ID',
+      mapTypeControl: false,
       minZoom: 9,
       panControl: true,
       streetViewControl: false,
@@ -128,6 +128,7 @@ locationButton.style.cssText = "background-color: white; padding: 8px; border: 0
       info!.style.display = 'block';
       let contentString = createInfoContent(value);
       info!.innerHTML = contentString;
+      map.panTo({lat: marker.position!.lat as number, lng: marker.position!.lng as number});
     });
     map.addListener('click', function () {
       const info = document.getElementById('info');
