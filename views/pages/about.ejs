@@ -4,13 +4,17 @@
     <%- include('../partials/head'); %>
   </head>
   <body>
+    <div class="flex flex-col min-h-screen">
     <%- include('../partials/header'); %>
     <!-- Main Body -->
-    <h1>東京散歩ライフとは</h1>
-    <p>
-      東京（神奈川、埼玉、千葉含む）で、散歩のクチコミを集めています！<br />
-      皆さんの散歩にピッタリの場所が、見つかるかも！？
-    </p>
+    <div class="flex-grow">
+      <h1>東京散歩ライフとは</h1>
+      <p>
+        東京（神奈川、埼玉、千葉含む）で、散歩のクチコミを集めています！<br />
+        皆さんの散歩にピッタリの場所が、見つかるかも！？
+      </p>
+    </div>
     <%- include('../partials/footer'); %>
+    </div>
   </body>
 </html>
