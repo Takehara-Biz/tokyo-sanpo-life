@@ -37,5 +37,27 @@ const DummyData: SanpoContent[] = [
           commentDate: new Date("2023/12/01"),
         }
       ]
+    },
+    {
+      userName: "Yasu",
+      title: "カフェ01",
+      contentTypeEnum: ContentTypeEnum.Cafe,
+      imageUrl: "https://s3-ap-northeast-1.amazonaws.com/thegate/2021/04/14/11/31/14/shinjukugyoen.jpg",
+      lat: 35.6951763,
+      lon: 139.7074714,
+      description: "適当",
+      insertDate: new Date("2023/12/01"),
+      sanpoComment: []
+    },
+    {
+      userName: "Yasu",
+      title: "神社01",
+      contentTypeEnum: ContentTypeEnum.Shrine,
+      imageUrl: "https://s3-ap-northeast-1.amazonaws.com/thegate/2021/04/14/11/31/14/shinjukugyoen.jpg",
+      lat: 35.7051763,
+      lon: 139.7074714,
+      description: "適当",
+      insertDate: new Date("2023/12/01"),
+      sanpoComment: []
     }
   ];

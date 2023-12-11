@@ -1,8 +1,139 @@
+
 // Initialize and add the map
 let map: google.maps.Map;
 let position: google.maps.LatLng | google.maps.LatLngLiteral;
 let center: google.maps.Marker;
 let peripheral: google.maps.Circle;
+
+
+
+
+/**
+ * Provide utility functions regardless of business logic.
+ */
+
+async function createTslMarker(contentTypeEnum: ContentTypeEnum, position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
+  let marker: Promise<google.maps.marker.AdvancedMarkerElement>;
+  switch (contentTypeEnum) {
+    case ContentTypeEnum.Flower:
+      marker = createFlowerMarker(position);
+      break;
+    case ContentTypeEnum.Landscape:
+      marker = createLandscapeMarker(position);
+      break;
+    case ContentTypeEnum.Cafe:
+      marker = createCafeMarker(position);
+      break;
+    case ContentTypeEnum.Shrine:
+      marker = createShrineMarker(position);
+      break;
+    default:
+      marker = createFlowerMarker(position);
+      break;
+  }
+  return marker;
+}
+async function createFlowerMarker(position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
+  const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+
+  const icon = document.createElement('div');
+  icon.innerHTML = '<span class="material-symbols-outlined text-xl">filter_vintage</span>';
+  const faPin = new PinElement({
+    glyph: icon,
+    glyphColor: '#ff0000',
+    background: '#ff99cc',
+    borderColor: '#ff0000',
+  });
+
+  return new AdvancedMarkerElement({
+    position: position,
+    content: faPin.element,
+  });
+}
+async function createLandscapeMarker(position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
+  const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+
+  const icon = document.createElement('div');
+  icon.innerHTML = '<span class="material-symbols-outlined text-xl">landscape</span>';
+  const faPin = new PinElement({
+    glyph: icon,
+    glyphColor: '#33cc00',
+    background: '#ccffcc',
+    borderColor: '#33cc00',
+  });
+
+  return new AdvancedMarkerElement({
+    position: position,
+    content: faPin.element,
+  });
+}
+async function createCafeMarker(position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
+  const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+
+  const icon = document.createElement('div');
+  icon.innerHTML = '<span class="material-symbols-outlined text-xl">local_cafe</span>';
+  const faPin = new PinElement({
+    glyph: icon,
+    glyphColor: '#663300',
+    background: '#ffcc99',
+    borderColor: '#663300',
+  });
+
+  return new AdvancedMarkerElement({
+    position: position,
+    content: faPin.element,
+  });
+}
+async function createShrineMarker(position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
+  const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+
+  const icon = document.createElement('div');
+  icon.innerHTML = '<span class="material-symbols-outlined text-xl">temple_buddhist</span>';
+  const faPin = new PinElement({
+    glyph: icon,
+    glyphColor: '#6600ff',
+    background: '#cc99ff',
+    borderColor: '#6600ff',
+  });
+
+  return new AdvancedMarkerElement({
+    position: position,
+    content: faPin.element,
+  });
+}
+// private static createObjectMarker(): google.maps.marker.AdvancedMarkerElement {
+//   return new AdvancedMarkerElement({
+//     map: map,
+//     position: position,
+//     title: "aaa"
+//   });
+// }
+// private static createBuildingMarker(): google.maps.marker.AdvancedMarkerElement {
+//   return new AdvancedMarkerElement({
+//     map: map,
+//     position: position,
+//     title: "aaa"
+//   });
+// }
+// private static createWaterMarker(): google.maps.marker.AdvancedMarkerElement {
+//   return new AdvancedMarkerElement({
+//     map: map,
+//     position: position,
+//     title: "aaa"
+//   });
+// }
+// private static createOtherMarker(): google.maps.marker.AdvancedMarkerElement {
+//   return new AdvancedMarkerElement({
+//     map: map,
+//     position: position,
+//     title: "aaa"
+//   });
+// }
+
+
+
+
+
 
 function createInfoContent(sanpoContent: SanpoContent): string {
   let commentString = "";
@@ -39,7 +170,7 @@ function createShowCurrentLocationButton(): HTMLButtonElement {
   return locationButton;
 }
 
-function showCurrentLocation(): void{
+function showCurrentLocation(): void {
   map.setCenter(position);
   showCurrentLocationBackground();
   showCurrentLocationGlyph();
@@ -49,7 +180,7 @@ function showCurrentLocation(): void{
  * 中央の濃い青丸
  */
 function showCurrentLocationGlyph(): void {
-  if(center !== undefined) {
+  if (center !== undefined) {
     center.setMap(null);
   }
   center = new google.maps.Marker({
@@ -70,7 +201,7 @@ function showCurrentLocationGlyph(): void {
  * 縁の薄い青丸
  */
 function showCurrentLocationBackground(): void {
-  if(peripheral !== undefined) {
+  if (peripheral !== undefined) {
     peripheral.setMap(null);
   }
   peripheral = new google.maps.Circle({
@@ -92,7 +223,6 @@ async function initMap(): Promise<void> {
   // Request needed libraries.
   //@ts-ignore
   const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
-  const { AdvancedMarkerElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
 
   map = new Map(
     document.getElementById('map') as HTMLElement,
@@ -145,23 +275,25 @@ async function initMap(): Promise<void> {
 
   let markers: google.maps.marker.AdvancedMarkerElement[] = [];
 
-  DummyData.map((value: SanpoContent) => {
+  DummyData.map(async (sanpoContent: SanpoContent) => {
 
-    let contentString = createInfoContent(value);
+    let contentString = createInfoContent(sanpoContent);
 
-    position = { lat: value.lat, lng: value.lon };
+    position = { lat: sanpoContent.lat, lng: sanpoContent.lon };
 
     // The marker, positioned at Uluru
-    let marker = new AdvancedMarkerElement({
-      map: map,
-      position: position,
-      title: value.title
-    });
+    // let marker = new AdvancedMarkerElement({
+    //   map: map,
+    //   position: position,
+    //   title: value.title
+    // });
+    let marker = await createTslMarker(sanpoContent.contentTypeEnum, position);
+    marker.map = map;
 
     marker.addListener('click', function () {
       const info = document.getElementById('info');
       info!.style.display = 'block';
-      let contentString = createInfoContent(value);
+      let contentString = createInfoContent(sanpoContent);
       info!.innerHTML = contentString;
       map.panTo({ lat: marker.position!.lat as number, lng: marker.position!.lng as number });
     });
