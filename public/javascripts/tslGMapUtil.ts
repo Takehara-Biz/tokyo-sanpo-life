@@ -40,35 +40,16 @@ const TslGMapUtil = {
 
   async createTslMarker(contentTypeEnum: ContentTypeEnum, position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
     let marker: Promise<google.maps.marker.AdvancedMarkerElement>;
-    switch (contentTypeEnum) {
-      case ContentTypeEnum.Flower:
-        marker = this.createFlowerMarker(position);
-        break;
-      case ContentTypeEnum.Landscape:
-        marker = this.createLandscapeMarker(position);
-        break;
-      case ContentTypeEnum.Cafe:
-        marker = this.createCafeMarker(position);
-        break;
-      case ContentTypeEnum.Shrine:
-        marker = this.createShrineMarker(position);
-        break;
-      default:
-        marker = this.createFlowerMarker(position);
-        break;
-    }
-    return marker;
-  },
-  async createFlowerMarker(position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
+    const markerDef = MarkerTypeDef.get(contentTypeEnum);
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
 
     const icon = document.createElement('div');
-    icon.innerHTML = '<span class="material-symbols-outlined text-xl">filter_vintage</span>';
+    icon.innerHTML = '<span class="material-symbols-outlined text-xl">' + markerDef!.iconKeyWord + '</span>';
     const faPin = new PinElement({
       glyph: icon,
-      glyphColor: '#ff0000',
-      background: '#ff99cc',
-      borderColor: '#ff0000',
+      glyphColor: markerDef!.glyphColor,
+      background: markerDef!.bgColor,
+      borderColor: markerDef!.glyphColor,
     });
 
     return new AdvancedMarkerElement({
@@ -76,83 +57,4 @@ const TslGMapUtil = {
       content: faPin.element,
     });
   },
-  async createLandscapeMarker(position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
-    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
-
-    const icon = document.createElement('div');
-    icon.innerHTML = '<span class="material-symbols-outlined text-xl">landscape</span>';
-    const faPin = new PinElement({
-      glyph: icon,
-      glyphColor: '#33cc00',
-      background: '#ccffcc',
-      borderColor: '#33cc00',
-    });
-
-    return new AdvancedMarkerElement({
-      position: position,
-      content: faPin.element,
-    });
-  },
-  async createCafeMarker(position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
-    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
-
-    const icon = document.createElement('div');
-    icon.innerHTML = '<span class="material-symbols-outlined text-xl">local_cafe</span>';
-    const faPin = new PinElement({
-      glyph: icon,
-      glyphColor: '#663300',
-      background: '#ffcc99',
-      borderColor: '#663300',
-    });
-
-    return new AdvancedMarkerElement({
-      position: position,
-      content: faPin.element,
-    });
-  },
-  async createShrineMarker(position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
-    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
-
-    const icon = document.createElement('div');
-    icon.innerHTML = '<span class="material-symbols-outlined text-xl">temple_buddhist</span>';
-    const faPin = new PinElement({
-      glyph: icon,
-      glyphColor: '#6600ff',
-      background: '#cc99ff',
-      borderColor: '#6600ff',
-    });
-
-    return new AdvancedMarkerElement({
-      position: position,
-      content: faPin.element,
-    });
-  }
-  // private static createObjectMarker(): google.maps.marker.AdvancedMarkerElement {
-  //   return new AdvancedMarkerElement({
-  //     map: map,
-  //     position: position,
-  //     title: "aaa"
-  //   });
-  // }
-  // private static createBuildingMarker(): google.maps.marker.AdvancedMarkerElement {
-  //   return new AdvancedMarkerElement({
-  //     map: map,
-  //     position: position,
-  //     title: "aaa"
-  //   });
-  // }
-  // private static createWaterMarker(): google.maps.marker.AdvancedMarkerElement {
-  //   return new AdvancedMarkerElement({
-  //     map: map,
-  //     position: position,
-  //     title: "aaa"
-  //   });
-  // }
-  // private static createOtherMarker(): google.maps.marker.AdvancedMarkerElement {
-  //   return new AdvancedMarkerElement({
-  //     map: map,
-  //     position: position,
-  //     title: "aaa"
-  //   });
-  // }
 }
