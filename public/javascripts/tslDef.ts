@@ -44,11 +44,20 @@ MarkerTypeDef.set(ContentTypeEnum.Building, {iconKeyWord: "location_city", glyph
 MarkerTypeDef.set(ContentTypeEnum.Water, {iconKeyWord: "water", glyphColor: "#0000cc", bgColor: "#99ccff"});
 MarkerTypeDef.set(ContentTypeEnum.Other, {iconKeyWord: "lightbulb", glyphColor: "#ff3300", bgColor: "#ffffcc"});
 
+interface IUser {
+  userId: string,
+  userName: string,
+  iconUrl: string,
+  selfIntroduction?: string;
+  twitterProfileLink?: string;
+  instagramProfileLink?: string;
+}
+
 /**
  * 投稿に対するコメント
  */
-interface SanpoComment {
-  userName: string;
+interface IPostComment {
+  user: IUser;
   comment: string;
   commentDate: Date;
 }
@@ -56,8 +65,8 @@ interface SanpoComment {
 /**
  * 投稿
  */
-interface SanpoContent {
-  userName: string;
+interface IPost {
+  user: IUser;
   title: string;
   contentTypeEnum: ContentTypeEnum;
   imageUrl: string;
@@ -65,5 +74,5 @@ interface SanpoContent {
   lon: number;
   description: string;
   insertDate: Date;
-  sanpoComment: SanpoComment[]
+  postComments: IPostComment[]
 }

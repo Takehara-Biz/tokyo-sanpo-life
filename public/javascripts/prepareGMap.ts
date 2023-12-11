@@ -109,25 +109,17 @@ async function initMap(): Promise<void> {
 
   let markers: google.maps.marker.AdvancedMarkerElement[] = [];
 
-  DummyData.map(async (sanpoContent: SanpoContent) => {
+  DummyData.map(async (post: IPost) => {
 
-    let contentString = TslGMapUtil.createInfoContent(sanpoContent);
-
-    position = { lat: sanpoContent.lat, lng: sanpoContent.lon };
-
-    // The marker, positioned at Uluru
-    // let marker = new AdvancedMarkerElement({
-    //   map: map,
-    //   position: position,
-    //   title: value.title
-    // });
-    let marker = await TslGMapUtil.createTslMarker(sanpoContent.contentTypeEnum, position);
+    let contentString = TslGMapUtil.createInfoContent(post);
+    position = { lat: post.lat, lng: post.lon };
+    let marker = await TslGMapUtil.createTslMarker(post.contentTypeEnum, position);
     marker.map = map;
 
     marker.addListener('click', function () {
       const info = document.getElementById('info');
       info!.style.display = 'block';
-      let contentString = TslGMapUtil.createInfoContent(sanpoContent);
+      let contentString = TslGMapUtil.createInfoContent(post);
       info!.innerHTML = contentString;
       map.panTo({ lat: marker.position!.lat as number, lng: marker.position!.lng as number });
     });

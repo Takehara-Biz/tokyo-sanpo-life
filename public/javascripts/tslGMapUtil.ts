@@ -3,13 +3,18 @@
  */
 const TslGMapUtil = {
 
-  createInfoContent(sanpoContent: SanpoContent): string {
+  createInfoContent(post: IPost): string {
     let commentString = "";
-    sanpoContent.sanpoComment.map((comment: SanpoComment) => {
-      console.log('aaa' + comment.userName);
-      commentString += '<hr /><div><div style="display:flex; justify-content:space-between;">' +
-        '<span style="font-weight:bold">' + comment.userName + "</span>" +
-        '<span style="font-size: small; margin-left:20px;">' + comment.commentDate.toLocaleDateString() + "</span>" +
+    post.postComments.map((comment: IPostComment) => {
+      console.log('aaa' + comment.user.userName);
+      commentString += '<hr />' +
+        '<div style="width:100%; padding: 10px;">' +
+        '<div style="display:flex; justify-content:space-between;">' +
+        '<div style="display:flex;">' +
+        '<img width="40px" height="40px" src="' + comment.user.iconUrl + '" style="border: 2px solid #ff0099; border-radius:50%" />' +
+        '<span style="font-weight:bold; font-family:Kaisai Decol; color:#ff0099; padding-left:10px;">' + comment.user.userName + "</span>" +
+        '</div>' +
+        '<span style="font-size: small; margin-left:20px;">' + comment.commentDate.toLocaleString("ja-JP") + "</span>" +
         "</div>" +
         "<p>" + comment.comment + "</p>" +
         "</div>"
@@ -17,14 +22,17 @@ const TslGMapUtil = {
 
     let contentString = '<div id="content">' +
       '<div id="bodyContent" style="display:flex; justify-content:space-between;">' +
-      "<img src='" + sanpoContent.imageUrl + "' width='50%' />" +
-      '<div style="width:50%">' + 
-        '<h4 id="firstHeading">' + sanpoContent.title + '</h4>' +
-        '<h4 style="font-weight:bold">' + sanpoContent.userName + '</h4>' +
-        "<p>" + sanpoContent.insertDate.toLocaleDateString() + "</p>" +
+      "<img src='" + post.imageUrl + "' width='50%' />" +
+      '<div style="width:50%; padding:10px;">' +
+        '<div style="display:flex;">' +
+          '<img width="40px" height="40px" src="' + post.user.iconUrl + '" style="border: 2px solid #ff0099; border-radius:50%" />' +
+          '<h4 style="font-weight:bold; font-family:Kaisai Decol; color:#ff0099; padding-left:10px;">' + post.user.userName + '</h4>' +
+        '</div>' +
+        '<h4 id="firstHeading">' + post.title + '</h4>' +
+        '<p style="font-size:small;">' + post.insertDate.toLocaleString("ja-JP") + "</p>" +
       '</div>' + 
       '</div>' + 
-      "<p>" + sanpoContent.description + "</p>" +
+      "<p>" + post.description + "</p>" +
       '<div>' + 
       '<p style="margin-top:10px; text-align:center; font-size:small;">コメント</p>' + 
       commentString + 
