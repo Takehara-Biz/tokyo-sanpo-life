@@ -7,21 +7,28 @@ const TslGMapUtil = {
     let commentString = "";
     sanpoContent.sanpoComment.map((comment: SanpoComment) => {
       console.log('aaa' + comment.userName);
-      commentString += "<hr /><div>" +
+      commentString += '<hr /><div><div style="display:flex; justify-content:space-between;">' +
+        '<span style="font-weight:bold">' + comment.userName + "</span>" +
+        '<span style="font-size: small; margin-left:20px;">' + comment.commentDate.toLocaleDateString() + "</span>" +
+        "</div>" +
         "<p>" + comment.comment + "</p>" +
-        "<p>" + comment.commentDate.toLocaleDateString() + "</p>" +
-        "<p>" + comment.userName + "</p>" +
         "</div>"
     })
 
     let contentString = '<div id="content">' +
-      '<h4 id="firstHeading">' + sanpoContent.title + '</h1>' +
-      '<div id="bodyContent">' +
-      "<img src='" + sanpoContent.imageUrl + "' width='200px' />" +
-      "<p>" + sanpoContent.insertDate.toLocaleDateString() + "</p>" +
+      '<div id="bodyContent" style="display:flex; justify-content:space-between;">' +
+      "<img src='" + sanpoContent.imageUrl + "' width='50%' />" +
+      '<div style="width:50%">' + 
+        '<h4 id="firstHeading">' + sanpoContent.title + '</h4>' +
+        '<h4 style="font-weight:bold">' + sanpoContent.userName + '</h4>' +
+        "<p>" + sanpoContent.insertDate.toLocaleDateString() + "</p>" +
+      '</div>' + 
+      '</div>' + 
       "<p>" + sanpoContent.description + "</p>" +
+      '<div>' + 
+      '<p style="margin-top:10px; text-align:center; font-size:small;">コメント</p>' + 
+      commentString + 
       "</div>" +
-      "<div>コメント一覧" + commentString + "</div>" +
       "</div>";
 
     return contentString;
