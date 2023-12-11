@@ -11,14 +11,14 @@ app.use(favicon('./public/images/favicon.ico'));
 app.get('/how-to-use', function(req, res, next) {
   res.render('pages/how-to-use', { menu1: true });
 });
-app.get('/column', function(req, res, next) {
-  res.render('pages/column', { menu2: true });
+app.get('/new-posts', function(req, res, next) {
+  res.render('pages/new-posts', { title: 'New Posts' });
 });
 app.get('/map', function(req, res, next) {
   res.render('pages/map', { title: 'Map' });
 });
-app.get('/community', function(req, res, next) {
-  res.render('pages/community', { title: 'Community' });
+app.get('/column', function(req, res, next) {
+  res.render('pages/column', { menu2: true });
 });
 app.get('/my-page', function(req, res, next) {
   res.render('pages/my-page', { title: 'My Page' });
