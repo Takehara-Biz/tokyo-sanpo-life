@@ -2,6 +2,7 @@ const DummyData: SanpoContent[] = [
     {
       userName: "Yasu",
       title: "東京駅",
+      contentTypeEnum: ContentTypeEnum.Building,
       imageUrl: "https://media.timeout.com/images/105544832/1372/772/image.webp",
       lat: 35.6812405,
       lon: 139.7645499,
@@ -23,6 +24,7 @@ const DummyData: SanpoContent[] = [
     {
       userName: "Yasu",
       title: "新宿御苑",
+      contentTypeEnum: ContentTypeEnum.Landscape,
       imageUrl: "https://s3-ap-northeast-1.amazonaws.com/thegate/2021/04/14/11/31/14/shinjukugyoen.jpg",
       lat: 35.6851763,
       lon: 139.7074714,
