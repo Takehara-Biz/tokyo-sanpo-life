@@ -18,7 +18,8 @@ app.get('/new-posts', function(req, res, next) {
   res.render('pages/new-posts', { posts: posts });
 });
 app.get('/map', function(req, res, next) {
-  res.render('pages/map', { title: 'Map' });
+  let posts = new BizLogic().findPosts();
+  res.render('pages/map', { posts: posts });
 });
 app.get('/column', function(req, res, next) {
   res.render('pages/column', { menu2: true });

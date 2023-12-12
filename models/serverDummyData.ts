@@ -55,7 +55,7 @@ export const ServerDummyData: IPost[] = [
           userName: "Bob",
           iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
         },
-        comment: "It's so nice!",
+        comment: "Its so nice!（シングルクォートを入れると、ejsからjsにうまくデータを渡せない・・。）",
         commentDate: new Date("2023/12/01"),
       }
     ]

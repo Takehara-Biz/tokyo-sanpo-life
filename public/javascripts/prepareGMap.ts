@@ -109,6 +109,8 @@ async function initMap(): Promise<void> {
 
   let markers: google.maps.marker.AdvancedMarkerElement[] = [];
 
+  // come from ejs
+  // @ts-ignore
   DummyData.map(async (post: IPost) => {
 
     let contentString = TslGMapUtil.createInfoContent(post);
