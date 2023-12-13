@@ -50,7 +50,7 @@ function showCurrentLocationBackground(): void {
   });
 }
 
-async function initMap(): Promise<void> {
+async function initMap(posts : IPost[]): Promise<void> {
   // The location of Tokyo Station
   position = { lat: 35.6812405, lng: 139.7645499 };
 
@@ -109,9 +109,7 @@ async function initMap(): Promise<void> {
 
   let markers: google.maps.marker.AdvancedMarkerElement[] = [];
 
-  // come from ejs
-  // @ts-ignore
-  DummyData.map(async (post: IPost) => {
+  posts.map(async (post: IPost) => {
 
     let contentString = TslGMapUtil.createInfoContent(post);
     position = { lat: post.lat, lng: post.lon };
@@ -137,4 +135,7 @@ async function initMap(): Promise<void> {
   });
 }
 
-window.onload = (() => initMap());
+
+// come from ejs
+// @ts-ignore
+window.onload = (() => initMap(targetPosts));

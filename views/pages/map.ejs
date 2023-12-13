@@ -10,10 +10,10 @@
       ({ key: GMAP_KEY, v: "weekly" });</script>
   <script src="/javascripts/tslDef.js"></script>
   <script>
-    var DummyData = JSON.parse('<%- JSON.stringify(posts) %>');
+    var targetPosts = JSON.parse('<%- JSON.stringify(targetPosts) %>');
   </script>
   <script src="/javascripts/tslGMapUtil.js"></script>
-  <script src="/javascripts/prepareGMap.js"></script>
+  <script src="/javascripts/renderPostsOnGMap.js"></script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 </head>
 
