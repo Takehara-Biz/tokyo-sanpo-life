@@ -29,7 +29,7 @@ export class PostsDao {
   }
 
   public findPosts(): IPost[] {
-    const postCount = 50;
+    const postCount = 100;
     const commentsCount = 10;
 
     const comments: IPostComment[] = this.createRandomComments(commentsCount);
@@ -44,10 +44,10 @@ export class PostsDao {
           iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
         },
         title: this.generateRandomString(22),
-        contentTypeEnum: ContentTypeEnum.Flower,
+        contentTypeEnum: Object.values(ContentTypeEnum)[i % Object.keys(ContentTypeEnum).length] as ContentTypeEnum,
         imageUrl: "https://media.timeout.com/images/105544832/1372/772/image.webp",
-        lat: 35.6812405,
-        lon: 139.7645499,
+        lat: 35.6 + (Math.random() / 10),
+        lon: 139.7 + (Math.random() / 10),
         description: this.generateRandomString(300),
         insertDate: new Date("2023/12/01"),
         postComments: comments,
