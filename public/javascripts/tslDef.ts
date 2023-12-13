@@ -45,7 +45,7 @@ MarkerTypeDef.set(ContentTypeEnum.Water, {iconKeyWord: "water", glyphColor: "#00
 MarkerTypeDef.set(ContentTypeEnum.Other, {iconKeyWord: "lightbulb", glyphColor: "#ff3300", bgColor: "#ffffcc"});
 
 interface IUser {
-  userId: string,
+  id: string,
   userName: string,
   iconUrl: string,
   selfIntroduction?: string;
@@ -57,6 +57,7 @@ interface IUser {
  * 投稿に対するコメント
  */
 interface IPostComment {
+  id: string;
   user: IUser;
   comment: string;
   commentDate: Date;
@@ -66,6 +67,7 @@ interface IPostComment {
  * 投稿
  */
 interface IPost {
+  id: string;
   user: IUser;
   title: string;
   contentTypeEnum: ContentTypeEnum;

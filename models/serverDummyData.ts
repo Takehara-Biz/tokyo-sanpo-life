@@ -2,8 +2,9 @@ import { ContentTypeEnum, IPost } from './serverTslDef';
 
 export const ServerDummyData: IPost[] = [
   {
+    id: "1",
     user: {
-      userId: "1",
+      id: "1",
       userName: "Yasu",
       iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
     },
@@ -16,8 +17,9 @@ export const ServerDummyData: IPost[] = [
     insertDate: new Date("2023/12/01"),
     postComments: [
       {
+        id: "1",
         user: {
-          userId: "2",
+          id: "2",
           userName: "Taro",
           iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
         },
@@ -25,8 +27,9 @@ export const ServerDummyData: IPost[] = [
         commentDate: new Date("2023/12/01"),
       },
       {
+        id: "3",
         user: {
-          userId: "3",
+          id: "3",
           userName: "Hanako",
           iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
         },
@@ -36,8 +39,9 @@ export const ServerDummyData: IPost[] = [
     ]
   },
   {
+    id: "3",
     user: {
-      userId: "1",
+      id: "1",
       userName: "Yasu",
       iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
     },
@@ -50,8 +54,9 @@ export const ServerDummyData: IPost[] = [
     insertDate: new Date("2023/12/01"),
     postComments: [
       {
+        id: "3",
         user: {
-          userId: "4",
+          id: "3",
           userName: "Bob",
           iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
         },
@@ -61,8 +66,9 @@ export const ServerDummyData: IPost[] = [
     ]
   },
   {
+    id: "3",
     user: {
-      userId: "1",
+      id: "1",
       userName: "Yasu",
       iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
     },
@@ -76,8 +82,9 @@ export const ServerDummyData: IPost[] = [
     postComments: []
   },
   {
+    id: "3",
     user: {
-      userId: "1",
+      id: "3",
       userName: "Yasu",
       iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
     },
@@ -91,8 +98,9 @@ export const ServerDummyData: IPost[] = [
     postComments: []
   },
   {
+    id: "3",
     user: {
-      userId: "1",
+      id: "3",
       userName: "Yasu",
       iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
     },
@@ -106,8 +114,9 @@ export const ServerDummyData: IPost[] = [
     postComments: []
   },
   {
+    id: "3",
     user: {
-      userId: "1",
+      id: "3",
       userName: "Yasu",
       iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
     },
@@ -121,8 +130,9 @@ export const ServerDummyData: IPost[] = [
     postComments: []
   },
   {
+    id: "3",
     user: {
-      userId: "1",
+      id: "3",
       userName: "Yasu",
       iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
     },
@@ -136,8 +146,9 @@ export const ServerDummyData: IPost[] = [
     postComments: []
   },
   {
+    id: "3",
     user: {
-      userId: "1",
+      id: "3",
       userName: "Yasu",
       iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
     },

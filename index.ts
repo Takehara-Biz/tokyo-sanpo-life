@@ -17,6 +17,10 @@ app.get('/new-posts', function(req, res, next) {
   let posts = new BizLogic().findPosts();
   res.render('pages/new-posts', { posts: posts });
 });
+app.get('/post/:id', function(req, res, next) {
+  const post = new BizLogic().findPost(req.params.id);
+  res.render('pages/post-detail', { post: post });
+});
 app.get('/map', function(req, res, next) {
   let posts = new BizLogic().findPosts();
   res.render('pages/map', { posts: posts });
