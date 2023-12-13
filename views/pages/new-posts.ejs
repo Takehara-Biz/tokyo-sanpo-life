@@ -10,8 +10,24 @@
     <%- include('../partials/header'); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll max-w-screen">
+        <ul class="nav nav-tabs nav-justified">
+          <li class="nav-item">
+            <a class="nav-link bg-accent text-white" aria-current="page" href="#">
+              新着順
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span class="text-accent">あなたの周辺</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span class="text-accent">あなたの投稿</span>
+            </a>
+          </li>
+        </ul>
         <% for (var post of targetPosts) { %>
-          <hr />
           <a href="./post/<%= post.id %>">
             <div class="w-full p-1 flex items-center">
               <img width="60%" height="80px" src="<%= post.imageUrl %>" style="border: 1px solid; " />
@@ -32,6 +48,7 @@
               </div>
             </div>
           </a>
+          <hr />
           <% } %>
       </div>
       <%- include('../partials/footer', {currentMenu: 2}); %>
