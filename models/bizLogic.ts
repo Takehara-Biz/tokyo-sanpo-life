@@ -1,6 +1,5 @@
 import { PostsDao } from './dao/postsDao';
-import { ServerDummyData } from './serverDummyData'
-import { IPost, ContentTypeEnum } from './serverTslDef';
+import { IPost } from './serverTslDef';
 
 export class BizLogic {
   private postsDao = new PostsDao();

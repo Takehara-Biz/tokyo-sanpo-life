@@ -3,12 +3,18 @@
 
 <head>
   <%- include('../partials/head'); %>
-    <script>
-      var post = JSON.parse('<%- JSON.stringify(post) %>');
-    </script>
-    <script src="/javascripts/tslGMapUtil.js"></script>
-    <script src="/javascripts/prepareGMap.js"></script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+  <script src="/javascripts/doNotGitPush.js"></script>
+  <!-- prettier-ignore -->
+  <script>(g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })
+      ({ key: GMAP_KEY, v: "weekly" });</script>
+  <script src="/javascripts/tslDef.js"></script>
+  <script>
+    var targetPost = JSON.parse('<%- JSON.stringify(post) %>');
+  </script>
+  <script src="/javascripts/tslGMapUtil.js"></script>
+  <script src="/javascripts/renderPostOnGMap.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 </head>
 
 <body>
@@ -36,7 +42,9 @@
           </p>
         </div>
         <!-- Main Body -->
-        <div id="map" style="flex-grow: 1;" class="w-[80%] h-[200px]"></div>
+        <div class="flex justify-center items-center">
+          <div id="map" class="w-[90%] h-[200px]"></div>
+        </div>
         <% for (const comment of post.postComments) { %>
           <hr />
           <div class="w-full px-4 py-2">

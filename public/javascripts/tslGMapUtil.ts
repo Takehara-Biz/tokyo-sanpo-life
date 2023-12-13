@@ -1,12 +1,16 @@
+  // Initialize and add the map
+  let map: google.maps.Map;
+  let position: google.maps.LatLng | google.maps.LatLngLiteral;
+  let center: google.maps.Marker;
+  let peripheral: google.maps.Circle;
+
 /**
  * Provide utility functions regardless of business logic.
  */
 const TslGMapUtil = {
-
   createInfoContent(post: IPost): string {
     let commentString = "";
     post.postComments.map((comment: IPostComment) => {
-      console.log('aaa' + comment.user.userName);
       commentString += '<hr />' +
         '<div style="width:100%; padding: 10px;">' +
         '<div style="display:flex; justify-content:space-between;">' +
@@ -53,9 +57,10 @@ const TslGMapUtil = {
     return locationButton;
   },
 
-  async createTslMarker(contentTypeEnum: ContentTypeEnum, position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
+  async createTslMarker(categoryType: CategoryType, position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
     let marker: Promise<google.maps.marker.AdvancedMarkerElement>;
-    const markerDef = MarkerTypeDef.get(contentTypeEnum);
+    const markerDef = MarkerTypeDef.get(categoryType);
+    console.log('categoryType:' + categoryType + ", markerDef:" + markerDef);
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
 
     const icon = document.createElement('div');

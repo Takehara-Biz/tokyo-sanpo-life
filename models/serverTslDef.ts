@@ -1,26 +1,25 @@
 // define class, interface, enum here.
 
 /**
- * 投稿コンテンツの種類
+ * 投稿のカテゴリー
  */
-export enum ContentTypeEnum {
+export type CategoryType =
   // 花、植物、
-  Flower,
+  'Flower' |
   // 自然、公園、風景、空
-  Landscape,
+  'Landscape' |
   // カフェ、飲食店
-  Cafe,
+  'Cafe' |
   // 神社、寺、城
-  Shrine,
+  'Shrine' |
   // 人工物、モニュメント
-  Object,
+  'Object' |
   // ビル、家、タワー
-  Building,
+  'Building' |
   // 海、川、池、湖
-  Water,
+  'Water' |
   // その他
-  Other
-}
+  'Other';
 
 /**
  * マーカーの種類の定義
@@ -34,15 +33,15 @@ export interface IMarkerTypeDef {
 /**
  * マーカーの種類
  */
-export const MarkerTypeDef: Map<ContentTypeEnum, IMarkerTypeDef> = new Map<ContentTypeEnum, IMarkerTypeDef>();
-MarkerTypeDef.set(ContentTypeEnum.Flower, {iconKeyWord: "filter_vintage", glyphColor: "#ff0000", bgColor: "#ff99cc"});
-MarkerTypeDef.set(ContentTypeEnum.Landscape, {iconKeyWord: "landscape", glyphColor: "#33cc00", bgColor: "#ccffcc"});
-MarkerTypeDef.set(ContentTypeEnum.Cafe, {iconKeyWord: "local_cafe", glyphColor: "#663300", bgColor: "#ffcc99"});
-MarkerTypeDef.set(ContentTypeEnum.Shrine, {iconKeyWord: "temple_buddhist", glyphColor: "#6600ff", bgColor: "#cc99ff"});
-MarkerTypeDef.set(ContentTypeEnum.Object, {iconKeyWord: "draw_abstract", glyphColor: "#000000", bgColor: "#cccccc"});
-MarkerTypeDef.set(ContentTypeEnum.Building, {iconKeyWord: "location_city", glyphColor: "#ffffff", bgColor: "#666666"});
-MarkerTypeDef.set(ContentTypeEnum.Water, {iconKeyWord: "water", glyphColor: "#0000cc", bgColor: "#99ccff"});
-MarkerTypeDef.set(ContentTypeEnum.Other, {iconKeyWord: "lightbulb", glyphColor: "#ff3300", bgColor: "#ffffcc"});
+export const MarkerTypeDef: Map<CategoryType, IMarkerTypeDef> = new Map<CategoryType, IMarkerTypeDef>();
+MarkerTypeDef.set('Flower', {iconKeyWord: "filter_vintage", glyphColor: "#ff0000", bgColor: "#ff99cc"});
+MarkerTypeDef.set('Landscape', {iconKeyWord: "landscape", glyphColor: "#33cc00", bgColor: "#ccffcc"});
+MarkerTypeDef.set('Cafe', {iconKeyWord: "local_cafe", glyphColor: "#663300", bgColor: "#ffcc99"});
+MarkerTypeDef.set('Shrine', {iconKeyWord: "temple_buddhist", glyphColor: "#6600ff", bgColor: "#cc99ff"});
+MarkerTypeDef.set('Object', {iconKeyWord: "draw_abstract", glyphColor: "#000000", bgColor: "#cccccc"});
+MarkerTypeDef.set('Building', {iconKeyWord: "location_city", glyphColor: "#ffffff", bgColor: "#666666"});
+MarkerTypeDef.set('Water', {iconKeyWord: "water", glyphColor: "#0000cc", bgColor: "#99ccff"});
+MarkerTypeDef.set('Other', {iconKeyWord: "lightbulb", glyphColor: "#ff3300", bgColor: "#ffffcc"});
 
 export interface IUser {
   id: string,
@@ -70,7 +69,7 @@ export interface IPost {
   id: string,
   user: IUser;
   title: string;
-  contentTypeEnum: ContentTypeEnum;
+  categoryType: CategoryType;
   imageUrl: string;
   lat: number;
   lon: number;
