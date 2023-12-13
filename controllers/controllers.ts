@@ -11,7 +11,7 @@ export const routing = ((app: express.Express): void => {
   });
   app.get('/post/:id', function (req, res, next) {
     const post = new BizLogic().findPost(req.params.id);
-    res.render('pages/post-detail', { post: post });
+    res.render('pages/post-detail', { post: post, showBack: true });
   });
   app.get('/map', function (req, res, next) {
     const targetPosts = new BizLogic().findPosts();

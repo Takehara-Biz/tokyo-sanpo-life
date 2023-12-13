@@ -1,10 +1,19 @@
 <!-- As a heading -->
 <div>
-<nav class=" p-0">
-  <div class="flex justify-center items-center">
-    <img src="/images/tsl.png" width="40px" class="inline"/>
-    <div class="mb-0 font-tsl_title text-accent text-2xl">東京散歩ライフ</div>
-    <img src="/images/tsl.png" width="40px" class="inline"/>
-  </div>
-</nav>
+  <nav class=" p-0">
+    <div class="flex justify-between items-center">
+      <div class="material-symbols-outlined <% if (/* if showBack is not defined */ !locals.showBack) { %>invisible<% } %>"
+        onclick="history.back()">
+        arrow_back
+      </div>
+      <div class="flex justify-center items-center">
+        <img src="/images/tsl.png" width="40px" class="inline" />
+        <div class="mb-0 font-tsl_title text-accent text-2xl">東京散歩ライフ</div>
+        <img src="/images/tsl.png" width="40px" class="inline" />
+      </div>
+      <div class="material-symbols-outlined invisible">
+        arrow_back
+      </div>
+    </div>
+  </nav>
 </div>
