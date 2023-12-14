@@ -25,6 +25,9 @@ export class PostCategory {
     PostCategory.Water,
     PostCategory.Other,
   ]
+  public static findCategory(id: number): PostCategory{
+    return PostCategory.Categories[id - 0];
+  }
 
   public getId(): number {
     return this.id;

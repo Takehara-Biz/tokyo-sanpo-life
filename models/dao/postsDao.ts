@@ -1,6 +1,37 @@
 import { IPost, IPostComment, PostCategory } from '../serverTslDef';
 
 export class PostsDao {
+
+  private idAndPostMap: Map<string, IPost> = new Map<string, IPost>();
+
+  constructor(postCount: number){
+    this.generateRandomPosts(postCount);
+  }
+
+  private generateRandomPosts(postCount: number): void{
+    const commentsCount = 10;
+    const comments: IPostComment[] = this.createRandomComments(commentsCount);
+    for (let i = 0; i < postCount; i++) {
+      let post = {
+        id: i.toString(),
+        user: {
+          id: i.toString(),
+          userName: this.generateRandomString(8),
+          iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
+        },
+        title: this.generateRandomString(22),
+        postCategory: this.chooseContentTypeEnumRandomly(),
+        imageUrl: "https://media.timeout.com/images/105544832/1372/772/image.webp",
+        lat: 35.6 + (Math.random() / 10),
+        lon: 139.7 + (Math.random() / 10),
+        description: this.generateRandomString(300),
+        insertDate: new Date("2023/12/01"),
+        postComments: comments,
+      };
+      this.idAndPostMap.set(i.toString(), post);
+    }
+  }
+
   private generateRandomString(charCount: number): string {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -34,52 +65,14 @@ export class PostsDao {
   }
 
   public findPosts(): IPost[] {
-    const postCount = 100;
-    const commentsCount = 10;
-
-    const comments: IPostComment[] = this.createRandomComments(commentsCount);
-
-    const posts: IPost[] = [];
-    for (let i = 0; i < postCount; i++) {
-      posts.push({
-        id: i.toString(),
-        user: {
-          id: i.toString(),
-          userName: this.generateRandomString(8),
-          iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
-        },
-        title: this.generateRandomString(22),
-        postCategory: this.chooseContentTypeEnumRandomly(),
-        imageUrl: "https://media.timeout.com/images/105544832/1372/772/image.webp",
-        lat: 35.6 + (Math.random() / 10),
-        lon: 139.7 + (Math.random() / 10),
-        description: this.generateRandomString(300),
-        insertDate: new Date("2023/12/01"),
-        postComments: comments,
-      });
-    }
-
-    return posts;
+    return [...this.idAndPostMap.values()];
   }
 
-  public findPost(id: string): IPost {
-    const commentsCount = 10;
+  public findPost(id: string): IPost | null {
+    return this.idAndPostMap.get(id) ?? null;
+  }
 
-    return {
-      id: "1",
-      user: {
-        id: "1",
-        userName: this.generateRandomString(8),
-        iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
-      },
-      title: this.generateRandomString(22),
-      postCategory: this.chooseContentTypeEnumRandomly(),
-      imageUrl: "https://media.timeout.com/images/105544832/1372/772/image.webp",
-      lat: 35.6 + (Math.random() / 10),
-      lon: 139.7 + (Math.random() / 10),
-      description: this.generateRandomString(300),
-      insertDate: new Date("2023/12/01"),
-      postComments: this.createRandomComments(commentsCount),
-    };
+  public createPost(post: IPost):void {
+    this.idAndPostMap.set(post.id, post);
   }
 }

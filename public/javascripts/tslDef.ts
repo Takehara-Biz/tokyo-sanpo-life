@@ -32,7 +32,7 @@ class PostCategory {
   public getEmoji(): string {
     return this.emoji;
   }
-  public getLable(): string {
+  public getLabel(): string {
     return this.label;
   }
 }
