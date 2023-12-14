@@ -1,8 +1,9 @@
-  // Initialize and add the map
-  let map: google.maps.Map;
-  let position: google.maps.LatLng | google.maps.LatLngLiteral;
-  let center: google.maps.Marker;
-  let peripheral: google.maps.Circle;
+
+// Initialize and add the map
+let map: google.maps.Map;
+let position: google.maps.LatLng | google.maps.LatLngLiteral;
+let center: google.maps.Marker;
+let peripheral: google.maps.Circle;
 
 /**
  * Provide utility functions regardless of business logic.
@@ -28,18 +29,18 @@ const TslGMapUtil = {
       '<div id="bodyContent" style="display:flex; justify-content:space-between;">' +
       "<img src='" + post.imageUrl + "' width='50%' />" +
       '<div style="width:50%; padding:10px;">' +
-        '<div style="display:flex;">' +
-          '<img width="40px" height="40px" src="' + post.user.iconUrl + '" style="border: 2px solid #ff0099; border-radius:50%" />' +
-          '<h4 style="font-weight:bold; font-family:Kaisai Decol; color:#ff0099; padding-left:10px;">' + post.user.userName + '</h4>' +
-        '</div>' +
-        '<h4 id="firstHeading">' + post.title + '</h4>' +
-        '<p style="font-size:small;">' + post.insertDate.toLocaleString("ja-JP") + "</p>" +
-      '</div>' + 
-      '</div>' + 
+      '<div style="display:flex;">' +
+      '<img width="40px" height="40px" src="' + post.user.iconUrl + '" style="border: 2px solid #ff0099; border-radius:50%" />' +
+      '<h4 style="font-weight:bold; font-family:Kaisai Decol; color:#ff0099; padding-left:10px;">' + post.user.userName + '</h4>' +
+      '</div>' +
+      '<h4 id="firstHeading">' + post.title + '</h4>' +
+      '<p style="font-size:small;">' + post.insertDate.toLocaleString("ja-JP") + "</p>" +
+      '</div>' +
+      '</div>' +
       "<p>" + post.description + "</p>" +
-      '<div>' + 
-      '<p style="margin-top:10px; text-align:center; font-size:small;">コメント</p>' + 
-      commentString + 
+      '<div>' +
+      '<p style="margin-top:10px; text-align:center; font-size:small;">コメント</p>' +
+      commentString +
       "</div>" +
       "</div>";
 
@@ -57,10 +58,10 @@ const TslGMapUtil = {
     return locationButton;
   },
 
-  async createTslMarker(categoryType: CategoryType, position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
+  async createTslMarker(postCategory: PostCategory, position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
     let marker: Promise<google.maps.marker.AdvancedMarkerElement>;
-    const markerDef = MarkerTypeDef.get(categoryType);
-    console.log('categoryType:' + categoryType + ", markerDef:" + markerDef);
+    const markerDef = CategoryIdAndMarkerTypeDefMap.get(postCategory.getId());
+    //console.log('categoryType:' + categoryType + ", markerDef:" + markerDef);
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
 
     const icon = document.createElement('div');

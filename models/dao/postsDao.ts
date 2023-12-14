@@ -1,4 +1,4 @@
-import { IPost, IPostComment, CategoryType } from '../serverTslDef';
+import { IPost, IPostComment, PostCategory } from '../serverTslDef';
 
 export class PostsDao {
   private generateRandomString(charCount: number): string {
@@ -28,20 +28,9 @@ export class PostsDao {
     return comments;
   }
 
-  private readonly AllCategories: CategoryType[] = [
-    'Flower',
-    'Landscape',
-    'Cafe',
-    'Shrine',
-    'Object',
-    'Building',
-    'Water',
-    'Other'
-  ]
-
-  private chooseContentTypeEnumRandomly(): CategoryType {
-    const index = Math.floor(Math.random() * this.AllCategories.length);
-    return this.AllCategories[index];
+  private chooseContentTypeEnumRandomly(): PostCategory {
+    const index = Math.floor(Math.random() * PostCategory.Categories.length);
+    return PostCategory.Categories[index];
   }
 
   public findPosts(): IPost[] {
@@ -60,7 +49,7 @@ export class PostsDao {
           iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
         },
         title: this.generateRandomString(22),
-        categoryType: this.chooseContentTypeEnumRandomly(),
+        postCategory: this.chooseContentTypeEnumRandomly(),
         imageUrl: "https://media.timeout.com/images/105544832/1372/772/image.webp",
         lat: 35.6 + (Math.random() / 10),
         lon: 139.7 + (Math.random() / 10),
@@ -84,7 +73,7 @@ export class PostsDao {
         iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
       },
       title: this.generateRandomString(22),
-      categoryType: this.chooseContentTypeEnumRandomly(),
+      postCategory: this.chooseContentTypeEnumRandomly(),
       imageUrl: "https://media.timeout.com/images/105544832/1372/772/image.webp",
       lat: 35.6 + (Math.random() / 10),
       lon: 139.7 + (Math.random() / 10),

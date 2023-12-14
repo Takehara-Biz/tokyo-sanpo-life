@@ -1,5 +1,6 @@
 import express from 'express'
 import { BizLogic } from '../models/bizLogic'
+import { PostCategory } from '../models/serverTslDef';
 
 export const routing = ((app: express.Express): void => {
   app.get('/login', function (req, res, next) {
@@ -21,7 +22,7 @@ export const routing = ((app: express.Express): void => {
     res.render('pages/map', { targetPosts: targetPosts });
   });
   app.get('/add-post', function (req, res, next) {
-    res.render('pages/add-post', { menu2: true });
+    res.render('pages/add-post', { categories: PostCategory.Categories });
   });
   app.get('/others', function (req, res, next) {
     res.render('pages/others', { title: 'My Page' });

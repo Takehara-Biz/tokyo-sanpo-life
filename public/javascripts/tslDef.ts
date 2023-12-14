@@ -1,25 +1,41 @@
 // define class, interface, enum here.
 
-/**
- * 投稿のカテゴリー
- */
-type CategoryType =
-  // 花、植物、
-  'Flower' |
-  // 自然、公園、風景、空
-  'Landscape' |
-  // カフェ、飲食店
-  'Cafe' |
-  // 神社、寺、城
-  'Shrine' |
-  // 人工物、モニュメント
-  'Object' |
-  // ビル、家、タワー
-  'Building' |
-  // 海、川、池、湖
-  'Water' |
-  // その他
-  'Other';
+class PostCategory {
+  private constructor(
+    private id: number,
+    private emoji: string,
+    private label: string
+  ){}
+
+  public static readonly Flower = new PostCategory(1, '🌸', '花、植物');
+  public static readonly Landscape = new PostCategory(2, '🏞', '自然、公園、風景、空');
+  public static readonly Cafe = new PostCategory(3, '☕️', 'カフェ、飲食店');
+  public static readonly Shrine = new PostCategory(4, '⛩', '神社、寺、城');
+  public static readonly Object = new PostCategory(5, '🗿', '人工物、モニュメント');
+  public static readonly Building = new PostCategory(6, '🏬', 'ビル、家、タワー');
+  public static readonly Water = new PostCategory(7, '🌊', '海、川、池、湖');
+  public static readonly Other = new PostCategory(8, '💡', 'その他');
+  public static readonly Categories = [
+    PostCategory.Flower,
+    PostCategory.Landscape,
+    PostCategory.Cafe,
+    PostCategory.Shrine,
+    PostCategory.Object,
+    PostCategory.Building,
+    PostCategory.Water,
+    PostCategory.Other,
+  ]
+
+  public getId(): number {
+    return this.id;
+  }
+  public getEmoji(): string {
+    return this.emoji;
+  }
+  public getLable(): string {
+    return this.label;
+  }
+}
 
 /**
  * マーカーの種類の定義
@@ -33,15 +49,15 @@ interface IMarkerTypeDef {
 /**
  * マーカーの種類
  */
-const MarkerTypeDef: Map<CategoryType, IMarkerTypeDef> = new Map<CategoryType, IMarkerTypeDef>();
-MarkerTypeDef.set('Flower', { iconKeyWord: "filter_vintage", glyphColor: "#ff0000", bgColor: "#ff99cc" });
-MarkerTypeDef.set('Landscape', { iconKeyWord: "landscape", glyphColor: "#33cc00", bgColor: "#ccffcc" });
-MarkerTypeDef.set('Cafe', { iconKeyWord: "local_cafe", glyphColor: "#663300", bgColor: "#ffcc99" });
-MarkerTypeDef.set('Shrine', { iconKeyWord: "temple_buddhist", glyphColor: "#6600ff", bgColor: "#cc99ff" });
-MarkerTypeDef.set('Object', { iconKeyWord: "draw_abstract", glyphColor: "#000000", bgColor: "#cccccc" });
-MarkerTypeDef.set('Building', { iconKeyWord: "location_city", glyphColor: "#ffffff", bgColor: "#666666" });
-MarkerTypeDef.set('Water', { iconKeyWord: "water", glyphColor: "#0000cc", bgColor: "#99ccff" });
-MarkerTypeDef.set('Other', { iconKeyWord: "lightbulb", glyphColor: "#ff3300", bgColor: "#ffffcc" });
+const CategoryIdAndMarkerTypeDefMap: Map<number, IMarkerTypeDef> = new Map<number, IMarkerTypeDef>();
+CategoryIdAndMarkerTypeDefMap.set(PostCategory.Flower.getId(), {iconKeyWord: "filter_vintage", glyphColor: "#ff0000", bgColor: "#ff99cc"});
+CategoryIdAndMarkerTypeDefMap.set(PostCategory.Landscape.getId(), {iconKeyWord: "landscape", glyphColor: "#33cc00", bgColor: "#ccffcc"});
+CategoryIdAndMarkerTypeDefMap.set(PostCategory.Cafe.getId(), {iconKeyWord: "local_cafe", glyphColor: "#663300", bgColor: "#ffcc99"});
+CategoryIdAndMarkerTypeDefMap.set(PostCategory.Shrine.getId(), {iconKeyWord: "temple_buddhist", glyphColor: "#6600ff", bgColor: "#cc99ff"});
+CategoryIdAndMarkerTypeDefMap.set(PostCategory.Object.getId(), {iconKeyWord: "draw_abstract", glyphColor: "#000000", bgColor: "#cccccc"});
+CategoryIdAndMarkerTypeDefMap.set(PostCategory.Building.getId(), {iconKeyWord: "location_city", glyphColor: "#ffffff", bgColor: "#666666"});
+CategoryIdAndMarkerTypeDefMap.set(PostCategory.Water.getId(), {iconKeyWord: "water", glyphColor: "#0000cc", bgColor: "#99ccff"});
+CategoryIdAndMarkerTypeDefMap.set(PostCategory.Other.getId(), {iconKeyWord: "lightbulb", glyphColor: "#ff3300", bgColor: "#ffffcc"});
 
 interface IUser {
   id: string,
@@ -69,7 +85,7 @@ interface IPost {
   id: string;
   user: IUser;
   title: string;
-  categoryType: CategoryType;
+  postCategory: PostCategory;
   imageUrl: string;
   lat: number;
   lon: number;
