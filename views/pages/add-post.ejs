@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  <body>
+    <div class="flex flex-col min-h-screen">
+      <%- include('../partials/header'); %>
+      <!-- Main Body -->
+      <div class="grow p-2">
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <span class="material-symbols-outlined text-accent">
+                  warning
+                  </span>投稿前の注意事項
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse visible" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <ul>
+                  <li>個人を特定できる情報は書かないこと。</li>
+                  <li>公序良俗に反する投稿は行わないこと。</li>
+                  <li>著作権・肖像権に注意すること。</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form>
+          <p>写真選択</p>
+          <div class="bg-gray-300 border rounded h-40 flex justify-center items-center">
+            <span class="material-symbols-outlined text-6xl">
+              add_photo_alternate
+              </span>
+          </div>
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">コメント</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="ここは私のお気に入りの場所です！"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">カテゴリ</label>
+            <select class="form-select" aria-label="Default select example">
+            <% var categoryType = ['🌸　花、植物', '🏞　自然、公園、風景、空'] %>
+            <% for (var category of categoryType) { %>
+              <option value="<%= category %>"><%= category %></option>
+            <% } %>
+            </select>
+          </div>
+          <br />
+          <input class="btn btn-primary border-accent bg-accent w-full" type="submit" value="投稿">
+        </form>
+      </div>
+      <%- include('../partials/footer', {currentMenu: 4}); %>
+    </div>
+  </body>
+</html>

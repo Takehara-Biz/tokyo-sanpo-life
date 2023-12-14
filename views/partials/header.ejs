@@ -1,8 +1,8 @@
 <!-- As a heading -->
 <div>
   <nav class=" p-0">
-    <div class="flex justify-between items-center">
-      <div class="material-symbols-outlined <% if (/* if showBack is not defined */ !locals.showBack) { %>invisible<% } %>"
+    <div class="flex justify-between items-center px-2">
+      <div class="material-symbols-outlined text-accent text-3xl <% if (/* if showBack is not defined */ !locals.showBack) { %>invisible<% } %>"
         onclick="history.back()">
         arrow_back
       </div>
@@ -11,9 +11,11 @@
         <div class="mb-0 font-tsl_title text-accent text-2xl">東京散歩ライフ</div>
         <img src="/images/tsl.png" width="40px" class="inline" />
       </div>
-      <div class="material-symbols-outlined invisible">
-        arrow_back
-      </div>
+      <a class="nav-link flex flex-col items-center" href="/login">
+        <span class="material-symbols-outlined text-accent text-3xl">
+          account_circle
+        </span>
+      </a>
     </div>
   </nav>
 </div>

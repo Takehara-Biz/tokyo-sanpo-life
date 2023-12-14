@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  <body>
+    <div class="flex flex-col min-h-screen">
+    <%- include('../partials/header'); %>
+    <!-- Main Body -->
+    <div class="flex-grow">
+      <h1>その他</h1>
+      <p>
+        <ul>
+          <li>コラム</li>
+          <li>このサイトについて</li>
+          <li>開発者紹介</li>
+          <li>技術情報</li>
+          <li>利用規約</li>
+          <li>プライバシーポリシー</li>
+        </ul>
+      </p>
+    </div>
+    <%- include('../partials/footer', {currentMenu: 5}); %>
+    </div>
+  </body>
+</html>

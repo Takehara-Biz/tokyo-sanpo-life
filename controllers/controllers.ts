@@ -2,6 +2,9 @@ import express from 'express'
 import { BizLogic } from '../models/bizLogic'
 
 export const routing = ((app: express.Express): void => {
+  app.get('/login', function (req, res, next) {
+    res.render('pages/login', { menu1: true });
+  });
   app.get('/how-to-use', function (req, res, next) {
     res.render('pages/how-to-use', { menu1: true });
   });
@@ -17,10 +20,10 @@ export const routing = ((app: express.Express): void => {
     const targetPosts = new BizLogic().findPosts();
     res.render('pages/map', { targetPosts: targetPosts });
   });
-  app.get('/column', function (req, res, next) {
-    res.render('pages/column', { menu2: true });
+  app.get('/add-post', function (req, res, next) {
+    res.render('pages/add-post', { menu2: true });
   });
-  app.get('/my-page', function (req, res, next) {
-    res.render('pages/my-page', { title: 'My Page' });
+  app.get('/others', function (req, res, next) {
+    res.render('pages/others', { title: 'My Page' });
   });
 });
