@@ -76,43 +76,12 @@
             </script>
           </div>
           <div class="mt-3">
-            <label class="form-label">位置選択（照準を合わせてください）</label>
-            <div class="relative w-full h-[200px] bg-transparent">
-              <div class="flex justify-center items-center">
-                <div id="map" class="w-[90%] h-[200px]"></div>
-              </div>
-              <div id="canvasContainer" class="absolute top-[80px] left-[45%] w-[10%] h-[40px]">
-                <canvas id="focusCanvas" height="40px" style="border:1px solid #000000;">
-                </canvas>
-              </div>
+            <label class="form-label">位置選択（写真を撮った位置をタップしてください）</label>
+            <div class="flex justify-center items-center">
+              <div id="map" class="w-[90%] h-[200px]"></div>
             </div>
-            <script>
-              let focusCanvas = document.getElementById("focusCanvas");
-              let canvasContainer = document.getElementById("canvasContainer");
-              focusCanvas.width = canvasContainer.clientWidth;
-              console.log('canvasContainer.width : ' + canvasContainer.width);
-              console.log('canvasContainer.clientWidth : ' + canvasContainer.clientWidth);
-
-              let context = focusCanvas.getContext("2d");
-
-              context.beginPath();
-              context.arc(focusCanvas.width / 2, focusCanvas.height / 2, 10, 0, 2 * Math.PI);
-              context.stroke();
-              context.strokeStyle = '#ff0099';
-              context.stroke();
-
-              context.beginPath();
-              context.moveTo(0, focusCanvas.height / 2);
-              context.lineTo(focusCanvas.width, focusCanvas.height / 2);
-              context.strokeStyle = '#ff0099';
-              context.stroke();
-
-              context.beginPath();
-              context.moveTo(focusCanvas.width / 2, 0);
-              context.lineTo(focusCanvas.width / 2, focusCanvas.height);
-              context.strokeStyle = '#ff0099';
-              context.stroke();
-            </script>
+            <input id="markerLat" type="hidden" name="markerLat" />
+            <input id="markerLng" type="hidden" name="markerLng" />
           </div>
           <div class="mt-3">
             <label for="exampleFormControlTextarea1" class="form-label">コメント</label>
@@ -132,20 +101,6 @@
           <br />
           <input class="mt-3 btn btn-primary border-accent bg-accent w-full" type="submit" value="投稿">
         </form>
-        <button id="checkLatLonButton" class="btn btn-primary">デバッグ</button>
-        <p>緯度：<span id="lat"></span></p>
-        <p>経度：<span id="lon"></span></p>
-        <script>
-          let checkLatLonButton = document.getElementById("checkLatLonButton");
-          checkLatLonButton.addEventListener('click', function(e){
-            let latLon = map.getCenter();
-            let latLonJson = JSON.parse(JSON.stringify(latLon))
-            let lat = document.getElementById("lat");
-            lat.innerHTML = latLonJson['lat'];
-            let lon = document.getElementById("lon");
-            lon.innerHTML = latLonJson['lng'];
-          });
-        </script>
       </div>
       <%- include('../partials/footer', {currentMenu: 4}); %>
   </div>

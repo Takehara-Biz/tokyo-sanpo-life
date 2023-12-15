@@ -8,6 +8,7 @@ const RenderEmptyGMap = {
     //@ts-ignore
     const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
 
+
     map = new Map(
       document.getElementById('map') as HTMLElement,
       {
@@ -21,6 +22,23 @@ const RenderEmptyGMap = {
         zoom: 15,
       }
     );
+
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+
+    const newMarker = new AdvancedMarkerElement({
+      map: map
+    });
+
+    map.addListener("click", (event: { latLng: google.maps.LatLngLiteral; }) => {
+      newMarker.position = event.latLng;
+      newMarker.map = map;
+      let latLngJson = JSON.parse(JSON.stringify(event.latLng));
+      let markerLat = document.getElementById("markerLat");
+      markerLat!.setAttribute("value", latLngJson['lat']);
+      let markerLng = document.getElementById("markerLng");
+      markerLng!.setAttribute("value", latLngJson['lng']);
+      map.setCenter(event.latLng);
+    });
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(

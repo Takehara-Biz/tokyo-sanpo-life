@@ -8,7 +8,7 @@ class PostCategory {
   ){}
 
   public static readonly Flower = new PostCategory(1, '🌸', '花、植物');
-  public static readonly Landscape = new PostCategory(2, '🏞', '自然、公園、風景、空');
+  public static readonly Landscape = new PostCategory(2, '🏞', '自然、公園、風景、山、空');
   public static readonly Cafe = new PostCategory(3, '☕️', 'カフェ、飲食店');
   public static readonly Shrine = new PostCategory(4, '⛩', '神社、寺、城');
   public static readonly Object = new PostCategory(5, '🗿', '人工物、モニュメント');

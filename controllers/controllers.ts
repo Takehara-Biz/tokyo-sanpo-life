@@ -23,7 +23,15 @@ export const routing = ((app: express.Express): void => {
     console.log('req : ' + req);
     console.log('req.params : ' + req.params);
     console.log('req.body : ' + JSON.stringify(req.body));
-    let postCategory = PostCategory.findCategory(req.body.postCategory);
+    console.log('req.body.comment : ' + req.body.comment);
+    console.log('req.body.postCategory : ' + req.body.postCategory);
+    console.log('req.body.uploadPhoto : ' + req.body.uploadPhoto);
+    console.log('req.body.markerLat : ' + req.body.markerLat);
+    console.log('req.body.markerLng : ' + req.body.markerLng);
+
+    let postCategory = PostCategory.findCategory(Number(req.body.postCategory));
+    console.log('aa' + postCategory);
+    console.log('aa' + postCategory.getLabel());
     let newPost: IPost = {
       id: "10",
       description: req.body.comment,
@@ -35,14 +43,11 @@ export const routing = ((app: express.Express): void => {
       },
       title: '',
       imageUrl: '',
-      lat: 0,
-      lon: 0,
+      lat: Number(req.body.markerLat),
+      lon: Number(req.body.markerLng),
       insertDate: new Date(),
       postComments: []
     }
-    console.log('req.body : ' + req.body.comment);
-    console.log('req.body : ' + req.body.postCategory);
-    console.log('req.body : ' + req.body.uploadPhoto);
     bizLogic.createPost(newPost);
     const post = bizLogic.findPost(newPost.id);
     res.render('pages/post-detail', { post: post, showBack: false });
