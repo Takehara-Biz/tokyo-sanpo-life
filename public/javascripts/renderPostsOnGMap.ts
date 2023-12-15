@@ -106,8 +106,7 @@ const RenderPostsOnGMap = {
 
     posts.map(async (post: IPost) => {
 
-      let contentString = TslGMapUtil.createInfoContent(post);
-      position = { lat: post.lat, lng: post.lon };
+      position = { lat: post.lat, lng: post.lng };
       let marker = await TslGMapUtil.createTslMarker(post.postCategory, position);
       marker.map = map;
 

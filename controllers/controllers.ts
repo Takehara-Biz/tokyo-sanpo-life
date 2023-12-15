@@ -34,17 +34,16 @@ export const routing = ((app: express.Express): void => {
     console.log('aa' + postCategory.getLabel());
     let newPost: IPost = {
       id: "10",
-      description: req.body.comment,
-      postCategory: postCategory,
       user: {
         id: "1",
         userName: "abc",
         iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
       },
-      title: '',
       imageUrl: '',
       lat: Number(req.body.markerLat),
-      lon: Number(req.body.markerLng),
+      lng: Number(req.body.markerLng),
+      description: req.body.comment,
+      postCategory: postCategory,
       insertDate: new Date(),
       postComments: []
     }

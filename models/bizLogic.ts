@@ -2,7 +2,7 @@ import { PostsDao } from './dao/postsDao';
 import { IPost } from './serverTslDef';
 
 export class BizLogic {
-  private postsDao = new PostsDao(2);
+  private postsDao = new PostsDao(50);
   
   public findPosts(): IPost[] {
     //return ServerDummyData;

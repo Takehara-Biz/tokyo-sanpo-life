@@ -86,13 +86,12 @@ export interface IPostComment {
  */
 export interface IPost {
   id: string,
-  user: IUser;
-  title: string;
-  postCategory: PostCategory;
+  user: IUser,
   imageUrl: string;
   lat: number;
-  lon: number;
+  lng: number;
+  postCategory: PostCategory;
   description: string;
   insertDate: Date;
-  postComments: IPostComment[]
+  postComments: IPostComment[];
 }

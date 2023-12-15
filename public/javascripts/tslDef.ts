@@ -82,14 +82,13 @@ interface IPostComment {
  * 投稿
  */
 interface IPost {
-  id: string;
-  user: IUser;
-  title: string;
-  postCategory: PostCategory;
+  id: string,
+  user: IUser,
   imageUrl: string;
   lat: number;
-  lon: number;
+  lng: number;
+  postCategory: PostCategory;
   description: string;
   insertDate: Date;
-  postComments: IPostComment[]
+  postComments: IPostComment[];
 }

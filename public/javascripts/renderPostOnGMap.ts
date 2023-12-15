@@ -1,7 +1,7 @@
 const RenderPostOnGMap = {
 
   async initMap(post : IPost): Promise<void> {
-    position = { lat: post.lat, lng: post.lon };
+    position = { lat: post.lat, lng: post.lng };
 
     // Request needed libraries.
     //@ts-ignore
@@ -24,7 +24,7 @@ const RenderPostOnGMap = {
     let markers: google.maps.marker.AdvancedMarkerElement[] = [];
 
       let contentString = TslGMapUtil.createInfoContent(post);
-      position = { lat: post.lat, lng: post.lon };
+      position = { lat: post.lat, lng: post.lng };
       let marker = await TslGMapUtil.createTslMarker(post.postCategory, position);
       marker.map = map;
 
