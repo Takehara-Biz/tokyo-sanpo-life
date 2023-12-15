@@ -8,6 +8,14 @@ export const routing = ((app: express.Express): void => {
   app.get('/login', function (req, res, next) {
     res.render('pages/login', { menu1: true });
   });
+  app.post('/login', function (req, res, next) {
+    bizLogic.setLoggedInUserId("1");
+    res.render('pages/my-page', { menu1: true });
+  });
+  app.post('/logout', function (req, res, next) {
+    bizLogic.logout();
+    res.render('pages/login', { menu1: true });
+  });
   app.get('/how-to-use', function (req, res, next) {
     res.render('pages/how-to-use');
   });
