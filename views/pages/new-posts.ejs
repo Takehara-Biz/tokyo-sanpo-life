@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<body>
+  <div class="flex flex-col min-h-screen max-h-screen">
+    <%- include('../partials/header'); %>
+      <!-- Main Body -->
+      <div class="grow overflow-y-scroll max-w-screen">
+        <ul class="nav nav-tabs nav-justified">
+          <li class="nav-item">
+            <a class="nav-link bg-accent text-white" aria-current="page" href="#">
+              新着順
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span class="text-accent">あなたの周辺</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span class="text-accent">あなたの投稿</span>
+            </a>
+          </li>
+        </ul>
+        <% for (var post of targetPosts) { %>
+          <a href="./post/<%= post.id %>">
+            <div class="w-full p-1 flex items-center">
+              <img width="60%" height="80px" src="<%= post.imageUrl %>" style="border: 1px solid; " />
+              <div class="p-1" style="width:40%;">
+                <div class="flex items-center">
+                  <img class="ml-1" width="30px" height="30px" src="<%= post.user.iconUrl %>"
+                    style="border: 2px solid #ff0099; border-radius:50%;" />
+                  <span class="font-bold pl-2" style="font-family:Kaisai Decol; color:#ff0099;">
+                    <%= post.user.userName %>
+                  </span>
+                </div>
+                <br />
+                <div class="w-full break-words"><%= post.title %></div>
+                <br />
+                <span class="text-sm">
+                  <%= post.insertDate.toLocaleString("ja-JP") %>
+                </span>
+              </div>
+            </div>
+          </a>
+          <hr />
+          <% } %>
+      </div>
+      <%- include('../partials/footer', {currentMenu: 2}); %>
+  </div>
+</body>
+
+</html>
