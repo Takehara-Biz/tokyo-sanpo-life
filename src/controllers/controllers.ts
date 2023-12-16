@@ -25,7 +25,7 @@ export const routing = ((app: express.Express): void => {
   });
   app.post('/logout', function (req, res, next) {
     bizLogic.logout();
-    res.render('pages/login', {user: bizLogic.getLoggedInUser()});
+    res.render('pages/login', {user: bizLogic.getLoggedInUser(), toast: true});
   });
   app.get('/how-to-use', function (req, res, next) {
     res.render('pages/how-to-use', {user: bizLogic.getLoggedInUser()});
