@@ -30,13 +30,26 @@ const RenderEmptyGMap = {
     });
 
     map.addListener("click", (event: { latLng: google.maps.LatLngLiteral; }) => {
+      const latLngJson = JSON.parse(JSON.stringify(event.latLng));
+      const lat = latLngJson['lat'];
+      const lng = latLngJson['lng'];
+
+      if(lat <= 34.468651 || 37.492991 <= lat){
+        alert('緯度が東京から離れすぎています。そこは登録できません。');
+        return;
+      }
+      if(lng <= 138.573217 || 140.936050 <= lng){
+        alert('経度が東京から離れすぎています。そこは登録できません。');
+        return;
+      }
+
       newMarker.position = event.latLng;
       newMarker.map = map;
-      let latLngJson = JSON.parse(JSON.stringify(event.latLng));
+      
       let markerLat = document.getElementById("markerLat");
-      markerLat!.setAttribute("value", latLngJson['lat']);
+      markerLat!.setAttribute("value", lat);
       let markerLng = document.getElementById("markerLng");
-      markerLng!.setAttribute("value", latLngJson['lng']);
+      markerLng!.setAttribute("value", lng);
       map.setCenter(event.latLng);
     });
 
