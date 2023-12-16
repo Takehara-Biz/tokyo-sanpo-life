@@ -7,18 +7,25 @@ const bizLogic = new BizLogic();
 
 export const routing = ((app: express.Express): void => {
   app.get('/login', function (req, res, next) {
-    res.render('pages/login', { menu1: true });
+    res.render('pages/login', {user: bizLogic.getLoggedInUser()});
   });
   app.post('/login', function (req, res, next) {
-    bizLogic.setLoggedInUserId("1");
-    res.render('pages/my-page', { menu1: true });
+    bizLogic.setLoggedInUser({
+      id: "123",
+      userName: "Yasu",
+      iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
+      selfIntroduction: "こんにちは〜",
+      twitterProfileLink: "https://www.yahoo.co.jp",
+      instagramProfileLink: "https://www.yahoo.co.jp",
+    })
+    res.render('pages/my-page', {user: bizLogic.getLoggedInUser()});
   });
   app.post('/logout', function (req, res, next) {
     bizLogic.logout();
     res.render('pages/login', { menu1: true });
   });
   app.get('/how-to-use', function (req, res, next) {
-    res.render('pages/how-to-use');
+    res.render('pages/how-to-use', {user: bizLogic.getLoggedInUser()});
   });
   app.get('/new-posts', function (req, res, next) {
     const targetPosts = bizLogic.findPosts();

@@ -10,7 +10,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
-//app.use(express.static(__dirname + '/public'));
+app.set('views', './src/views');
+
 app.use(express.static('public'));
 app.use(favicon('./public/images/favicon.ico'));
 app.use(function(req, res, next) {

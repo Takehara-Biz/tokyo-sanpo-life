@@ -1,16 +1,16 @@
 import { PostsDao } from './dao/postsDao';
-import { IPost } from './serverTslDef';
+import { IPost, IUser } from './serverTslDef';
 
 export class BizLogic {
-  private loggedInUserId: string | undefined;
-  public setLoggedInUserId(id: string){
-    this.loggedInUserId = id;
+  private loggedInUser: IUser | undefined;
+  public setLoggedInUser(loggedInUser: IUser){
+    this.loggedInUser = loggedInUser;
   }
   public logout(): void{
-    this.loggedInUserId = undefined;
+    this.loggedInUser = undefined;
   }
-  public getLoggedInUserId(): string | undefined {
-    return this.loggedInUserId;
+  public getLoggedInUser(): IUser | undefined {
+    return this.loggedInUser;
   }
 
   private postsDao = new PostsDao(50);
