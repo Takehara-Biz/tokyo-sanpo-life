@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../../partials/head'); %>
+</head>
+
+<body>
+  <div class="flex flex-col min-h-screen max-h-screen">
+    <%- include('../../partials/header', {user: user}); %>
+      <!-- Main Body -->
+      <div class="grow overflow-y-scroll">
+        <h1>技術情報</h1>
+        <p>本Webアプリは、以下の技術により構成されています。</p>
+        <ul>
+          <li><a href="https://nodejs.org/en">Node.js</a></li>
+          <li><a href="https://expressjs.com/">Express</a></li>
+          <li><a href="https://ejs.co/">EJS</a></li>
+          <li><a href="https://www.typescriptlang.org/">TypeScript</a></li>
+          <li><a href="https://tailwindcss.com/">Tailwind CSS</a></li>
+          <li><a href="https://getbootstrap.com/">Bootstrap</a></li>
+          <li><a href="https://firebase.google.com/">Firebase</a></li>
+          <li><a href="https://developers.google.com/maps">Google Maps Platform</a></li>
+          <li><a href="https://github.com/">GitHub</a></li>
+        </ul>
+      </div>
+      <%- include('../../partials/footer', {currentMenu: 5}); %>
+  </div>
+</body>
+
+</html>

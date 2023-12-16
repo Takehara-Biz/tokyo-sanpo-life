@@ -1,6 +1,6 @@
 import express from 'express'
 import favicon from 'serve-favicon'
-import { routing } from './src/controllers/controllers'
+import { routing } from './src/controllers/routes'
 import { TslLogUtil } from './src/utils/tslLogUtil'
 
 const app: express.Express = express()

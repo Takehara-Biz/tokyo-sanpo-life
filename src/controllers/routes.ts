@@ -83,8 +83,24 @@ export const routing = ((app: express.Express): void => {
     res.render('pages/add-post', {user: bizLogic.getLoggedInUser(), categories: PostCategory.Categories });
   });
   app.get('/others', function (req, res, next) {
-    res.render('pages/others', {user: bizLogic.getLoggedInUser(), title: 'My Page' });
+    res.render('pages/others', {user: bizLogic.getLoggedInUser()});
   });
+  app.get('/others/about', function (req, res, next) {
+    res.render('pages/others/about', {user: bizLogic.getLoggedInUser(), showBack: true });
+  });
+  app.get('/others/tech', function (req, res, next) {
+    res.render('pages/others/tech', {user: bizLogic.getLoggedInUser(), showBack: true });
+  });
+  app.get('/others/terms-of-service', function (req, res, next) {
+    res.render('pages/others/terms-of-service', {user: bizLogic.getLoggedInUser(), showBack: true });
+  });
+  app.get('/others/privacy-policy', function (req, res, next) {
+    res.render('pages/others/privacy-policy', {user: bizLogic.getLoggedInUser(), showBack: true });
+  });
+  app.get('/others/cookie-policy', function (req, res, next) {
+    res.render('pages/others/cookie-policy', {user: bizLogic.getLoggedInUser(), showBack: true });
+  });
+
   app.all("*", (req, res) => {
     TslLogUtil.warn(req.url);
     res.render('pages/404', {user: bizLogic.getLoggedInUser()});
