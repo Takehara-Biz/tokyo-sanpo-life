@@ -10,11 +10,14 @@
     <%- include('../../partials/header', {user: user}); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll">
-        <h1>このサイトについて</h1>
+        <%- include('../../partials/page-title', {title: 'このサイトについて'}); %>
         <h2>目的</h2>
         <p>管理人は、散歩好きなエンジニアです。そこで散歩情報を集めたサイトを作ろうと思いました。無料でお使いいただけます。</p>
+        <h2>お問い合わせ先・連絡先</h2>
+        <a href="https://twitter.com/tokyosanpolife">@tokyosanpolife</a>
         <h2>運営元</h2>
         <p>個人事業主 Yasushi Takehara (屋号：LIBERTY)</p>
+        
         <h2>想定デバイス</h2>
         <p>スマホを縦向きで快適にお使いいただけるデザインにしています。</p>
         <h2>スペシャルサンクス</h2>
