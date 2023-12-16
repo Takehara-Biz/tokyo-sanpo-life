@@ -1,6 +1,7 @@
 import express from 'express'
-import { BizLogic } from '../models/bizLogic'
+import { BizLogic } from '../models/bizLogic';
 import { IPost, PostCategory } from '../models/serverTslDef';
+import { TslLogUtil } from '../utils/tslLogUtil';
 
 const bizLogic = new BizLogic();
 
@@ -25,7 +26,12 @@ export const routing = ((app: express.Express): void => {
   });
   app.get('/post/:id', function (req, res, next) {
     const post = bizLogic.findPost(req.params.id);
-    res.render('pages/post-detail', { post: post, showBack: true });
+    if( post !== null ){
+      res.render('pages/post-detail', { post: post, showBack: true });
+    } else {
+      // not found
+      res.render('pages/404');
+    }
   });
   app.post('/post', function (req, res, next) {
     console.log('req : ' + req);
@@ -68,5 +74,9 @@ export const routing = ((app: express.Express): void => {
   });
   app.get('/others', function (req, res, next) {
     res.render('pages/others', { title: 'My Page' });
+  });
+  app.all("*", (req, res) => {
+    TslLogUtil.warn(req.url);
+    res.render('pages/404');
   });
 });

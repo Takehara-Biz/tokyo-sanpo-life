@@ -1,6 +1,7 @@
 import express from 'express'
 import favicon from 'serve-favicon'
-import { routing } from './controllers/controllers'
+import { routing } from './src/controllers/controllers'
+import { TslLogUtil } from './src/utils/tslLogUtil'
 
 const app: express.Express = express()
 const port = 3000
@@ -12,6 +13,11 @@ app.set('view engine', 'ejs');
 //app.use(express.static(__dirname + '/public'));
 app.use(express.static('public'));
 app.use(favicon('./public/images/favicon.ico'));
+app.use(function(req, res, next) {
+  TslLogUtil.debug('[BEGIN] ' + req.url + ", req.params=" + JSON.stringify(req.params) + ", req.body=" + JSON.stringify(req.body));
+  next();
+  TslLogUtil.debug('[  END] ' + req.url);
+});
 
 routing(app);
 
