@@ -4,12 +4,6 @@
 <head>
   <%- include('../partials/head'); %>
     <style>
-      h1 {
-        font-family: 'Kaisei Decol';
-        font-size: x-large;
-        color: #ff0099;
-      }
-
       h2 {
         font-family: 'Kaisei Decol';
         font-size: large;
@@ -20,17 +14,16 @@
 
 <body>
   <div class="flex flex-col max-h-screen">
-    <%- include('../partials/header'); %>
+    <%- include('../partials/header', {user: user}); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll">
-        <div class="bg-accent w-full h-16 flex items-center justify-center" style="font-family: 'Kaisei Decol';">
-          <h1 class="text-white">使い方</h1>
-        </div>
+        <%- include('../partials/page-title', {title: '使い方'}); %>
         <div class="bg-gray w-full">
           <div class="m-2 p-1 border rounded-lg">
             <h2>💡&nbsp;近くで散歩に良い場所を簡単に見つけられる！</h2>
             <p class="mt-1">
               散歩の口コミ情報が閲覧できます！<br />
+              東京だけでなく、神奈川、埼玉、千葉など、東京から日帰りで行ける範囲もカバーしています。<br />
               「マップ」から探してみましょう。
             </p>
           </div>
@@ -54,8 +47,7 @@
               LINEのオープンチャットで、東京散歩ライフのオフ会を定期的にやってます。<br />
               公園🏞や神社⛩など、有名な観光地からマイナーなスポットまで、様々な場所を巡っています。いつも穏やかな雰囲気ですよ😌。<br />
               少人数制の承認方式を取っており、メンバーは皆顔見知りなので、安心して参加できます😄。<br />
-              興味のある方は、まずはゲストとしてご参加いただき、その後は任意で加入いただければと思います。<br />
-              ※参加を前提とした会なので、長期間参加されない方は、退出させられることがあります。
+              興味のある方は、まずはゲストとしてご参加いただき、その後は任意で加入いただければと思います。
             </p>
           </div>
         </div>

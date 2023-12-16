@@ -33,7 +33,6 @@ const TslGMapUtil = {
       '<img width="40px" height="40px" src="' + post.user.iconUrl + '" style="border: 2px solid #ff0099; border-radius:50%" />' +
       '<h4 style="font-weight:bold; font-family:Kaisai Decol; color:#ff0099; padding-left:10px;">' + post.user.userName + '</h4>' +
       '</div>' +
-      '<h4 id="firstHeading">' + post.title + '</h4>' +
       '<p style="font-size:small;">' + post.insertDate.toLocaleString("ja-JP") + "</p>" +
       '</div>' +
       '</div>' +
@@ -59,9 +58,10 @@ const TslGMapUtil = {
   },
 
   async createTslMarker(postCategory: PostCategory, position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
+    console.log('postCategory:' + postCategory);
+    console.log('postCategory:' + JSON.parse(JSON.stringify(postCategory))['id']);
     let marker: Promise<google.maps.marker.AdvancedMarkerElement>;
-    const markerDef = CategoryIdAndMarkerTypeDefMap.get(postCategory.getId());
-    //console.log('categoryType:' + categoryType + ", markerDef:" + markerDef);
+    const markerDef = CategoryIdAndMarkerTypeDefMap.get(JSON.parse(JSON.stringify(postCategory))['id']);
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
 
     const icon = document.createElement('div');
@@ -71,6 +71,7 @@ const TslGMapUtil = {
       glyphColor: markerDef!.glyphColor,
       background: markerDef!.bgColor,
       borderColor: markerDef!.glyphColor,
+      scale: 1.5,
     });
 
     return new AdvancedMarkerElement({

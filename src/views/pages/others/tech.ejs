@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../../partials/head'); %>
+</head>
+
+<body>
+  <div class="flex flex-col min-h-screen max-h-screen">
+    <%- include('../../partials/header', {user: user}); %>
+      <!-- Main Body -->
+      <div class="grow overflow-y-scroll">
+        <%- include('../../partials/page-title', {title: '技術情報'}); %>
+        <p>本Webアプリは、以下の技術により構成されています。</p>
+        <ul>
+          <li><a href="https://nodejs.org/en" target="_blank">Node.js</a></li>
+          <li><a href="https://expressjs.com/" target="_blank">Express</a></li>
+          <li><a href="https://ejs.co/" target="_blank">EJS</a></li>
+          <li><a href="https://www.typescriptlang.org/" target="_blank">TypeScript</a></li>
+          <li><a href="https://tailwindcss.com/" target="_blank">Tailwind CSS</a></li>
+          <li><a href="https://getbootstrap.com/" target="_blank">Bootstrap</a></li>
+          <li><a href="https://firebase.google.com/" target="_blank">Firebase</a></li>
+          <li><a href="https://developers.google.com/maps" target="_blank">Google Maps Platform</a></li>
+          <li><a href="https://github.com/" target="_blank">GitHub</a></li>
+        </ul>
+        <h2>フォント・アイコンなど</h2>
+        <ul>
+          <li><a href="https://fonts.google.com/specimen/Kaisei+Decol" target="_blank">Kaisei Decol</a></li>
+          <li><a href="https://fonts.google.com/noto/specimen/Noto+Sans+JP" target="_blank">Noto Sans Japanese</a></li>
+          <li><a href="https://fonts.google.com/icons" target="_blank">Google Fonts Icon</a></li>
+        </ul>
+      </div>
+      <%- include('../../partials/footer', {currentMenu: 5}); %>
+  </div>
+</body>
+
+</html>

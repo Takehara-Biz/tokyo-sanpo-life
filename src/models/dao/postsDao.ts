@@ -16,15 +16,14 @@ export class PostsDao {
         id: i.toString(),
         user: {
           id: i.toString(),
-          userName: this.generateRandomString(8),
+          userName: this.generateRandomString(3, 12),
           iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
         },
-        title: this.generateRandomString(22),
         postCategory: this.chooseContentTypeEnumRandomly(),
         imageUrl: "https://media.timeout.com/images/105544832/1372/772/image.webp",
-        lat: 35.6 + (Math.random() / 10),
-        lon: 139.7 + (Math.random() / 10),
-        description: this.generateRandomString(300),
+        lat: 35.2 + (Math.random()),
+        lng: 139.3 + (Math.random()),
+        description: this.generateRandomString(1, 100),
         insertDate: new Date("2023/12/01"),
         postComments: comments,
       };
@@ -32,12 +31,12 @@ export class PostsDao {
     }
   }
 
-  private generateRandomString(charCount: number): string {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  private generateRandomString(charMinCount: number, charMaxCount: number): string {
+    const useChar = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const strLength = Math.floor(Math.random() * (charMaxCount - charMinCount)) + charMinCount;
     let result = '';
-    const charactersLength = characters.length;
-    for (let i = 0; i < charCount; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    for (let i = 0; i < strLength; i++) {
+      result += useChar.charAt(Math.floor(Math.random() * useChar.length));
     }
     return result;
   }
@@ -49,10 +48,10 @@ export class PostsDao {
         id: i.toString(),
         user: {
           id: i.toString(),
-          userName: this.generateRandomString(5),
+          userName: this.generateRandomString(3, 12),
           iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
         },
-        comment: this.generateRandomString(100),
+        comment: this.generateRandomString(1, 100),
         commentDate: new Date("2023/12/01"),
       },)
     }

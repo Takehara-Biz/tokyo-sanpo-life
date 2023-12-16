@@ -8,21 +8,17 @@ class PostCategory {
   ){}
 
   public static readonly Flower = new PostCategory(1, '🌸', '花、植物');
-  public static readonly Landscape = new PostCategory(2, '🏞', '自然、公園、風景、空');
+  public static readonly Landscape = new PostCategory(2, '🏞', '自然、公園、風景、山、空、川、海');
   public static readonly Cafe = new PostCategory(3, '☕️', 'カフェ、飲食店');
   public static readonly Shrine = new PostCategory(4, '⛩', '神社、寺、城');
-  public static readonly Object = new PostCategory(5, '🗿', '人工物、モニュメント');
-  public static readonly Building = new PostCategory(6, '🏬', 'ビル、家、タワー');
-  public static readonly Water = new PostCategory(7, '🌊', '海、川、池、湖');
-  public static readonly Other = new PostCategory(8, '💡', 'その他');
+  public static readonly Building = new PostCategory(5, '🏬', 'ビル、家、タワー、人工物、モニュメント');
+  public static readonly Other = new PostCategory(6, '💡', 'その他');
   public static readonly Categories = [
     PostCategory.Flower,
     PostCategory.Landscape,
     PostCategory.Cafe,
     PostCategory.Shrine,
-    PostCategory.Object,
     PostCategory.Building,
-    PostCategory.Water,
     PostCategory.Other,
   ]
 
@@ -54,9 +50,7 @@ CategoryIdAndMarkerTypeDefMap.set(PostCategory.Flower.getId(), {iconKeyWord: "fi
 CategoryIdAndMarkerTypeDefMap.set(PostCategory.Landscape.getId(), {iconKeyWord: "landscape", glyphColor: "#33cc00", bgColor: "#ccffcc"});
 CategoryIdAndMarkerTypeDefMap.set(PostCategory.Cafe.getId(), {iconKeyWord: "local_cafe", glyphColor: "#663300", bgColor: "#ffcc99"});
 CategoryIdAndMarkerTypeDefMap.set(PostCategory.Shrine.getId(), {iconKeyWord: "temple_buddhist", glyphColor: "#6600ff", bgColor: "#cc99ff"});
-CategoryIdAndMarkerTypeDefMap.set(PostCategory.Object.getId(), {iconKeyWord: "draw_abstract", glyphColor: "#000000", bgColor: "#cccccc"});
-CategoryIdAndMarkerTypeDefMap.set(PostCategory.Building.getId(), {iconKeyWord: "location_city", glyphColor: "#ffffff", bgColor: "#666666"});
-CategoryIdAndMarkerTypeDefMap.set(PostCategory.Water.getId(), {iconKeyWord: "water", glyphColor: "#0000cc", bgColor: "#99ccff"});
+CategoryIdAndMarkerTypeDefMap.set(PostCategory.Building.getId(), {iconKeyWord: "location_city", glyphColor: "#0000ff", bgColor: "#99ffff"});
 CategoryIdAndMarkerTypeDefMap.set(PostCategory.Other.getId(), {iconKeyWord: "lightbulb", glyphColor: "#ff3300", bgColor: "#ffffcc"});
 
 interface IUser {
@@ -82,14 +76,13 @@ interface IPostComment {
  * 投稿
  */
 interface IPost {
-  id: string;
-  user: IUser;
-  title: string;
-  postCategory: PostCategory;
+  id: string,
+  user: IUser,
   imageUrl: string;
   lat: number;
-  lon: number;
+  lng: number;
+  postCategory: PostCategory;
   description: string;
   insertDate: Date;
-  postComments: IPostComment[]
+  postComments: IPostComment[];
 }
