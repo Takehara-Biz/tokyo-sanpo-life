@@ -11,10 +11,10 @@
         <div class="mb-0 font-tsl_title text-accent text-2xl">東京散歩ライフ</div>
         <img src="/images/tsl.png" width="40px" class="inline" />
       </div>
-      <a class="nav-link flex flex-col items-center" href="/login">
+      <a class="nav-link flex flex-col items-center" href="/<% if (user === undefined) { %>login<% } else { %>my-page<% } %>">
         <% if (user === undefined) { %>
           <span class="material-symbols-outlined text-accent text-3xl">
-            account_circle
+            account_circle_off
           </span>
         <% } else { %>
           <img width="30px" height="30px" src="<%= user.iconUrl %>" style="border: 2px solid #ff0099; border-radius:50%;" />

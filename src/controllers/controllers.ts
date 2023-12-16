@@ -18,23 +18,26 @@ export const routing = ((app: express.Express): void => {
       twitterProfileLink: "https://www.yahoo.co.jp",
       instagramProfileLink: "https://www.yahoo.co.jp",
     })
+    res.render('pages/my-page', {user: bizLogic.getLoggedInUser(), toast: true});
+  });
+  app.get('/my-page', function (req, res, next) {
     res.render('pages/my-page', {user: bizLogic.getLoggedInUser()});
   });
   app.post('/logout', function (req, res, next) {
     bizLogic.logout();
-    res.render('pages/login', { menu1: true });
+    res.render('pages/login', {user: bizLogic.getLoggedInUser()});
   });
   app.get('/how-to-use', function (req, res, next) {
     res.render('pages/how-to-use', {user: bizLogic.getLoggedInUser()});
   });
   app.get('/new-posts', function (req, res, next) {
     const targetPosts = bizLogic.findPosts();
-    res.render('pages/new-posts', { targetPosts: targetPosts });
+    res.render('pages/new-posts', {user: bizLogic.getLoggedInUser(), targetPosts: targetPosts });
   });
   app.get('/post/:id', function (req, res, next) {
     const post = bizLogic.findPost(req.params.id);
     if( post !== null ){
-      res.render('pages/post-detail', { post: post, showBack: true });
+      res.render('pages/post-detail', {user: bizLogic.getLoggedInUser(), post: post, showBack: true });
     } else {
       // not found
       res.render('pages/404');
@@ -70,20 +73,20 @@ export const routing = ((app: express.Express): void => {
     }
     bizLogic.createPost(newPost);
     const post = bizLogic.findPost(newPost.id);
-    res.render('pages/post-detail', { post: post, showBack: false });
+    res.render('pages/post-detail', {user: bizLogic.getLoggedInUser(), post: post, showBack: false });
   });
   app.get('/map', function (req, res, next) {
     const targetPosts = bizLogic.findPosts();
-    res.render('pages/map', { targetPosts: targetPosts });
+    res.render('pages/map', {user: bizLogic.getLoggedInUser(), targetPosts: targetPosts });
   });
   app.get('/add-post', function (req, res, next) {
-    res.render('pages/add-post', { categories: PostCategory.Categories });
+    res.render('pages/add-post', {user: bizLogic.getLoggedInUser(), categories: PostCategory.Categories });
   });
   app.get('/others', function (req, res, next) {
-    res.render('pages/others', { title: 'My Page' });
+    res.render('pages/others', {user: bizLogic.getLoggedInUser(), title: 'My Page' });
   });
   app.all("*", (req, res) => {
     TslLogUtil.warn(req.url);
-    res.render('pages/404');
+    res.render('pages/404', {user: bizLogic.getLoggedInUser()});
   });
 });
