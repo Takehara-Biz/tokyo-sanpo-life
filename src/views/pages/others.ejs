@@ -19,27 +19,13 @@
       <div class="flex-grow overflow-y-scroll">
         <%- include('../partials/page-title', {title: 'その他'}); %>
         <div class="list-group">
-          <a href="#" class="list-group-item list-group-item-action py-4">
-            <h2>📰&nbsp;コラム</h2>
-          </a>
-          <a href="others/about" class="list-group-item list-group-item-action py-4">
-            <h2>✅&nbsp;このサイトについて</h2>
-          </a>
-          <a href="#" class="list-group-item list-group-item-action py-4">
-            <h2>👨‍💻&nbsp;開発者紹介</h2>
-          </a>
-          <a href="others/tech" class="list-group-item list-group-item-action py-4">
-            <h2>🤖&nbsp;技術情報</h2>
-          </a>
-          <a href="others/terms-of-service" class="list-group-item list-group-item-action py-4">
-            <h2>👨‍⚖️&nbsp;利用規約</h2>
-          </a>
-          <a href="others/privacy-policy" class="list-group-item list-group-item-action py-4">
-            <h2>🙈&nbsp;プライバシーポリシー</h2>
-          </a>
-          <a href="others/cookie-policy" class="list-group-item list-group-item-action py-4">
-            <h2>🍪&nbsp;クッキーポリシー</h2>
-          </a>
+          <%- include('../partials/others-item-list', {href: "#", emoji: "📰", name: "コラム"}) %>
+          <%- include('../partials/others-item-list', {href: "others/about", emoji: "✅", name: "このサイトについて"}) %>
+          <%- include('../partials/others-item-list', {href: "#", emoji: "👨‍💻", name: "開発者紹介"}) %>
+          <%- include('../partials/others-item-list', {href: "others/tech", emoji: "🤖", name: "技術情報"}) %>
+          <%- include('../partials/others-item-list', {href: "others/terms-of-service", emoji: "👨‍⚖️", name: "利用規約"}) %>
+          <%- include('../partials/others-item-list', {href: "others/privacy-policy", emoji: "🙈", name: "プライバシーポリシー"}) %>
+          <%- include('../partials/others-item-list', {href: "others/cookie-policy", emoji: "🍪", name: "クッキーポリシー"}) %>
         </div>
       </div>
       <%- include('../partials/footer', {currentMenu: 5}); %>
