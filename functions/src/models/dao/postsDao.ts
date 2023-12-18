@@ -1,18 +1,17 @@
-import { IPost, IPostComment, PostCategory } from '../serverTslDef';
+import {IPost, IPostComment, PostCategory} from "../serverTslDef";
 
 export class PostsDao {
-
   private idAndPostMap: Map<string, IPost> = new Map<string, IPost>();
 
-  constructor(postCount: number){
+  constructor(postCount: number) {
     this.generateRandomPosts(postCount);
   }
 
-  private generateRandomPosts(postCount: number): void{
+  private generateRandomPosts(postCount: number): void {
     const commentsCount = 10;
     const comments: IPostComment[] = this.createRandomComments(commentsCount);
     for (let i = 0; i < postCount; i++) {
-      let post = {
+      const post = {
         id: i.toString(),
         user: {
           id: i.toString(),
@@ -32,9 +31,9 @@ export class PostsDao {
   }
 
   private generateRandomString(charMinCount: number, charMaxCount: number): string {
-    const useChar = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const useChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const strLength = Math.floor(Math.random() * (charMaxCount - charMinCount)) + charMinCount;
-    let result = '';
+    let result = "";
     for (let i = 0; i < strLength; i++) {
       result += useChar.charAt(Math.floor(Math.random() * useChar.length));
     }
@@ -53,7 +52,7 @@ export class PostsDao {
         },
         comment: this.generateRandomString(1, 100),
         commentDate: new Date("2023/12/01"),
-      },)
+      },);
     }
     return comments;
   }

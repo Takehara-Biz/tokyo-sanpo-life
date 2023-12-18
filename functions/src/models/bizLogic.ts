@@ -1,12 +1,12 @@
-import { PostsDao } from './dao/postsDao';
-import { IPost, IUser } from './serverTslDef';
+import {PostsDao} from "./dao/postsDao";
+import {IPost, IUser} from "./serverTslDef";
 
 export class BizLogic {
   private loggedInUser: IUser | undefined;
-  public setLoggedInUser(loggedInUser: IUser){
+  public setLoggedInUser(loggedInUser: IUser) {
     this.loggedInUser = loggedInUser;
   }
-  public logout(): void{
+  public logout(): void {
     this.loggedInUser = undefined;
   }
   public getLoggedInUser(): IUser | undefined {
@@ -14,9 +14,9 @@ export class BizLogic {
   }
 
   private postsDao = new PostsDao(50);
-  
+
   public findPosts(): IPost[] {
-    //return ServerDummyData;
+    // return ServerDummyData;
     return this.postsDao.findPosts();
   }
 

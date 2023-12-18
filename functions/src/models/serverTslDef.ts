@@ -5,14 +5,14 @@ export class PostCategory {
     private id: number,
     private emoji: string,
     private label: string
-  ){}
+  ) {}
 
-  public static readonly Flower = new PostCategory(1, '🌸', '花、植物');
-  public static readonly Landscape = new PostCategory(2, '🏞', '自然、公園、風景、山、空、川、海');
-  public static readonly Cafe = new PostCategory(3, '☕️', 'カフェ、飲食店');
-  public static readonly Shrine = new PostCategory(4, '⛩', '神社、寺、城');
-  public static readonly Building = new PostCategory(5, '🏬', 'ビル、家、タワー、人工物、モニュメント');
-  public static readonly Other = new PostCategory(6, '💡', 'その他');
+  public static readonly Flower = new PostCategory(1, "🌸", "花、植物");
+  public static readonly Landscape = new PostCategory(2, "🏞", "自然、公園、風景、山、空、川、海");
+  public static readonly Cafe = new PostCategory(3, "☕️", "カフェ、飲食店");
+  public static readonly Shrine = new PostCategory(4, "⛩", "神社、寺、城");
+  public static readonly Building = new PostCategory(5, "🏬", "ビル、家、タワー、人工物、モニュメント");
+  public static readonly Other = new PostCategory(6, "💡", "その他");
   public static readonly Categories = [
     PostCategory.Flower,
     PostCategory.Landscape,
@@ -20,8 +20,8 @@ export class PostCategory {
     PostCategory.Shrine,
     PostCategory.Building,
     PostCategory.Other,
-  ]
-  public static findCategory(id: number): PostCategory{
+  ];
+  public static findCategory(id: number): PostCategory {
     return PostCategory.Categories[id - 1];
   }
 
