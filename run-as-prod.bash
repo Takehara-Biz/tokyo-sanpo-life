@@ -1,5 +1,5 @@
 #!/bin/bash
-./env/local.bash
+./env/prod.bash
 cd functions
 npm run build
 firebase serve
