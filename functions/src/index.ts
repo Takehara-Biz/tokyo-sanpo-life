@@ -49,14 +49,5 @@ app.use(function(req: Request, res: Response, next: NextFunction) {
 
 routing(app);
 
-// app.get('/hello', (req: any, res: any) => {
-//   // レスポンスの設定
-//   res.send('Hello Express!');
-// });
-
-// app.listen(port, () => {
-//   console.log(`Example app listening on port ${port}`)
-// })
-
 // 出力
 exports.app = functions.region("asia-northeast1").https.onRequest(app);

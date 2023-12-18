@@ -19,16 +19,28 @@
     <%- include('../partials/header'); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll p-2">
-        <div class="accordion" id="accordionExample">
+        <ul class="nav nav-tabs nav-justified">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="./add-record.ejs">
+              👣&nbsp;毎日歩数計
+            </a>
+          </li>
+          <li class="nav-item bg-accent">
+            <a class="nav-link bg-accent text-white" href="#">
+              📍地図に追加
+            </a>
+          </li>
+        </ul>
+        <div class="accordion mt-3" id="accordionExample">
           <div class="accordion-item">
             <h2 class="accordion-header">
-              <button class="accordion-button collapsed" style="background-color: #ff0099 !important;" type="button"
+              <button class="accordion-button collapsed" type="button"
                 data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true"
                 aria-controls="collapseOne">
-                <span class="material-symbols-outlined text-white">
+                <span class="material-symbols-outlined text-accent">
                   warning
                 </span>
-                <span class="text-white">投稿前の注意事項</span>
+                <span class="text-accent">投稿前の注意事項</span>
               </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse visible" data-bs-parent="#accordionExample">
@@ -46,7 +58,7 @@
           <div class="mt-3">
             <label class="form-label">写真選択</label>
             <input type="file" id="uploadPhoto" name="uploadPhoto" required accept=".jpg, .jpeg, .png" />
-            <div id="printPhoto" class="border rounded h-40 flex justify-center items-center">
+            <div id="printPhoto" class="mt-1 border rounded h-40 flex justify-center items-center">
               <img src="/images/emptyPhoto.png" class="h-40">
             </div>
             <script>

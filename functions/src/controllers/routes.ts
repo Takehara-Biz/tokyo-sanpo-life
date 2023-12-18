@@ -79,6 +79,9 @@ export const routing = ((app: Express): void => {
     const targetPosts = bizLogic.findPosts();
     res.render("pages/map", {user: bizLogic.getLoggedInUser(), targetPosts: targetPosts});
   });
+  app.get("/add-record", function(req, res, next) {
+    res.render("pages/add-record", {user: bizLogic.getLoggedInUser()});
+  });
   app.get("/add-post", function(req, res, next) {
     res.render("pages/add-post", {user: bizLogic.getLoggedInUser(), categories: PostCategory.Categories});
   });
