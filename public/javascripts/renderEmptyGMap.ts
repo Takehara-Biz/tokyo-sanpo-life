@@ -29,7 +29,7 @@ const RenderEmptyGMap = {
       map: map
     });
 
-    map.addListener("click", (event: { latLng: google.maps.LatLngLiteral; }) => {
+    map.addListener("click", async (event: { latLng: google.maps.LatLngLiteral; }) => {
       const latLngJson = JSON.parse(JSON.stringify(event.latLng));
       const lat = latLngJson['lat'];
       const lng = latLngJson['lng'];
@@ -43,8 +43,14 @@ const RenderEmptyGMap = {
         return;
       }
 
+      const postCategorySelect = document.getElementById('postCategory')! as HTMLSelectElement;
+      const postCategoryValue = postCategorySelect.options[postCategorySelect.selectedIndex].value;
+      console.debug("postCategoryValue : " + postCategoryValue);
+      let pinElement = await TslGMapUtil.createPinElement(Number(postCategoryValue));
+
       newMarker.position = event.latLng;
       newMarker.map = map;
+      newMarker.content = pinElement.element;
       
       let markerLat = document.getElementById("markerLat");
       markerLat!.setAttribute("value", lat);

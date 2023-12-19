@@ -107,7 +107,7 @@ const RenderPostsOnGMap = {
     posts.map(async (post: IPost) => {
 
       position = { lat: post.lat, lng: post.lng };
-      let marker = await TslGMapUtil.createTslMarker(post.postCategory, position);
+      let marker = await TslGMapUtil.createTslMarker(post.postCategory.getId(), position);
       marker.map = map;
 
       marker.addListener('click', function () {

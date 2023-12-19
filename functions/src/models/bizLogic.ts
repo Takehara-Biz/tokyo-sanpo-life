@@ -1,3 +1,4 @@
+import { TslLogUtil } from "../utils/tslLogUtil";
 import {PostsDao} from "./dao/postsDao";
 import {IPost, IUser} from "./serverTslDef";
 
@@ -13,18 +14,22 @@ export class BizLogic {
     return this.loggedInUser;
   }
 
-  private postsDao = new PostsDao(50);
+  private postsDao = new PostsDao(10);
 
   public findPosts(): IPost[] {
-    // return ServerDummyData;
-    return this.postsDao.findPosts();
+    const result = this.postsDao.findPosts();
+    //TslLogUtil.info('findPosts length : ' + result.length);
+    return result;
   }
 
   public findPost(id: string): IPost | null {
-    return this.postsDao.findPost(id);
+    const result = this.postsDao.findPost(id);
+    //TslLogUtil.debug('findPost result : ' + JSON.stringify(result));
+    return result;
   }
 
   public createPost(post: IPost): void {
+    //TslLogUtil.info('createPost : ' + JSON.stringify(post));
     return this.postsDao.createPost(post);
   }
 }

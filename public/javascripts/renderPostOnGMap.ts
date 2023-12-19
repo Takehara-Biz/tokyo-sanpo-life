@@ -25,7 +25,9 @@ const RenderPostOnGMap = {
 
       let contentString = TslGMapUtil.createInfoContent(post);
       position = { lat: post.lat, lng: post.lng };
-      let marker = await TslGMapUtil.createTslMarker(post.postCategory, position);
+      let postCategoryId = JSON.parse(JSON.stringify(post.postCategory))['id']
+      console.debug("postCategoryId : " + postCategoryId);
+      let marker = await TslGMapUtil.createTslMarker(Number(postCategoryId), position);
       marker.map = map;
 
       marker.addListener('click', function () {

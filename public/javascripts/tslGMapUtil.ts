@@ -57,26 +57,28 @@ const TslGMapUtil = {
     return locationButton;
   },
 
-  async createTslMarker(postCategory: PostCategory, position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
-    console.log('postCategory:' + postCategory);
-    console.log('postCategory:' + JSON.parse(JSON.stringify(postCategory))['id']);
-    let marker: Promise<google.maps.marker.AdvancedMarkerElement>;
-    const markerDef = CategoryIdAndMarkerTypeDefMap.get(JSON.parse(JSON.stringify(postCategory))['id']);
-    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+  async createTslMarker(postCategoryId: number, position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
+    console.debug('createTslMarker postCategoryId:' + postCategoryId);
+    
+    let pinElement = await TslGMapUtil.createPinElement(postCategoryId);
+    return new google.maps.marker.AdvancedMarkerElement({
+      position: position,
+      content: pinElement.element,
+    });
+  },
 
+  async createPinElement(postCategoryId: number): Promise<google.maps.marker.PinElement>{
+    console.debug('createPinElement postCategoryId:' + postCategoryId);
+    
+    const markerDef = CategoryIdAndMarkerTypeDefMap.get(postCategoryId);
     const icon = document.createElement('div');
     icon.innerHTML = '<span class="material-symbols-outlined text-xl">' + markerDef!.iconKeyWord + '</span>';
-    const faPin = new PinElement({
+    return new google.maps.marker.PinElement({
       glyph: icon,
       glyphColor: markerDef!.glyphColor,
       background: markerDef!.bgColor,
       borderColor: markerDef!.glyphColor,
       scale: 1.5,
     });
-
-    return new AdvancedMarkerElement({
-      position: position,
-      content: faPin.element,
-    });
-  },
+  }
 }

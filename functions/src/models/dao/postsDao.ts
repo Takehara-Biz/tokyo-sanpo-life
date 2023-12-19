@@ -1,3 +1,4 @@
+import { TslLogUtil } from "../../utils/tslLogUtil";
 import {IPost, IPostComment, PostCategory} from "../serverTslDef";
 
 export class PostsDao {
@@ -63,14 +64,19 @@ export class PostsDao {
   }
 
   public findPosts(): IPost[] {
-    return [...this.idAndPostMap.values()];
+    const result = [...this.idAndPostMap.values()]
+    TslLogUtil.info('findPosts length : ' + result.length);
+    return result;
   }
 
   public findPost(id: string): IPost | null {
+    const result = this.idAndPostMap.get(id) ?? null;
+    TslLogUtil.debug('findPost result : ' + JSON.stringify(result));
     return this.idAndPostMap.get(id) ?? null;
   }
 
   public createPost(post: IPost):void {
+    TslLogUtil.info('createPost : ' + JSON.stringify(post));
     this.idAndPostMap.set(post.id, post);
   }
 }
