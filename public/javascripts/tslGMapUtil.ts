@@ -60,8 +60,9 @@ const TslGMapUtil = {
   async createTslMarker(postCategoryId: number, position: google.maps.LatLng | google.maps.LatLngLiteral): Promise<google.maps.marker.AdvancedMarkerElement> {
     console.debug('createTslMarker postCategoryId:' + postCategoryId);
     
+    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
     let pinElement = await TslGMapUtil.createPinElement(postCategoryId);
-    return new google.maps.marker.AdvancedMarkerElement({
+    return new AdvancedMarkerElement({
       position: position,
       content: pinElement.element,
     });
@@ -73,7 +74,10 @@ const TslGMapUtil = {
     const markerDef = CategoryIdAndMarkerTypeDefMap.get(postCategoryId);
     const icon = document.createElement('div');
     icon.innerHTML = '<span class="material-symbols-outlined text-xl">' + markerDef!.iconKeyWord + '</span>';
-    return new google.maps.marker.PinElement({
+
+
+    const { PinElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+    return new PinElement({
       glyph: icon,
       glyphColor: markerDef!.glyphColor,
       background: markerDef!.bgColor,

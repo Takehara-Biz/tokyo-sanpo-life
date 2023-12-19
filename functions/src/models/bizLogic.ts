@@ -1,4 +1,3 @@
-import { TslLogUtil } from "../utils/tslLogUtil";
 import {PostsDao} from "./dao/postsDao";
 import {IPost, IUser} from "./serverTslDef";
 
