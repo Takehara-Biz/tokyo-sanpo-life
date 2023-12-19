@@ -67,32 +67,7 @@
           <% } %>
       </div>
       <%- include('../partials/footer', {currentMenu: 2}); %>
-      <!-- Toast -->
-      <div class="position-fixed top-50 start-50 translate-middle p-3" style="z-index: 11">
-        <div id="liveToast" class="toast hide" data-bs-delay="2000" role="alert" aria-live="assertive"
-          aria-atomic="true">
-          <div class="toast-header">
-            <img src="/images/tsl.png" width="30px" class="rounded me-2" alt="tsl-light">
-            <strong class="me-auto">コンテンツを登録しました😊</strong>
-          </div>
-          <!-- <div class="toast-body">
-                  Hello, world! This is a toast message.
-                </div> -->
-        </div>
-      </div>
-      <script>
-        window.onload = (() => {
-          let toast = false;
-          <% if (/* if toast is defined and true */ locals.toast === true) { %>
-            toast = true;
-          <% } %>
-          if (toast) {
-            const toastLiveExample = document.getElementById('liveToast')
-            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
-            toastBootstrap.show();
-          }
-        });
-      </script>
+
   </div>
 </body>
 

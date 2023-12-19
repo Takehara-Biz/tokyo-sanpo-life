@@ -72,7 +72,7 @@ export class PostsDao {
   public findPost(id: string): IPost | null {
     const result = this.idAndPostMap.get(id) ?? null;
     TslLogUtil.debug('findPost result : ' + JSON.stringify(result));
-    return this.idAndPostMap.get(id) ?? null;
+    return result;
   }
 
   public createPost(post: IPost):void {
