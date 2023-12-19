@@ -18,14 +18,14 @@
 </head>
 
 <body>
-  <div class="flex flex-col min-h-screen">
+  <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
     <%- include('../partials/header'); %>
 
     <!-- Main Body -->
     <div id="map" style="flex-grow: 1;"></div>
 
     <!-- The Modal -->
-    <div id="info" class="overflow-y-scroll" style="display:none; height:calc(50vh); overflow-y: scroll;">情報ウィンドウ表示場所</div>
+    <div id="info" class="overflow-y-scroll" style="display:none; height:calc(50svh); overflow-y: scroll;">情報ウィンドウ表示場所</div>
     <%- include('../partials/footer', {currentMenu: 3}); %>
   </div>
 </body>
