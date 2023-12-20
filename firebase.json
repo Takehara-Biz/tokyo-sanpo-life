@@ -16,6 +16,11 @@
   ],
   "hosting": {
     "public": "public",
+    "redirects":[{
+      "source": "/",
+      "destination": "/how-to-use",
+      "type": 301
+  }],
     "rewrites": [{
       "source": "**",
       "function": {

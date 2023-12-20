@@ -38,8 +38,8 @@ app.set("views", "./src/views");
 app.use(express.static("public"));
 
 // fix later!
-//const favicon = require("serve-favicon");
-//app.use(favicon("../public/images/favicon.ico"));
+// const favicon = require("serve-favicon");
+// app.use(favicon("./src/kkrn_icon_kirakira_2.svg"));
 
 app.use(function(req: Request, res: Response, next: NextFunction) {
   TslLogUtil.debug("[BEGIN] " + req.url + ", req.params=" + JSON.stringify(req.params) + ", req.body=" + JSON.stringify(req.body));
