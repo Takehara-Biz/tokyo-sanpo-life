@@ -91,6 +91,9 @@ export const routing = ((app: Express): void => {
   app.get("/others/about", function(req, res, next) {
     res.render("pages/others/about", {user: bizLogic.getLoggedInUser(), showBack: true});
   });
+  app.get("/others/developer", function(req, res, next) {
+    res.render("pages/others/developer", {user: bizLogic.getLoggedInUser(), showBack: true});
+  });
   app.get("/others/tech", function(req, res, next) {
     res.render("pages/others/tech", {user: bizLogic.getLoggedInUser(), showBack: true});
   });

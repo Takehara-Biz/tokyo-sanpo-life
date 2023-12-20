@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../../partials/head'); %>
+  <style>
+    h2 {
+      font-size: large;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
+    <%- include('../../partials/header', {user: user}); %>
+      <!-- Main Body -->
+      <div class="grow overflow-y-scroll">
+        <%- include('../../partials/page-title', {title: '開発者紹介' }); %>
+          <div class="p-1">
+            <h2>名前</h2>
+            <p>Yasu🚶‍♂️（散歩エンジニア）</p>
+            <h2>お問い合わせ先・連絡先</h2>
+            X（旧：ツイッター）からDMをください。
+            <p><a href="https://twitter.com/TakeharaBiz">@TakeharaBiz</a></p>
+            <h2>経歴</h2>
+            <p><a href="www.linkedin.com/in/takeharayasushi">LinkedIn</a></p>
+            <h2>趣味</h2>
+            <p>散歩、旅行、カメラ、ピアノ、ジム、銭湯など</p>
+          </div>
+      </div>
+      <%- include('../../partials/footer', {currentMenu: 5}); %>
+  </div>
+</body>
+
+</html>
