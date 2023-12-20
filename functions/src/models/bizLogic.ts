@@ -15,7 +15,7 @@ export class BizLogic {
     return this.loggedInUser;
   }
 
-  private postsDao = new PostsDao(10);
+  private postsDao = new PostsDao(2);
 
   public findPosts(): IPost[] {
     const result = this.postsDao.findPosts();

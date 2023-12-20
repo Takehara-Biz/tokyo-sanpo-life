@@ -57,7 +57,7 @@ export class PostsDao {
   }
 
   private nextval(): number {
-    return this.idSequence++;
+    return ++this.idSequence;
   }
 
   public findPosts(): IPost[] {

@@ -7,24 +7,26 @@ const bizLogic = new BizLogic();
 
 export const routing = ((app: Express): void => {
   app.get("/login", function(req, res, next) {
-    res.render("pages/login", {user: bizLogic.getLoggedInUser()});
+    const toast = req.query.toast != undefined;
+    res.render("pages/login", {user: bizLogic.getLoggedInUser(), toast: toast});
   });
   app.post("/login", function(req, res, next) {
     const user = bizLogic.findUser("1");
     if ( user !== null ) {
       bizLogic.setLoggedInUser(user);
-      res.redirect("/my-page");
+      res.redirect("/my-page?toast");
     } else {
       // not found
       res.render("pages/404");
     }
   });
   app.get("/my-page", function(req, res, next) {
-    res.render("pages/my-page", {user: bizLogic.getLoggedInUser()});
+    const toast = req.query.toast != undefined;
+    res.render("pages/my-page", {user: bizLogic.getLoggedInUser(), toast: toast});
   });
   app.post("/logout", function(req, res, next) {
     bizLogic.logout();
-    res.render("pages/login", {user: bizLogic.getLoggedInUser(), toast: true});
+    res.redirect("/login?toast");
   });
   app.get("/how-to-use", function(req, res, next) {
     res.render("pages/how-to-use", {user: bizLogic.getLoggedInUser()});
@@ -58,7 +60,7 @@ export const routing = ((app: Express): void => {
     const newPost: IPost = {
       id: "this will be updated in dao class",
       user: bizLogic.getLoggedInUser()!,
-      imageUrl: "",
+      imageUrl: "/images/post-sample.jpeg",
       lat: Number(req.body.markerLat),
       lng: Number(req.body.markerLng),
       description: req.body.comment,

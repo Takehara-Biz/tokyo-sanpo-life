@@ -23,7 +23,7 @@
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
     <%- include('../partials/header'); %>
       <!-- Main Body -->
-      <div class="grow overflow-y-scroll p-2">
+      <div class="grow overflow-y-scroll p-2 flex flex-col">
         <ul class="nav nav-tabs nav-justified">
           <li class="nav-item">
             <a class="nav-link" aria-current="page" href="./add-record">
@@ -36,106 +36,116 @@
             </a>
           </li>
         </ul>
-        <div class="accordion mt-3" id="accordionExample">
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button"
-                data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true"
-                aria-controls="collapseOne">
-                <span class="material-symbols-outlined text-accent">
-                  warning
-                </span>
-                <span class="text-accent">投稿前の注意事項</span>
-              </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse visible" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                <ul>
-                  <li>後からいつでも削除できます。</li>
-                  <li>個人を特定できる情報は書かないこと。</li>
-                  <li>公序良俗に反する投稿は行わないこと。</li>
-                  <li>著作権・肖像権に注意すること。</li>
-                </ul>
+        <% if (user === undefined) { %>
+          <div class="grow flex justify-center items-center">
+            <div>
+              <p class="text-center">🥳この機能は、<br />ログインしたら使えるようになります〜。</p>
+              <p class="text-center">ログインまたは新規登録を行うには、<br />右上のユーザアイコンをクリックしてください。</p>
+            </div>
+          </div>
+          <% } else { %>
+            <div class="accordion mt-3" id="accordionExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <span class="material-symbols-outlined text-accent">
+                      warning
+                    </span>
+                    <span class="text-accent">投稿前の注意事項</span>
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse visible" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <ul>
+                      <li>後からいつでも削除できます。</li>
+                      <li>個人を特定できる情報は書かないこと。</li>
+                      <li>公序良俗に反する投稿は行わないこと。</li>
+                      <li>著作権・肖像権に注意すること。</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <form action="/post" method="post" onSubmit="return validate()">
-          <div class="mt-3">
-            <label for="formFile" class="form-label">写真選択</label>
-            <input class="form-control" type="file" id="uploadPhoto" name="uploadPhoto" required accept=".jpg, .jpeg, .png" />
-          </div>
-          <div class="mt-3">
-            <div id="printPhoto" class="border rounded h-40 flex justify-center items-center">
-              <img src="/images/empty-photo.svg" class="h-40">
-            </div>
-            <script>
-              let uploadPhotoInput = document.getElementById('uploadPhoto');
-              uploadPhotoInput.addEventListener('change', function (e) {
-                let file = e.srcElement.files[0];
+            <form action="/post" method="post" onSubmit="return validate()">
+              <div class="mt-3">
+                <label for="formFile" class="form-label">写真選択</label>
+                <input class="form-control" type="file" id="uploadPhoto" name="uploadPhoto" required
+                  accept=".jpg, .jpeg, .png" />
+              </div>
+              <div class="mt-3">
+                <div id="printPhoto" class="border rounded h-40 flex justify-center items-center">
+                  <img src="/images/empty-photo.svg" class="h-40">
+                </div>
+                <script>
+                  let uploadPhotoInput = document.getElementById('uploadPhoto');
+                  uploadPhotoInput.addEventListener('change', function (e) {
+                    let file = e.srcElement.files[0];
 
-                let fr = new FileReader();
-                fr.addEventListener('load', function () {
-                  let url = fr.result;
+                    let fr = new FileReader();
+                    fr.addEventListener('load', function () {
+                      let url = fr.result;
 
-                  // Imageオブジェクトをつくり
-                  let img = new Image();
-                  // srcにurlを指定する
-                  img.src = url;
-                  // そのままだとでかすぎるのでサイズ調整して
-                  //img.height = 200;
-                  img.classList.add('h-40');
+                      // Imageオブジェクトをつくり
+                      let img = new Image();
+                      // srcにurlを指定する
+                      img.src = url;
+                      // そのままだとでかすぎるのでサイズ調整して
+                      //img.height = 200;
+                      img.classList.add('h-40');
 
-                  // 追加する
-                  let printPhotoDiv = document.getElementById('printPhoto');
-                  printPhotoDiv.innerHTML = '';
-                  printPhotoDiv.appendChild(img);
-                });
-                fr.readAsDataURL(file);
-              });
-            </script>
-          </div>
-          <div class="mt-3">
-            <label class="form-label">カテゴリ</label>
-            <select id="postCategory" name="postCategory" class="form-select" aria-label="Default select example">
-              <% for (let category of categories) { %>
-                <option value="<%= category.getId() %>">
-                  <%= category.getEmoji() %>　<%= category.getLabel() %>
-                </option>
-                <% } %>
-            </select>
-          </div>
-          <div class="mt-3">
-            <label class="form-label">位置選択（写真を撮った位置をタップしてください）</label>
-            <div class="flex justify-center items-center">
-              <div id="map" class="w-[90%] h-[200px]"></div>
-            </div>
-            <input id="markerLat" type="hidden" name="markerLat" />
-            <input id="markerLng" type="hidden" name="markerLng" />
-          </div>
-          <div class="mt-3">
-            <label for="exampleFormControlTextarea1" class="form-label">コメント</label>
-            <textarea name="comment" required class="form-control" id="exampleFormControlTextarea1" maxlength="100" rows="3"
-              placeholder="ここは私のお気に入りの場所です！"></textarea>
-          </div>
-          <br />
-          <input class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" type="submit" value="投稿">
-          <script>
-            function validate(){
-              const markerLat = document.getElementById("markerLat");
-              const latValue = markerLat.getAttribute("value");
-              let markerLng = document.getElementById("markerLng");
-              const lngValue = markerLng.getAttribute("value");
-              console.log(latValue + "    " + lngValue);
-              if(latValue == null || lngValue == null ){
-                // marker has not been set yet.
-                alert('地図にマーカーをセットしてください。')
-                return false;
-              }
-              return true;
-            }
-          </script>
-        </form>
+                      // 追加する
+                      let printPhotoDiv = document.getElementById('printPhoto');
+                      printPhotoDiv.innerHTML = '';
+                      printPhotoDiv.appendChild(img);
+                    });
+                    fr.readAsDataURL(file);
+                  });
+                </script>
+              </div>
+              <div class="mt-3">
+                <label class="form-label">カテゴリ</label>
+                <select id="postCategory" name="postCategory" class="form-select" aria-label="Default select example">
+                  <% for (let category of categories) { %>
+                    <option value="<%= category.getId() %>">
+                      <%= category.getEmoji() %>　<%= category.getLabel() %>
+                    </option>
+                    <% } %>
+                </select>
+              </div>
+              <div class="mt-3">
+                <label class="form-label">位置選択（写真を撮った位置をタップしてください）</label>
+                <div class="flex justify-center items-center">
+                  <div id="map" class="w-[90%] h-[200px]"></div>
+                </div>
+                <input id="markerLat" type="hidden" name="markerLat" />
+                <input id="markerLng" type="hidden" name="markerLng" />
+              </div>
+              <div class="mt-3">
+                <label for="exampleFormControlTextarea1" class="form-label">コメント</label>
+                <textarea name="comment" required class="form-control" id="exampleFormControlTextarea1" maxlength="100"
+                  rows="3" placeholder="ここは私のお気に入りの場所です！"></textarea>
+              </div>
+              <br />
+              <input class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" type="submit"
+                value="投稿">
+              <script>
+                function validate() {
+                  const markerLat = document.getElementById("markerLat");
+                  const latValue = markerLat.getAttribute("value");
+                  let markerLng = document.getElementById("markerLng");
+                  const lngValue = markerLng.getAttribute("value");
+                  console.log(latValue + "    " + lngValue);
+                  if (latValue == null || lngValue == null) {
+                    // marker has not been set yet.
+                    alert('地図にマーカーをセットしてください。')
+                    return false;
+                  }
+                  return true;
+                }
+              </script>
+            </form>
+            <% } %>
       </div>
       <%- include('../partials/footer', {currentMenu: 4}); %>
   </div>

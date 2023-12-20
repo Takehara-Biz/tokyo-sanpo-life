@@ -23,8 +23,10 @@
           </li>
         </ul>
         <% for (var post of targetPosts) { %>
-          <div onclick="location.href='./post/<%= post.id %>'" class="w-full p-1 flex items-center">
-            <img width="60%" height="80px" src="<%= post.imageUrl %>" style="border: 1px solid; " />
+          <div onclick="location.href='./post/<%= post.id %>'" class="w-full p-1 flex items-center border-b">
+            <div width="60%" >
+              <img width="100%" src="<%= post.imageUrl %>" style="border: 1px solid; " />
+            </div>
             <div class="p-1" style="width:40%;">
               <div class="flex items-center">
                 <img class="ml-1" width="30px" height="30px" src="<%= post.user.iconUrl %>"
@@ -33,16 +35,13 @@
                   <%= post.user.userName %>
                 </span>
               </div>
-              <br />
               <p class="truncate"><%= post.description %></p>
               <p><%= post.postCategory.getEmoji() %>&nbsp;<%= post.postCategory.getLabel() %></p>
-              <br />
               <span class="text-sm">
                 <%= post.insertDate.toLocaleString("ja-JP") %>
               </span>
             </div>
           </div>
-          <hr />
           <% } %>
       </div>
       <%- include('../partials/footer', {currentMenu: 2}); %>
