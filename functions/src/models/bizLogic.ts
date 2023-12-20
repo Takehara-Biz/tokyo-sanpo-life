@@ -1,8 +1,10 @@
 import {PostsDao} from "./dao/postsDao";
+import { UsersDao } from "./dao/usersDao";
 import {IPost, IUser} from "./serverTslDef";
 
 export class BizLogic {
   private loggedInUser: IUser | undefined;
+
   public setLoggedInUser(loggedInUser: IUser) {
     this.loggedInUser = loggedInUser;
   }
@@ -30,5 +32,17 @@ export class BizLogic {
   public createPost(post: IPost): void {
     //TslLogUtil.info('createPost : ' + JSON.stringify(post));
     return this.postsDao.createPost(post);
+  }
+
+  private usersDao = new UsersDao(10);
+
+  public findUser(id: string): IUser | null {
+    const result = this.usersDao.findUser(id);
+    //TslLogUtil.debug('findUser result : ' + JSON.stringify(result));
+    return result;
+  }
+
+  public createUser(user: IUser): void {
+    return this.usersDao.createUser(user);
   }
 }

@@ -1,11 +1,14 @@
 import { TslLogUtil } from "../../utils/tslLogUtil";
 import {IPost, IPostComment, PostCategory} from "../serverTslDef";
+import { DaoUtil } from "./daoUtil";
 
 export class PostsDao {
   private idAndPostMap: Map<string, IPost> = new Map<string, IPost>();
+  private idSequence: number;
 
   constructor(postCount: number) {
     this.generateRandomPosts(postCount);
+    this.idSequence = postCount - 1;
   }
 
   private generateRandomPosts(postCount: number): void {
@@ -16,29 +19,19 @@ export class PostsDao {
         id: i.toString(),
         user: {
           id: i.toString(),
-          userName: this.generateRandomString(3, 12),
-          iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
+          userName: DaoUtil.generateRandomString(3, 12),
+          iconUrl: "/images/user-icon/kkrn_icon_user_9.svg",
         },
         postCategory: this.chooseContentTypeEnumRandomly(),
-        imageUrl: "https://media.timeout.com/images/105544832/1372/772/image.webp",
+        imageUrl: "/images/post-sample.jpeg",
         lat: 35.2 + (Math.random()),
         lng: 139.3 + (Math.random()),
-        description: this.generateRandomString(1, 100),
+        description: DaoUtil.generateRandomString(1, 100),
         insertDate: new Date("2023/12/01"),
         postComments: comments,
       };
       this.idAndPostMap.set(i.toString(), post);
     }
-  }
-
-  private generateRandomString(charMinCount: number, charMaxCount: number): string {
-    const useChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const strLength = Math.floor(Math.random() * (charMaxCount - charMinCount)) + charMinCount;
-    let result = "";
-    for (let i = 0; i < strLength; i++) {
-      result += useChar.charAt(Math.floor(Math.random() * useChar.length));
-    }
-    return result;
   }
 
   private createRandomComments(count: number): IPostComment[] {
@@ -48,10 +41,10 @@ export class PostsDao {
         id: i.toString(),
         user: {
           id: i.toString(),
-          userName: this.generateRandomString(3, 12),
-          iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
+          userName: DaoUtil.generateRandomString(3, 12),
+          iconUrl: "/images/user-icon/kkrn_icon_user_9.svg",
         },
-        comment: this.generateRandomString(1, 100),
+        comment: DaoUtil.generateRandomString(1, 100),
         commentDate: new Date("2023/12/01"),
       },);
     }
@@ -61,6 +54,10 @@ export class PostsDao {
   private chooseContentTypeEnumRandomly(): PostCategory {
     const index = Math.floor(Math.random() * PostCategory.Categories.length);
     return PostCategory.Categories[index];
+  }
+
+  private nextval(): number {
+    return this.idSequence++;
   }
 
   public findPosts(): IPost[] {
@@ -76,6 +73,7 @@ export class PostsDao {
   }
 
   public createPost(post: IPost):void {
+    post.id = this.nextval().toString();
     TslLogUtil.info('createPost : ' + JSON.stringify(post));
     this.idAndPostMap.set(post.id, post);
   }

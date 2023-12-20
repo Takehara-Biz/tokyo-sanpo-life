@@ -10,15 +10,14 @@ export const routing = ((app: Express): void => {
     res.render("pages/login", {user: bizLogic.getLoggedInUser()});
   });
   app.post("/login", function(req, res, next) {
-    bizLogic.setLoggedInUser({
-      id: "123",
-      userName: "Yasu",
-      iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
-      selfIntroduction: "こんにちは〜",
-      twitterProfileLink: "https://www.yahoo.co.jp",
-      instagramProfileLink: "https://www.yahoo.co.jp",
-    });
-    res.render("pages/my-page", {user: bizLogic.getLoggedInUser(), toast: true});
+    const user = bizLogic.findUser("1");
+    if ( user !== null ) {
+      bizLogic.setLoggedInUser(user);
+      res.redirect("/my-page");
+    } else {
+      // not found
+      res.render("pages/404");
+    }
   });
   app.get("/my-page", function(req, res, next) {
     res.render("pages/my-page", {user: bizLogic.getLoggedInUser()});
@@ -57,12 +56,8 @@ export const routing = ((app: Express): void => {
     console.log("aa" + postCategory);
     console.log("aa" + postCategory.getLabel());
     const newPost: IPost = {
-      id: "10",
-      user: {
-        id: "1",
-        userName: "abc",
-        iconUrl: "https://3.bp.blogspot.com/-SGNTyEM-dcA/Vlmd3H73mFI/AAAAAAAA1G8/yPgxI8YdJWE/s150/christmas_mark09_bear.png",
-      },
+      id: "this will be updated in dao class",
+      user: bizLogic.getLoggedInUser()!,
       imageUrl: "",
       lat: Number(req.body.markerLat),
       lng: Number(req.body.markerLng),
@@ -73,7 +68,7 @@ export const routing = ((app: Express): void => {
     };
     bizLogic.createPost(newPost);
     const post = bizLogic.findPost(newPost.id);
-    res.render("pages/post-detail", {user: bizLogic.getLoggedInUser(), post: post, showBack: false, toast: true});
+    res.redirect("/post/" + post!.id)
   });
   app.get("/map", function(req, res, next) {
     const targetPosts = bizLogic.findPosts();

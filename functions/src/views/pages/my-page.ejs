@@ -9,12 +9,35 @@
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
     <%- include('../partials/header'); %>
       <!-- Main Body -->
-      <div class="flex-grow">
-        <h1>マイページ</h1>
-        <form action="/logout" method="post" onsubmit="return confirm('ログアウトしてよろしいですか？');">
-          <p>ダミーログアウト</p>
-          <input class="mt-3 btn btn-primary border-accent bg-accent w-full" type="submit" value="ログアウト">
-        </form>
+      <div class="grow overflow-y-scroll">
+        <%- include('../partials/page-title', {title: 'マイページ' }); %>
+          <div class="p-1">
+            <h2>あなたの情報</h2>
+            <dl>
+              <dt>ID</dt>
+              <dd><%= user.id %></dd>
+            </dl>
+            <dl>
+              <dt>ユーザ名</dt>
+              <dd><%= user.userName %></dd>
+            </dl>
+            <dl>
+              <dt>自己紹介</dt>
+              <dd><%= user.selfIntroduction %></dd>
+            </dl>
+            <dl>
+              <dt>SNS（X）</dt>
+              <dd><a href="<%= user.twitterProfileLink %>" target="_blank">X</a></dd>
+            </dl>
+            <dl>
+              <dt>SNS（インスタグラム）</dt>
+              <dd><a href="<%= user.instagramProfileLink %>" target="_blank">インスタグラム</a></dd>
+            </dl>
+            <form action="/logout" method="post" onsubmit="return confirm('ログアウトしてよろしいですか？');">
+              <input class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" type="submit"
+                value="ログアウト" />
+            </form>
+          </div>
       </div>
       <%- include('../partials/footer', {currentMenu: 5}); %>
         <!-- Toast -->
