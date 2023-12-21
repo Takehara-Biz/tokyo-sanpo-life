@@ -15,7 +15,7 @@ export class BizLogic {
     return this.loggedInUser;
   }
 
-  private postsDao = new PostsDao(2);
+  private postsDao = new PostsDao(10);
 
   public findPosts(): IPost[] {
     const result = this.postsDao.findPosts();
@@ -32,6 +32,10 @@ export class BizLogic {
   public createPost(post: IPost): void {
     //TslLogUtil.info('createPost : ' + JSON.stringify(post));
     return this.postsDao.createPost(post);
+  }
+
+  public deletePost(id: string): void {
+    return this.postsDao.delete(id);
   }
 
   private usersDao = new UsersDao(10);

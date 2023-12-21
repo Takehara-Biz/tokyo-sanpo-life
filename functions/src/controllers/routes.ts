@@ -33,7 +33,8 @@ export const routing = ((app: Express): void => {
   });
   app.get("/new-posts", function(req, res, next) {
     const targetPosts = bizLogic.findPosts();
-    res.render("pages/new-posts", {user: bizLogic.getLoggedInUser(), targetPosts: targetPosts});
+    const deletedToast = req.query.deletedToast != undefined;
+    res.render("pages/new-posts", {user: bizLogic.getLoggedInUser(), targetPosts: targetPosts, deletedToast: deletedToast});
   });
   app.get("/post/:id", function(req, res, next) {
     const post = bizLogic.findPost(req.params.id);
@@ -44,6 +45,20 @@ export const routing = ((app: Express): void => {
       res.render("pages/404");
     }
   });
+
+  app.delete("/post/:id", function(req, res, next) {
+    // needs authorization
+    try {
+      bizLogic.deletePost(req.params.id!.toString());
+    } catch (error) {
+      TslLogUtil.warn('failed to delete the post ' + req.query.id);
+      TslLogUtil.warn(error);
+      res.render("pages/500");
+      return;
+    }
+    res.redirect('/new-posts?deletedToast=true');
+  });
+
   app.post("/post", function(req, res, next) {
     console.log("req : " + req);
     console.log("req.params : " + req.params);
@@ -82,6 +97,9 @@ export const routing = ((app: Express): void => {
   app.get("/add-post", function(req, res, next) {
     res.render("pages/add-post", {user: bizLogic.getLoggedInUser(), categories: PostCategory.Categories});
   });
+
+  // 以下、othersページおよびその配下
+
   app.get("/others", function(req, res, next) {
     res.render("pages/others", {user: bizLogic.getLoggedInUser()});
   });
@@ -102,6 +120,12 @@ export const routing = ((app: Express): void => {
   });
   app.get("/others/cookie-policy", function(req, res, next) {
     res.render("pages/others/cookie-policy", {user: bizLogic.getLoggedInUser(), showBack: true});
+  });
+
+  // 以下、エラーページ
+
+  app.get("/500", function(req, res, next) {
+    res.render("pages/500", {user: bizLogic.getLoggedInUser()});
   });
 
   app.all("*", (req, res) => {

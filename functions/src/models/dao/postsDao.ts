@@ -77,4 +77,9 @@ export class PostsDao {
     TslLogUtil.info('createPost : ' + JSON.stringify(post));
     this.idAndPostMap.set(post.id, post);
   }
+
+  public delete(id: string):void {
+    const result = this.idAndPostMap.delete(id);
+    TslLogUtil.info('deleted post ' + id + ', and the result is ' + result);
+  }
 }
