@@ -12,7 +12,7 @@ export class PostsDao {
   }
 
   private generateRandomPosts(postCount: number): void {
-    const commentsCount = 10;
+    const commentsCount = Math.floor(Math.random() * 9)
     const comments: IPostComment[] = this.createRandomComments(commentsCount);
     for (let i = 0; i < postCount; i++) {
       const post = {
