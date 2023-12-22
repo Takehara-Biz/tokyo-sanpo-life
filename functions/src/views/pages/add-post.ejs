@@ -127,8 +127,12 @@
                   rows="3" placeholder="ここは私のお気に入りの場所です！"></textarea>
               </div>
               <br />
-              <input type="submit" class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;"
-                value="投稿">
+              <button type="submit" class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;">
+                <span class="material-symbols-outlined align-[-6px]" data-bs-toggle="dropdown" aria-expanded="false">
+                  upload
+                </span>
+                投稿
+              </button>
               <script>
                 function validate() {
                   const markerLat = document.getElementById("markerLat");

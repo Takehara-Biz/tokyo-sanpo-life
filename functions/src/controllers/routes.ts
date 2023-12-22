@@ -87,6 +87,16 @@ export const routing = ((app: Express): void => {
     const post = bizLogic.findPost(newPost.id);
     res.redirect("/post/" + post!.id)
   });
+  app.get("/edit-post/:id", function(req, res, next) {
+    // needs authorization
+    const post = bizLogic.findPost(req.params.id);
+    if ( post !== null ) {
+      res.render("pages/edit-post", {user: bizLogic.getLoggedInUser(), post: post, showBack: true});
+    } else {
+      // not found
+      res.render("pages/404");
+    }
+  });
   app.get("/map", function(req, res, next) {
     const targetPosts = bizLogic.findPosts();
     res.render("pages/map", {user: bizLogic.getLoggedInUser(), targetPosts: targetPosts});
