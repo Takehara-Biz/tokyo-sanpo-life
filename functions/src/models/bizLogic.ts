@@ -14,12 +14,21 @@ export class BizLogic {
   public getLoggedInUser(): IUser | undefined {
     return this.loggedInUser;
   }
+  public alreadyLoggedIn(): boolean {
+    return this.loggedInUser !== undefined;
+  }
 
   private postsDao = new PostsDao(10);
 
   public findPosts(): IPost[] {
     const result = this.postsDao.findPosts();
     //TslLogUtil.info('findPosts length : ' + result.length);
+    return result;
+  }
+
+  public findMyPosts(): IPost[] {
+    const result = this.postsDao.findPostsByUserId(this.loggedInUser!.id);
+    //TslLogUtil.info('findPostsByUserId length : ' + result.length);
     return result;
   }
 

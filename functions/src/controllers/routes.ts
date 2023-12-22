@@ -36,6 +36,13 @@ export const routing = ((app: Express): void => {
     const deletedToast = req.query.deletedToast != undefined;
     res.render("pages/new-posts", {user: bizLogic.getLoggedInUser(), targetPosts: targetPosts, deletedToast: deletedToast});
   });
+  app.get("/my-posts", function(req, res, next) {
+    let myPosts: IPost[] = [];
+    if(bizLogic.alreadyLoggedIn()){
+      myPosts.push(...bizLogic.findMyPosts());
+    }
+    res.render("pages/my-posts", {user: bizLogic.getLoggedInUser(), myPosts: myPosts});
+  });
   app.get("/post/:id", function(req, res, next) {
     const post = bizLogic.findPost(req.params.id);
     if ( post !== null ) {

@@ -66,6 +66,12 @@ export class PostsDao {
     return result;
   }
 
+  public findPostsByUserId(userId: string): IPost[] {
+    const result = [...this.idAndPostMap.values()].filter((value: IPost) => value.user.id === userId);
+    TslLogUtil.info('findPosts length : ' + result.length);
+    return result;
+  }
+
   public findPost(id: string): IPost | null {
     const result = this.idAndPostMap.get(id) ?? null;
     TslLogUtil.debug('findPost result : ' + JSON.stringify(result));

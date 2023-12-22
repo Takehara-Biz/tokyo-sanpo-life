@@ -9,40 +9,44 @@
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
     <%- include('../partials/header'); %>
       <!-- Main Body -->
-      <div class="grow overflow-y-scroll max-w-screen">
+      <div class="grow overflow-y-scroll p-2 flex flex-col">
         <ul class="nav nav-tabs nav-justified">
-          <li class="nav-item bg-accent">
-            <a class="nav-link bg-accent text-white" aria-current="page" href="#">
-              新着順
+          <li class="nav-item">
+            <a class="nav-link" href="/new-posts">
+              <span class="text-accent">新着順</span>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/my-posts">
-              <span class="text-accent">あなたの投稿</span>
+          <li class="nav-item bg-accent">
+            <a class="nav-link bg-accent text-white" aria-current="page" href="#">
+              あなたの投稿
             </a>
           </li>
         </ul>
-        <% for (var post of targetPosts) { %>
-          <div onclick="location.href='./post/<%= post.id %>'" class="w-full p-1 flex items-center border-b">
-            <div style="max-width: 50%;">
-              <img width="100%" src="<%= post.imageUrl %>" style="border: 1px solid; " />
-            </div>
-            <div class="p-1" style="width:50%;">
-              <div class="flex items-center">
-                <img class="ml-1" width="30px" height="30px" src="<%= post.user.iconUrl %>"
-                  style="border: 2px solid #ff0099; border-radius:50%;" />
-                <span class="font-bold pl-2" style="font-family:Kaisai Decol; color:#ff0099;">
-                  <%= post.user.userName %>
+        <% if (user === undefined) { %>
+          <%- include('../partials/urge-login'); %>
+        <% } else { %>
+          <% for (var post of myPosts) { %>
+            <div onclick="location.href='./post/<%= post.id %>'" class="w-full p-1 flex items-center border-b">
+              <div style="max-width: 50%;">
+                <img width="100%" src="<%= post.imageUrl %>" style="border: 1px solid; " />
+              </div>
+              <div class="p-1" style="width:50%;">
+                <div class="flex items-center">
+                  <img class="ml-1" width="30px" height="30px" src="<%= post.user.iconUrl %>"
+                    style="border: 2px solid #ff0099; border-radius:50%;" />
+                  <span class="font-bold pl-2" style="font-family:Kaisai Decol; color:#ff0099;">
+                    <%= post.user.userName %>
+                  </span>
+                </div>
+                <p class="truncate"><%= post.description %></p>
+                <p><%= post.postCategory.getEmoji() %>&nbsp;<%= post.postCategory.getLabel() %></p>
+                <span class="text-sm">
+                  <%= post.insertDate.toLocaleString("ja-JP") %>
                 </span>
               </div>
-              <p class="truncate"><%= post.description %></p>
-              <p><%= post.postCategory.getEmoji() %>&nbsp;<%= post.postCategory.getLabel() %></p>
-              <span class="text-sm">
-                <%= post.insertDate.toLocaleString("ja-JP") %>
-              </span>
             </div>
-          </div>
           <% } %>
+        <% } %>
       </div>
       <%- include('../partials/footer', {currentMenu: 2}); %>
         <!-- Toast -->

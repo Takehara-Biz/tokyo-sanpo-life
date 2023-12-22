@@ -37,12 +37,7 @@
           </li>
         </ul>
         <% if (user === undefined) { %>
-          <div class="grow flex justify-center items-center">
-            <div>
-              <p class="text-center">🥳この機能は、<br />ログインしたら使えるようになります〜。</p>
-              <p class="text-center">ログインまたは新規登録を行うには、<br />右上のユーザアイコンをクリックしてください。</p>
-            </div>
-          </div>
+          <%- include('../partials/urge-login'); %>
           <% } else { %>
             <div class="accordion mt-3" id="accordionExample">
               <div class="accordion-item">
