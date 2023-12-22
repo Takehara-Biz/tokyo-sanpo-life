@@ -37,12 +37,13 @@
             </span>
           </div>
           <div>
-            <button class="mt-3 btn text-white bg-accent" style="background-color:#ff0099;">
+            <a class="mt-3 btn text-white bg-accent" style="background-color:#ff0099;" role="button"
+              href="https://twitter.com/intent/tweet?url=https://tokyo-sanpo-life.web.app/post/<%= post.id %>&text=<%= post.description %>&hashtags=東京散歩ライフ">
               <span class="material-symbols-outlined align-[-6px]">
                 share
               </span>
               Xでシェアする
-            </button>
+            </a>
             <% if (user !== undefined && user.id === post.user.id) { %>
               <!-- ログイン済み、かつ、投稿したユーザなら、編集と削除が可能。 -->
               
