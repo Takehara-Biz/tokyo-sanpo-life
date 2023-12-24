@@ -47,12 +47,20 @@
           </div>
           <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
           <script type="module">
+            const designatedEmojiCountJson = {};
             document.querySelector('emoji-picker').addEventListener('emoji-click', e => {
-              console.log(e.detail.unicode);
+              const emoji = e.detail.unicode
+              console.log(emoji);
               document.getElementById('reactionDropdown').classList.remove('show');
 
+              if(designatedEmojiCountJson[emoji] != undefined){
+                designatedEmojiCountJson[emoji]++;
+              } else {
+                designatedEmojiCountJson[emoji] = 1;
+              }
+
               const toastLiveExample = document.getElementById('liveToast')
-              document.getElementById('toastMessage').innerHTML = e.detail.unicode;
+              document.getElementById('toastMessage').innerHTML = JSON.stringify(designatedEmojiCountJson);
               const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
               toastBootstrap.show();
             })
