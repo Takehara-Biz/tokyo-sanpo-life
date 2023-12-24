@@ -1,26 +1,28 @@
 <div id="content">
-  <div id="bodyContent" style="display:flex; justify-content:space-between;">
+  <div id="bodyContent" class="flex justify-between">
     <img src='<%= post.imageUrl %>' width='50%' />
-    <div style="width:50%; padding:10px;">
-      <div style="display:flex;">
+    <div class="w-1/2 p-2">
+      <div class="flex">
         <img width="40px" height="40px" src="<%= post.user.iconUrl %>"
-          style="border: 2px solid #ff0099; border-radius:50%" />
-        <h4 style="font-weight:bold; font-family:Kaisai Decol; color:#ff0099; padding-left:10px;">
+          class="border-2 border-solid border-accent rounded-full" style="border-color: #ff0099;" />
+        <span class="font-bold font-tsl_title text-accent pl-2" style="color:#ff0099;">
           <%= post.user.userName %>
-        </h4>
+        </span>
       </div>
-      <p style="font-size:small;">
+      <p class="text-sm">
         <%= post.insertDate.toLocaleString("ja-JP") %>
       </p>
     </div>
   </div>
-  <p class="w-full break-words">
-    <%= post.description %>
-  </p>
-  <div>
-    <p style="margin-top:10px; text-align:center; font-size:small;">コメント</p>
-    <%- include('./comments-list'); %>
+  <div class="p-2">
+    <p class="w-full break-words">
+      <%= post.description %>
+    </p>
+    <div>
+      <p class="m-2 text-center text-sm">コメント</p>
+      <%- include('./comments-list'); %>
+    </div>
+    <hr />
+    <%- include('./add-comment-section'); %>
   </div>
-  <hr />
-  <%- include('./add-comment-section'); %>
 </div>
