@@ -30,20 +30,13 @@ const RenderPostOnGMap = {
       let marker = await TslGMapUtil.createTslMarker(Number(postCategoryId), position);
       marker.map = map;
 
-      marker.addListener('click', function () {
-        const info = document.getElementById('info');
-        info!.style.display = 'block';
-        let contentString = TslGMapUtil.createInfoContent(post);
-        info!.innerHTML = contentString;
-        map.panTo({ lat: marker.position!.lat as number, lng: marker.position!.lng as number });
-      });
-      map.addListener('click', function () {
-        const info = document.getElementById('info');
-        info!.innerHTML = '';
-        info!.style.display = 'none';
-        const map2 = document.getElementById('map');
-        map2!.style.flexGrow = '1';
-      });
+      // map.addListener('click', function () {
+      //   const info = document.getElementById('info');
+      //   info!.innerHTML = '';
+      //   info!.style.display = 'none';
+      //   const map2 = document.getElementById('map');
+      //   map2!.style.flexGrow = '1';
+      // });
 
       markers.push(marker);
   },
