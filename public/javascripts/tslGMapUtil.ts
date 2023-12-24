@@ -39,6 +39,45 @@ const TslGMapUtil = {
       <p style="margin-top:10px; text-align:center; font-size:small;">コメント</p>
       <%- commentString %>
     </div>
+    <hr />
+            <div class="accordion mt-3" id="accordionExample" style="height:240px;">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <span class="material-symbols-outlined text-accent">
+                      add_comment
+                    </span>
+                    <span class="text-accent">コメントする</span>
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse visible" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <% if (true) { %>
+                      <form>
+                        <textarea name="comment" required class="form-control" id="exampleFormControlTextarea1"
+                          maxlength="100" rows="3" placeholder="あなたのコメント"></textarea>
+                        <button type="submit" class="mt-3 btn w-full text-white bg-accent"
+                          style="background-color:#ff0099;">
+                          <span class="material-symbols-outlined align-[-6px]" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            upload
+                          </span>
+                          送信
+                        </button>
+                      </form>
+                      <% } else { %>
+                        <div class="grow flex justify-center items-center">
+                        <div>
+                          <p class="text-center">🥳この機能は、<br />ログインしたら使えるようになります〜。</p>
+                          <p class="text-center">ログインまたは新規登録を行うには、<br />右上のユーザアイコンをクリックしてください。</p>
+                        </div>
+                      </div>
+                          <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
   </div>`,
   
   createInfoContent(post: IPost): string {
