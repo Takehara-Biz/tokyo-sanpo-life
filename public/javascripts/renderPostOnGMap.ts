@@ -1,6 +1,6 @@
 const RenderPostOnGMap = {
 
-  async initMap(post : IPost): Promise<void> {
+  async initMap(post: IPost): Promise<void> {
     console.debug('lat ' + post.lat + ", lng " + post.lng);
     position = { lat: post.lat, lng: post.lng };
 
@@ -24,21 +24,12 @@ const RenderPostOnGMap = {
 
     let markers: google.maps.marker.AdvancedMarkerElement[] = [];
 
-      position = { lat: post.lat, lng: post.lng };
-      let postCategoryId = JSON.parse(JSON.stringify(post.postCategory))['id']
-      console.debug("postCategoryId : " + postCategoryId);
-      let marker = await TslGMapUtil.createTslMarker(Number(postCategoryId), position);
-      marker.map = map;
-
-      // map.addListener('click', function () {
-      //   const info = document.getElementById('info');
-      //   info!.innerHTML = '';
-      //   info!.style.display = 'none';
-      //   const map2 = document.getElementById('map');
-      //   map2!.style.flexGrow = '1';
-      // });
-
-      markers.push(marker);
+    position = { lat: post.lat, lng: post.lng };
+    let postCategoryId = JSON.parse(JSON.stringify(post.postCategory))['id']
+    console.debug("postCategoryId : " + postCategoryId);
+    let marker = await TslGMapUtil.createTslMarker(Number(postCategoryId), position);
+    marker.map = map;
+    markers.push(marker);
   },
 }
 
