@@ -1,0 +1,19 @@
+<div onclick="location.href='./post/<%= post.id %>'" class="w-full p-1 flex items-center border-b">
+  <div style="max-width: 50%;">
+    <img width="100%" src="<%= post.imageUrl %>" style="border: 1px solid; " />
+  </div>
+  <div class="p-1" style="width:50%;">
+    <div class="flex items-center">
+      <img class="ml-1" width="30px" height="30px" src="<%= post.user.iconUrl %>"
+        style="border: 2px solid #ff0099; border-radius:50%;" />
+      <span class="font-bold pl-2" style="font-family:Kaisai Decol; color:#ff0099;">
+        <%= post.user.userName %>
+      </span>
+    </div>
+    <p class="truncate"><%= post.description %></p>
+    <p><%= post.postCategory.getEmoji() %>&nbsp;<%= post.postCategory.getLabel() %></p>
+    <span class="text-sm">
+      <%= post.insertDate.toLocaleString("ja-JP") %>
+    </span>
+  </div>
+</div>
