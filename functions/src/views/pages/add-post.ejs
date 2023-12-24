@@ -23,19 +23,9 @@
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
     <%- include('../partials/header'); %>
       <!-- Main Body -->
-      <div class="grow overflow-y-scroll p-2 flex flex-col">
-        <ul class="nav nav-tabs nav-justified">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="./add-record">
-              👣&nbsp;<span class="text-accent">毎日歩数計</span>
-            </a>
-          </li>
-          <li class="nav-item bg-accent">
-            <a class="nav-link bg-accent text-white" href="#">
-              📍&nbsp;地図に追加
-            </a>
-          </li>
-        </ul>
+      <div class="grow overflow-y-scroll flex flex-col">
+        <%- include('../partials/add-tab', {currentMenu: 1}); %>
+        <div class="p-2">
         <% if (user === undefined) { %>
           <%- include('../partials/urge-login'); %>
           <% } else { %>
@@ -145,6 +135,7 @@
               </script>
             </form>
             <% } %>
+          </div>
       </div>
       <%- include('../partials/footer', {currentMenu: 4}); %>
   </div>
