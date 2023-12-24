@@ -44,18 +44,7 @@
       <%- include('../partials/footer', {currentMenu: 5}); %>
 
         <!-- Toast -->
-        <div class="position-fixed top-50 start-50 translate-middle p-3" style="z-index: 11">
-          <div id="liveToast" class="toast hide" data-bs-delay="2000" role="alert" aria-live="assertive"
-            aria-atomic="true">
-            <div class="toast-header">
-              <img src="/images/tsl-symbol/kkrn_icon_kirakira_2.svg" width="30px" class="rounded me-2" alt="tsl-light">
-              <strong class="me-auto">ログアウトしました</strong>
-            </div>
-            <!-- <div class="toast-body">
-                        Hello, world! This is a toast message.
-                      </div> -->
-          </div>
-        </div>
+        <%- include('../partials/toast', {message: "ログアウトしました"}); %>
         <script>
           window.onload = (() => {
             let toast = false;

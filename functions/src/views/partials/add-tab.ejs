@@ -2,14 +2,14 @@
   <li class="nav-item <% if (currentMenu === 1) { %>bg-accent<% } %>">
     <a class="nav-link <% if (currentMenu === 1) { %>bg-accent text-white<% } %>" 
       <% if (currentMenu === 1) { %>aria-current="page"<% } %> 
-      href="<% if (currentMenu === 1) { %>#<% } else { %>/new-posts<% } %>">
+      href="<% if (currentMenu === 1) { %>#<% } else { %>/add-record<% } %>">
       <span <% if (currentMenu !== 1) { %>class="text-accent"<% } %>>👣&nbsp;毎日歩数計</span>
     </a>
   </li>
   <li class="nav-item <% if (currentMenu === 2) { %>bg-accent<% } %>">
     <a class="nav-link <% if (currentMenu === 2) { %>bg-accent text-white<% } %>" 
       <% if (currentMenu === 2) { %>aria-current="page"<% } %> 
-      href="<% if (currentMenu === 2) { %>#<% } else { %>/my-posts<% } %>">
+      href="<% if (currentMenu === 2) { %>#<% } else { %>/add-post<% } %>">
       <span <% if (currentMenu !== 2) { %>class="text-accent"<% } %>>📍&nbsp;地図に追加</span>
     </a>
   </li>

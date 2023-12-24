@@ -52,7 +52,7 @@
               document.getElementById('reactionDropdown').classList.remove('show');
 
               const toastLiveExample = document.getElementById('liveToast')
-              document.getElementById('emojiContent').innerHTML = e.detail.unicode;
+              document.getElementById('toastMessage').innerHTML = e.detail.unicode;
               const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
               toastBootstrap.show();
             })
@@ -125,43 +125,13 @@
         <div class="flex justify-center items-center">
           <div id="map" class="w-[90%] h-[200px] border"></div>
         </div>
-        <% for (const comment of post.postComments) { %>
-          <hr />
-          <div class="w-full px-4 py-2">
-            <div style="display:flex; justify-content:space-between;">
-              <div style="display:flex;">
-                <img width="40px" height="40px" src="<%= comment.user.iconUrl %>"
-                  style="border: 2px solid #ff0099; border-radius:50%" />
-                <span style="font-weight:bold; font-family:Kaisai Decol; color:#ff0099; padding-left:10px;">
-                  <%= comment.user.userName %>
-                </span>
-              </div>
-              <span style="font-size: small; margin-left:20px;">
-                <%= comment.commentDate.toLocaleString("ja-JP") %>
-              </span>
-            </div>
-            <p class="w-full break-words">
-              <%= comment.comment %>
-            </p>
-          </div>
-          <% } %>
+          <%- include('../partials/comments-list'); %>
           <hr />
           <%- include('../partials/add-comment-section'); %>
       </div>
       <%- include('../partials/footer', {currentMenu: 2}); %>
       <!-- Toast -->
-      <div class="position-fixed top-50 start-50 translate-middle p-3" style="z-index: 11">
-        <div id="liveToast" class="toast hide" data-bs-delay="2000" role="alert" aria-live="assertive"
-          aria-atomic="true">
-          <div class="toast-header">
-            <img src="/images/tsl-symbol/kkrn_icon_kirakira_2.svg" width="30px" class="rounded me-2" alt="tsl-light">
-            <strong class="me-auto" id="emojiContent"></strong>
-          </div>
-          <!-- <div class="toast-body">
-                      Hello, world! This is a toast message.
-                    </div> -->
-        </div>
-      </div>
+      <%- include('../partials/toast', {message: ""}); %>
   </div>
 </body>
 

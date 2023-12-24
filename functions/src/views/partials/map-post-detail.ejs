@@ -19,26 +19,7 @@
   </p>
   <div>
     <p style="margin-top:10px; text-align:center; font-size:small;">コメント</p>
-    <% for (const comment of post.postComments) { %>
-      <hr />
-      <div class="w-full px-4 py-2">
-        <div style="display:flex; justify-content:space-between;">
-          <div style="display:flex;">
-            <img width="40px" height="40px" src="<%= comment.user.iconUrl %>"
-              style="border: 2px solid #ff0099; border-radius:50%" />
-            <span style="font-weight:bold; font-family:Kaisai Decol; color:#ff0099; padding-left:10px;">
-              <%= comment.user.userName %>
-            </span>
-          </div>
-          <span style="font-size: small; margin-left:20px;">
-            <%= comment.commentDate.toLocaleString("ja-JP") %>
-          </span>
-        </div>
-        <p class="w-full break-words">
-          <%= comment.comment %>
-        </p>
-      </div>
-    <% } %>
+    <%- include('./comments-list'); %>
   </div>
   <hr />
   <%- include('./add-comment-section'); %>
