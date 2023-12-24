@@ -10,18 +10,7 @@
     <%- include('../partials/header'); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll max-w-screen">
-        <ul class="nav nav-tabs nav-justified">
-          <li class="nav-item bg-accent">
-            <a class="nav-link bg-accent text-white" aria-current="page" href="#">
-              新着順
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/my-posts">
-              <span class="text-accent">あなたの投稿</span>
-            </a>
-          </li>
-        </ul>
+        <%- include('../partials/posts-tab', {currentMenu: 1}); %>
         <% for (var post of targetPosts) { %>
           <div onclick="location.href='./post/<%= post.id %>'" class="w-full p-1 flex items-center border-b">
             <div style="max-width: 50%;">
