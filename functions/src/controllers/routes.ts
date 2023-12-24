@@ -6,6 +6,9 @@ import {TslLogUtil} from "../utils/tslLogUtil";
 const bizLogic = new BizLogic();
 
 export const routing = ((app: Express): void => {
+
+  // related to auth
+
   app.get("/login", function(req, res, next) {
     const toast = req.query.toast != undefined;
     res.render("pages/login", {user: bizLogic.getLoggedInUser(), toast: toast});
@@ -28,6 +31,9 @@ export const routing = ((app: Express): void => {
     bizLogic.logout();
     res.redirect("/login?toast");
   });
+
+  // main screens
+
   app.get("/how-to-use", function(req, res, next) {
     res.render("pages/how-to-use", {user: bizLogic.getLoggedInUser()});
   });
@@ -107,6 +113,19 @@ export const routing = ((app: Express): void => {
   app.get("/map", function(req, res, next) {
     const targetPosts = bizLogic.findPosts();
     res.render("pages/map", {user: bizLogic.getLoggedInUser(), targetPosts: targetPosts});
+  });
+
+  /**
+   * expects to be called with Ajax.
+   */
+  app.get("/map/post/:id", function(req, res, next) {
+    const post = bizLogic.findPost(req.params.id);
+    if ( post !== null ) {
+      res.render("partials/map-post-detail", {user: bizLogic.getLoggedInUser(), post: post});
+    } else {
+      // not found
+      res.render("pages/404");
+    }
   });
   app.get("/add-record", function(req, res, next) {
     res.render("pages/add-record", {user: bizLogic.getLoggedInUser()});

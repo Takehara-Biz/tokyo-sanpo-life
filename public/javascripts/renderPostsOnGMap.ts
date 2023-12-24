@@ -112,10 +112,10 @@ const RenderPostsOnGMap = {
       let marker = await TslGMapUtil.createTslMarker(Number(postCategoryId), position);
       marker.map = map;
 
-      marker.addListener('click', function () {
+      marker.addListener('click', async function () {
         const info = document.getElementById('info');
         info!.style.display = 'block';
-        let contentString = TslGMapUtil.createInfoContent(post);
+        let contentString = await (await fetch('/map/post/' + post.id)).text();
         info!.innerHTML = contentString;
         map.panTo({ lat: marker.position!.lat as number, lng: marker.position!.lng as number });
       });
