@@ -1,16 +1,18 @@
 import {Express} from "express";
-import {BizLogic} from "../models/bizLogic";
+import {PostLogic} from "../models/bizlogic/postLogic";
+import {UserLogic} from "../models/bizlogic/userLogic";
 import {IPost, IUser, PostCategory} from "../models/serverTslDef";
 import {TslLogUtil} from "../utils/tslLogUtil";
 
-const bizLogic = new BizLogic();
+const postLogic = new PostLogic();
+const userLogic = new UserLogic();
 
 export const routing = ((app: Express): void => {
 
   // related to auth
 
   app.get("/create-account", function(req, res, next) {
-    res.render("pages/create-account", {user: bizLogic.getLoggedInUser()});
+    res.render("pages/create-account", {user: userLogic.getLoggedInUser()});
   });
   app.post("/create-account", function(req, res, next) {
     TslLogUtil.debug("req : " + req);
@@ -30,18 +32,18 @@ export const routing = ((app: Express): void => {
       twitterProfileLink: req.body.xProfileURL,
       instagramProfileLink: req.body.instaProfileURL,
     };
-    bizLogic.createUser(newUser);
-    bizLogic.setLoggedInUser(newUser);
-    res.render("pages/my-page", {user: bizLogic.getLoggedInUser(), toast: false});
+    userLogic.createUser(newUser);
+    userLogic.setLoggedInUser(newUser);
+    res.render("pages/my-page", {user: userLogic.getLoggedInUser(), toast: false});
   });
   app.get("/login", function(req, res, next) {
     const toast = req.query.toast != undefined;
-    res.render("pages/login", {user: bizLogic.getLoggedInUser(), toast: toast});
+    res.render("pages/login", {user: userLogic.getLoggedInUser(), toast: toast});
   });
   app.post("/login", function(req, res, next) {
-    const user = bizLogic.findUser("1");
+    const user = userLogic.findUser("1");
     if ( user !== null ) {
-      bizLogic.setLoggedInUser(user);
+      userLogic.setLoggedInUser(user);
       res.redirect("/my-page?toast");
     } else {
       // not found
@@ -50,34 +52,34 @@ export const routing = ((app: Express): void => {
   });
   app.get("/my-page", function(req, res, next) {
     const toast = req.query.toast != undefined;
-    res.render("pages/my-page", {user: bizLogic.getLoggedInUser(), toast: toast});
+    res.render("pages/my-page", {user: userLogic.getLoggedInUser(), toast: toast});
   });
   app.post("/logout", function(req, res, next) {
-    bizLogic.logout();
+    userLogic.logout();
     res.redirect("/login?toast");
   });
 
   // main screens
 
   app.get("/how-to-use", function(req, res, next) {
-    res.render("pages/how-to-use", {user: bizLogic.getLoggedInUser()});
+    res.render("pages/how-to-use", {user: userLogic.getLoggedInUser()});
   });
   app.get("/new-posts", function(req, res, next) {
-    const targetPosts = bizLogic.findPosts();
+    const targetPosts = postLogic.findPosts();
     const deletedToast = req.query.deletedToast != undefined;
-    res.render("pages/new-posts", {user: bizLogic.getLoggedInUser(), targetPosts: targetPosts, deletedToast: deletedToast});
+    res.render("pages/new-posts", {user: userLogic.getLoggedInUser(), targetPosts: targetPosts, deletedToast: deletedToast});
   });
   app.get("/my-posts", function(req, res, next) {
     let myPosts: IPost[] = [];
-    if(bizLogic.alreadyLoggedIn()){
-      myPosts.push(...bizLogic.findMyPosts());
+    if(userLogic.alreadyLoggedIn()){
+      myPosts.push(...postLogic.findPostsByUserId(userLogic.getLoggedInUser()!.id));
     }
-    res.render("pages/my-posts", {user: bizLogic.getLoggedInUser(), myPosts: myPosts});
+    res.render("pages/my-posts", {user: userLogic.getLoggedInUser(), myPosts: myPosts});
   });
   app.get("/post/:id", function(req, res, next) {
-    const post = bizLogic.findPost(req.params.id);
+    const post = postLogic.findPost(req.params.id);
     if ( post !== null ) {
-      res.render("pages/post-detail", {user: bizLogic.getLoggedInUser(), post: post, showBack: true});
+      res.render("pages/post-detail", {user: userLogic.getLoggedInUser(), post: post, showBack: true});
     } else {
       // not found
       res.render("pages/404");
@@ -87,7 +89,7 @@ export const routing = ((app: Express): void => {
   app.delete("/post/:id", function(req, res, next) {
     // needs authorization
     try {
-      bizLogic.deletePost(req.params.id!.toString());
+      postLogic.deletePost(req.params.id!.toString());
     } catch (error) {
       TslLogUtil.warn('failed to delete the post ' + req.query.id);
       TslLogUtil.warn(error);
@@ -112,7 +114,7 @@ export const routing = ((app: Express): void => {
     TslLogUtil.debug("aa" + postCategory.getLabel());
     const newPost: IPost = {
       id: "this will be updated in dao class",
-      user: bizLogic.getLoggedInUser()!,
+      user: userLogic.getLoggedInUser()!,
       imageUrl: "/images/post-sample.jpeg",
       lat: Number(req.body.markerLat),
       lng: Number(req.body.markerLng),
@@ -121,76 +123,76 @@ export const routing = ((app: Express): void => {
       insertDate: new Date(),
       postComments: [],
     };
-    bizLogic.createPost(newPost);
-    const post = bizLogic.findPost(newPost.id);
+    postLogic.createPost(newPost);
+    const post = postLogic.findPost(newPost.id);
     res.redirect("/post/" + post!.id)
   });
   app.get("/edit-post/:id", function(req, res, next) {
     // needs authorization
-    const post = bizLogic.findPost(req.params.id);
+    const post = postLogic.findPost(req.params.id);
     if ( post !== null ) {
-      res.render("pages/edit-post", {user: bizLogic.getLoggedInUser(), post: post, showBack: true});
+      res.render("pages/edit-post", {user: userLogic.getLoggedInUser(), post: post, showBack: true});
     } else {
       // not found
       res.render("pages/404");
     }
   });
   app.get("/map", function(req, res, next) {
-    const targetPosts = bizLogic.findPosts();
-    res.render("pages/map", {user: bizLogic.getLoggedInUser(), targetPosts: targetPosts});
+    const targetPosts = postLogic.findPosts();
+    res.render("pages/map", {user: userLogic.getLoggedInUser(), targetPosts: targetPosts});
   });
 
   /**
    * expects to be called with Ajax.
    */
   app.get("/map/post/:id", function(req, res, next) {
-    const post = bizLogic.findPost(req.params.id);
+    const post = postLogic.findPost(req.params.id);
     if ( post !== null ) {
-      res.render("partials/map-post-detail", {user: bizLogic.getLoggedInUser(), post: post});
+      res.render("partials/map-post-detail", {user: userLogic.getLoggedInUser(), post: post});
     } else {
       // not found
       res.render("pages/404");
     }
   });
   app.get("/add-record", function(req, res, next) {
-    res.render("pages/add-record", {user: bizLogic.getLoggedInUser()});
+    res.render("pages/add-record", {user: userLogic.getLoggedInUser()});
   });
   app.get("/add-post", function(req, res, next) {
-    res.render("pages/add-post", {user: bizLogic.getLoggedInUser(), categories: PostCategory.Categories});
+    res.render("pages/add-post", {user: userLogic.getLoggedInUser(), categories: PostCategory.Categories});
   });
 
   // 以下、othersページおよびその配下
 
   app.get("/others", function(req, res, next) {
-    res.render("pages/others", {user: bizLogic.getLoggedInUser()});
+    res.render("pages/others", {user: userLogic.getLoggedInUser()});
   });
   app.get("/others/about", function(req, res, next) {
-    res.render("pages/others/about", {user: bizLogic.getLoggedInUser(), showBack: true});
+    res.render("pages/others/about", {user: userLogic.getLoggedInUser(), showBack: true});
   });
   app.get("/others/developer", function(req, res, next) {
-    res.render("pages/others/developer", {user: bizLogic.getLoggedInUser(), showBack: true});
+    res.render("pages/others/developer", {user: userLogic.getLoggedInUser(), showBack: true});
   });
   app.get("/others/tech", function(req, res, next) {
-    res.render("pages/others/tech", {user: bizLogic.getLoggedInUser(), showBack: true});
+    res.render("pages/others/tech", {user: userLogic.getLoggedInUser(), showBack: true});
   });
   app.get("/others/terms-of-service", function(req, res, next) {
-    res.render("pages/others/terms-of-service", {user: bizLogic.getLoggedInUser(), showBack: true});
+    res.render("pages/others/terms-of-service", {user: userLogic.getLoggedInUser(), showBack: true});
   });
   app.get("/others/privacy-policy", function(req, res, next) {
-    res.render("pages/others/privacy-policy", {user: bizLogic.getLoggedInUser(), showBack: true});
+    res.render("pages/others/privacy-policy", {user: userLogic.getLoggedInUser(), showBack: true});
   });
   app.get("/others/cookie-policy", function(req, res, next) {
-    res.render("pages/others/cookie-policy", {user: bizLogic.getLoggedInUser(), showBack: true});
+    res.render("pages/others/cookie-policy", {user: userLogic.getLoggedInUser(), showBack: true});
   });
 
   // 以下、エラーページ
 
   app.get("/500", function(req, res, next) {
-    res.render("pages/500", {user: bizLogic.getLoggedInUser()});
+    res.render("pages/500", {user: userLogic.getLoggedInUser()});
   });
 
   app.all("*", (req, res) => {
     TslLogUtil.warn(req.url);
-    res.render("pages/404", {user: bizLogic.getLoggedInUser()});
+    res.render("pages/404", {user: userLogic.getLoggedInUser()});
   });
 });
