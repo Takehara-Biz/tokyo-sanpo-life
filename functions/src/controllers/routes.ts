@@ -9,6 +9,9 @@ export const routing = ((app: Express): void => {
 
   // related to auth
 
+  app.get("/create-account", function(req, res, next) {
+    res.render("pages/create-account", {user: bizLogic.getLoggedInUser()});
+  });
   app.get("/login", function(req, res, next) {
     const toast = req.query.toast != undefined;
     res.render("pages/login", {user: bizLogic.getLoggedInUser(), toast: toast});
