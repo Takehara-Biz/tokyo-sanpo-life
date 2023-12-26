@@ -10,7 +10,7 @@
     <%- include('../../partials/header'); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll">
-        <%- include('../../partials/page-title', {title: '新規登録' }); %>
+        <%- include('../../partials/page-title', {title: 'ユーザ情報編集' }); %>
         <div class="p-1 pb-10">
           <div class="accordion mt-3" id="accordionExample">
             <div class="accordion-item">
@@ -35,7 +35,7 @@
               </div>
             </div>
           </div>
-          <form action="/user/create-account" method="POST" onSubmit="return confirm('本当に登録してもよろしいですか？')">
+          <form action="/user/update" method="POST" onSubmit="return confirm('本当に更新してもよろしいですか？')">
             <div class="mt-3">
               <label for="userName" class="form-label">ユーザ名（必須）</label>
               <input type="text" id="userName" name="userName" required maxlength="20" class="form-control" />

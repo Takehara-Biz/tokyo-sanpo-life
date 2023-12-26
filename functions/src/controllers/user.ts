@@ -13,10 +13,10 @@ export const addUserRouting = ((app: Express): void => {
 
   const URL_PREFIX = "/user";
 
-  app.get(URL_PREFIX + "/create-account", function(req, res, next) {
-    res.render("pages/user/create-account", {user: userLogic.getLoggedInUser()});
+  app.get(URL_PREFIX + "/create", function(req, res, next) {
+    res.render("pages/user/create", {user: userLogic.getLoggedInUser()});
   });
-  app.post(URL_PREFIX + "/create-account", function(req, res, next) {
+  app.post(URL_PREFIX + "/create", function(req, res, next) {
     TslLogUtil.debug("req : " + req);
     TslLogUtil.debug("req.params : " + req.params);
     TslLogUtil.debug("req.body : " + JSON.stringify(req.body));
@@ -55,6 +55,9 @@ export const addUserRouting = ((app: Express): void => {
   app.get(URL_PREFIX + "/my-page", function(req, res, next) {
     const toast = req.query.toast != undefined;
     res.render("pages/user/my-page", {user: userLogic.getLoggedInUser(), toast: toast});
+  });
+  app.get(URL_PREFIX + "/update", function(req, res, next) {
+    res.render("pages/user/update", {user: userLogic.getLoggedInUser()});
   });
   app.post(URL_PREFIX + "/logout", function(req, res, next) {
     userLogic.logout();
