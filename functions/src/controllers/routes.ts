@@ -1,63 +1,17 @@
 import {Express} from "express";
 import {PostLogic} from "../models/bizlogic/postLogic";
 import {UserLogic} from "../models/bizlogic/userLogic";
-import {IPost, IUser, PostCategory} from "../models/serverTslDef";
+import {IPost, PostCategory} from "../models/serverTslDef";
 import {TslLogUtil} from "../utils/tslLogUtil";
+import { addUserRouting } from "./user";
+import { addOthersRouting } from "./others";
 
 const postLogic = new PostLogic();
 const userLogic = new UserLogic();
 
 export const routing = ((app: Express): void => {
 
-  // related to auth
-
-  app.get("/create-account", function(req, res, next) {
-    res.render("pages/create-account", {user: userLogic.getLoggedInUser()});
-  });
-  app.post("/create-account", function(req, res, next) {
-    TslLogUtil.debug("req : " + req);
-    TslLogUtil.debug("req.params : " + req.params);
-    TslLogUtil.debug("req.body : " + JSON.stringify(req.body));
-    TslLogUtil.debug("req.body.userName : " + req.body.userName);
-    TslLogUtil.debug("req.body.iconImage : " + req.body.iconImage);
-    TslLogUtil.debug("req.body.selfIntro : " + req.body.selfIntro);
-    TslLogUtil.debug("req.body.xProfileURL : " + req.body.xProfileURL);
-    TslLogUtil.debug("req.body.instaProfileURL : " + req.body.instaProfileURL);
-
-    const newUser: IUser = {
-      id: "1",
-      userName: req.body.userName,
-      iconUrl: "/images/user-icon/kkrn_icon_user_9.svg",
-      selfIntroduction: req.body.selfIntro,
-      twitterProfileLink: req.body.xProfileURL,
-      instagramProfileLink: req.body.instaProfileURL,
-    };
-    userLogic.createUser(newUser);
-    userLogic.setLoggedInUser(newUser);
-    res.render("pages/my-page", {user: userLogic.getLoggedInUser(), toast: false});
-  });
-  app.get("/login", function(req, res, next) {
-    const toast = req.query.toast != undefined;
-    res.render("pages/login", {user: userLogic.getLoggedInUser(), toast: toast});
-  });
-  app.post("/login", function(req, res, next) {
-    const user = userLogic.findUser("1");
-    if ( user !== null ) {
-      userLogic.setLoggedInUser(user);
-      res.redirect("/my-page?toast");
-    } else {
-      // not found
-      res.render("pages/404");
-    }
-  });
-  app.get("/my-page", function(req, res, next) {
-    const toast = req.query.toast != undefined;
-    res.render("pages/my-page", {user: userLogic.getLoggedInUser(), toast: toast});
-  });
-  app.post("/logout", function(req, res, next) {
-    userLogic.logout();
-    res.redirect("/login?toast");
-  });
+  addUserRouting(app);
 
   // main screens
 
@@ -161,29 +115,7 @@ export const routing = ((app: Express): void => {
     res.render("pages/add-post", {user: userLogic.getLoggedInUser(), categories: PostCategory.Categories});
   });
 
-  // 以下、othersページおよびその配下
-
-  app.get("/others", function(req, res, next) {
-    res.render("pages/others", {user: userLogic.getLoggedInUser()});
-  });
-  app.get("/others/about", function(req, res, next) {
-    res.render("pages/others/about", {user: userLogic.getLoggedInUser(), showBack: true});
-  });
-  app.get("/others/developer", function(req, res, next) {
-    res.render("pages/others/developer", {user: userLogic.getLoggedInUser(), showBack: true});
-  });
-  app.get("/others/tech", function(req, res, next) {
-    res.render("pages/others/tech", {user: userLogic.getLoggedInUser(), showBack: true});
-  });
-  app.get("/others/terms-of-service", function(req, res, next) {
-    res.render("pages/others/terms-of-service", {user: userLogic.getLoggedInUser(), showBack: true});
-  });
-  app.get("/others/privacy-policy", function(req, res, next) {
-    res.render("pages/others/privacy-policy", {user: userLogic.getLoggedInUser(), showBack: true});
-  });
-  app.get("/others/cookie-policy", function(req, res, next) {
-    res.render("pages/others/cookie-policy", {user: userLogic.getLoggedInUser(), showBack: true});
-  });
+  addOthersRouting(app);
 
   // 以下、エラーページ
 

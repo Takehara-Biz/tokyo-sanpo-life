@@ -1,5 +1,5 @@
 import {PostsDao} from "../dao/postsDao";
-import {IPost, IUser} from "../serverTslDef";
+import {IPost} from "../serverTslDef";
 
 export class PostLogic {
   private postsDao = new PostsDao(10);
