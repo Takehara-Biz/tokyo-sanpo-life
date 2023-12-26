@@ -2,6 +2,10 @@ import {Express} from "express";
 import {UserLogic} from "../models/bizlogic/userLogic";
 const userLogic = new UserLogic();
 
+/**
+ * implements URL related to "others" pages.
+ * @param app 
+ */
 export const addOthersRouting = ((app: Express): void => {
 
   app.get("/others", function(req, res, next) {

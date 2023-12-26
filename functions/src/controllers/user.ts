@@ -6,15 +6,17 @@ import {TslLogUtil} from "../utils/tslLogUtil";
 const userLogic = new UserLogic();
 
 /**
- * set URL for user and authentication
+ * implements URL related to user or authentication
  * @param app 
  */
 export const addUserRouting = ((app: Express): void => {
-  
-  app.get("/create-account", function(req, res, next) {
-    res.render("pages/create-account", {user: userLogic.getLoggedInUser()});
+
+  const URL_PREFIX = "/user";
+
+  app.get(URL_PREFIX + "/create-account", function(req, res, next) {
+    res.render("pages/user/create-account", {user: userLogic.getLoggedInUser()});
   });
-  app.post("/create-account", function(req, res, next) {
+  app.post(URL_PREFIX + "/create-account", function(req, res, next) {
     TslLogUtil.debug("req : " + req);
     TslLogUtil.debug("req.params : " + req.params);
     TslLogUtil.debug("req.body : " + JSON.stringify(req.body));
@@ -34,28 +36,28 @@ export const addUserRouting = ((app: Express): void => {
     };
     userLogic.createUser(newUser);
     userLogic.setLoggedInUser(newUser);
-    res.render("pages/my-page", {user: userLogic.getLoggedInUser(), toast: false});
+    res.render("pages/user/my-page", {user: userLogic.getLoggedInUser(), toast: false});
   });
-  app.get("/login", function(req, res, next) {
+  app.get(URL_PREFIX + "/login", function(req, res, next) {
     const toast = req.query.toast != undefined;
-    res.render("pages/login", {user: userLogic.getLoggedInUser(), toast: toast});
+    res.render("pages/user/login", {user: userLogic.getLoggedInUser(), toast: toast});
   });
-  app.post("/login", function(req, res, next) {
+  app.post(URL_PREFIX + "/login", function(req, res, next) {
     const user = userLogic.findUser("1");
     if ( user !== null ) {
       userLogic.setLoggedInUser(user);
-      res.redirect("/my-page?toast");
+      res.redirect(URL_PREFIX + "/my-page?toast");
     } else {
       // not found
       res.render("pages/404");
     }
   });
-  app.get("/my-page", function(req, res, next) {
+  app.get(URL_PREFIX + "/my-page", function(req, res, next) {
     const toast = req.query.toast != undefined;
-    res.render("pages/my-page", {user: userLogic.getLoggedInUser(), toast: toast});
+    res.render("pages/user/my-page", {user: userLogic.getLoggedInUser(), toast: toast});
   });
-  app.post("/logout", function(req, res, next) {
+  app.post(URL_PREFIX + "/logout", function(req, res, next) {
     userLogic.logout();
-    res.redirect("/login?toast");
+    res.redirect(URL_PREFIX + "/login?toast");
   });
 });

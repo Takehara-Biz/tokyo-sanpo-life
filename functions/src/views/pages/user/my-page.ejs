@@ -2,15 +2,15 @@
 <html>
 
 <head>
-  <%- include('../partials/head'); %>
+  <%- include('../../partials/head'); %>
 </head>
 
 <body>
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
-    <%- include('../partials/header'); %>
+    <%- include('../../partials/header'); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll flex flex-col">
-        <%- include('../partials/page-title', {title: 'マイページ' }); %>
+        <%- include('../../partials/page-title', {title: 'マイページ' }); %>
           <% if (user === undefined) { %>
             <div class="grow flex justify-center items-center">
               <div>
@@ -47,16 +47,16 @@
                   <dt>SNS（インスタグラム）</dt>
                   <dd><a href="<%= user.instagramProfileLink %>" target="_blank">インスタグラム</a></dd>
                 </dl>
-                <form action="/logout" method="post" onsubmit="return confirm('ログアウトしてよろしいですか？');">
+                <form action="/user/logout" method="post" onsubmit="return confirm('ログアウトしてよろしいですか？');">
                   <input class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" type="submit"
                     value="ログアウト" />
                 </form>
               </div>
               <% } %>
       </div>
-      <%- include('../partials/footer', {currentMenu: 5}); %>
+      <%- include('../../partials/footer', {currentMenu: 5}); %>
         <!-- Toast -->
-        <%- include('../partials/toast', {message: "ログインに成功しました"}); %>
+        <%- include('../../partials/toast', {message: "ログインに成功しました"}); %>
         <script>
           window.onload = (() => {
             let toast = false;
