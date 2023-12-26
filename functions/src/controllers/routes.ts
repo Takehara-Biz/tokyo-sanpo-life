@@ -1,6 +1,6 @@
 import {Express} from "express";
 import {BizLogic} from "../models/bizLogic";
-import {IPost, PostCategory} from "../models/serverTslDef";
+import {IPost, IUser, PostCategory} from "../models/serverTslDef";
 import {TslLogUtil} from "../utils/tslLogUtil";
 
 const bizLogic = new BizLogic();
@@ -11,6 +11,28 @@ export const routing = ((app: Express): void => {
 
   app.get("/create-account", function(req, res, next) {
     res.render("pages/create-account", {user: bizLogic.getLoggedInUser()});
+  });
+  app.post("/create-account", function(req, res, next) {
+    TslLogUtil.debug("req : " + req);
+    TslLogUtil.debug("req.params : " + req.params);
+    TslLogUtil.debug("req.body : " + JSON.stringify(req.body));
+    TslLogUtil.debug("req.body.userName : " + req.body.userName);
+    TslLogUtil.debug("req.body.iconImage : " + req.body.iconImage);
+    TslLogUtil.debug("req.body.selfIntro : " + req.body.selfIntro);
+    TslLogUtil.debug("req.body.xProfileURL : " + req.body.xProfileURL);
+    TslLogUtil.debug("req.body.instaProfileURL : " + req.body.instaProfileURL);
+
+    const newUser: IUser = {
+      id: "1",
+      userName: req.body.userName,
+      iconUrl: "/images/user-icon/kkrn_icon_user_9.svg",
+      selfIntroduction: req.body.selfIntro,
+      twitterProfileLink: req.body.xProfileURL,
+      instagramProfileLink: req.body.instaProfileURL,
+    };
+    bizLogic.createUser(newUser);
+    bizLogic.setLoggedInUser(newUser);
+    res.render("pages/my-page", {user: bizLogic.getLoggedInUser(), toast: false});
   });
   app.get("/login", function(req, res, next) {
     const toast = req.query.toast != undefined;
@@ -76,18 +98,18 @@ export const routing = ((app: Express): void => {
   });
 
   app.post("/post", function(req, res, next) {
-    console.log("req : " + req);
-    console.log("req.params : " + req.params);
-    console.log("req.body : " + JSON.stringify(req.body));
-    console.log("req.body.comment : " + req.body.comment);
-    console.log("req.body.postCategory : " + req.body.postCategory);
-    console.log("req.body.uploadPhoto : " + req.body.uploadPhoto);
-    console.log("req.body.markerLat : " + req.body.markerLat);
-    console.log("req.body.markerLng : " + req.body.markerLng);
+    TslLogUtil.debug("req : " + req);
+    TslLogUtil.debug("req.params : " + req.params);
+    TslLogUtil.debug("req.body : " + JSON.stringify(req.body));
+    TslLogUtil.debug("req.body.comment : " + req.body.comment);
+    TslLogUtil.debug("req.body.postCategory : " + req.body.postCategory);
+    TslLogUtil.debug("req.body.uploadPhoto : " + req.body.uploadPhoto);
+    TslLogUtil.debug("req.body.markerLat : " + req.body.markerLat);
+    TslLogUtil.debug("req.body.markerLng : " + req.body.markerLng);
 
     const postCategory = PostCategory.findCategory(Number(req.body.postCategory));
-    console.log("aa" + postCategory);
-    console.log("aa" + postCategory.getLabel());
+    TslLogUtil.debug("aa" + postCategory);
+    TslLogUtil.debug("aa" + postCategory.getLabel());
     const newPost: IPost = {
       id: "this will be updated in dao class",
       user: bizLogic.getLoggedInUser()!,
