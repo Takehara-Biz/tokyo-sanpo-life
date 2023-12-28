@@ -11,7 +11,8 @@
   <!-- The surrounding HTML is left untouched by FirebaseUI.
      Your app may use that space for branding, controls and other customizations.-->
   <h1>Welcome to My Awesome App</h1>
-  <button onclick="login();">login!!!!</button>
+  <button onclick="loginWithGoogle();">login with Google Account!</button>
+  <button onclick="loginWithTwitter();">login with X (Twitter) Account!</button>
   <div id="firebaseui-auth-container"></div>
   <div id="loader">Loading...</div>
   <button onclick="logout();">logout!!!!</button>
@@ -19,7 +20,7 @@
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-    import { getAuth, signInWithRedirect, getRedirectResult, signOut, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getAuth, signInWithRedirect, getRedirectResult, signOut, GoogleAuthProvider, TwitterAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -40,13 +41,20 @@
     const analytics = getAnalytics(app);
     // Initialize Firebase Authentication and get a reference to the service
     const auth = getAuth();
-    const provider = new GoogleAuthProvider();
+    const googleAuthProvider = new GoogleAuthProvider();
 
-    const login = (() => {
-    signInWithRedirect(auth, provider);
+    const loginWithGoogle = (() => {
+      signInWithRedirect(auth, googleAuthProvider);
     });
-    window.login = login;
-    export {login};
+    window.loginWithGoogle = loginWithGoogle;
+    export {loginWithGoogle};
+
+    const twitterAuthProvider = new TwitterAuthProvider();
+    const loginWithTwitter = (() => {
+      signInWithRedirect(auth, twitterAuthProvider);
+    });
+    window.loginWithTwitter = loginWithTwitter;
+    export {loginWithTwitter};
 
     const logout = (() => {
       signOut(auth).then(() => {
@@ -66,13 +74,13 @@
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access Google APIs.
         const credential = GoogleAuthProvider.credentialFromResult(result);
-        console.log('credential : ' + credential);
+        console.log('credential : ' + JSON.stringify(credential));
         const token = credential.accessToken;
         console.log('token : ' + token);
 
         // The signed-in user info.
         const user = result.user;
-        console.log('user : ' + user);
+        console.log('user : ' + JSON.stringify(user));
         // IdP data available using getAdditionalUserInfo(result)
         // ...
       }).catch((error) => {
