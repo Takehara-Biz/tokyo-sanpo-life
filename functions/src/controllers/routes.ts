@@ -88,7 +88,7 @@ export const routing = ((app: Express): void => {
       res.render("pages/edit-post", {user: userLogic.getLoggedInUser(), post: post, showBack: true});
     } else {
       // not found
-      res.render("pages/404");
+      res.render("pages/404", {user: userLogic.getLoggedInUser()});
     }
   });
   app.get("/map", function(req, res, next) {
@@ -105,7 +105,7 @@ export const routing = ((app: Express): void => {
       res.render("partials/map-post-detail", {user: userLogic.getLoggedInUser(), post: post});
     } else {
       // not found
-      res.render("pages/404");
+      res.render("pages/404", {user: userLogic.getLoggedInUser()});
     }
   });
   app.get("/add-record", function(req, res, next) {

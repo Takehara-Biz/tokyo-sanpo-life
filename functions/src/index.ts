@@ -21,6 +21,7 @@
 const functions = require("firebase-functions");
 // Expressの読み込み
 const express = require("express");
+const cookieParser = require('cookie-parser')
 
 import {routing} from "./controllers/routes";
 import {TslLogUtil} from "./utils/tslLogUtil";
@@ -31,6 +32,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cookieParser());
 
 app.set("view engine", "ejs");
 app.set("views", "./src/views");
@@ -42,9 +44,10 @@ app.use(express.static("public"));
 // app.use(favicon("./src/kkrn_icon_kirakira_2.svg"));
 
 app.use(function(req: Request, res: Response, next: NextFunction) {
-  TslLogUtil.debug("[BEGIN] " + req.url + ", req.params=" + JSON.stringify(req.params) + ", req.body=" + JSON.stringify(req.body));
+  //TslLogUtil.debug("[BEGIN] " + req.url + ", req.params=" + JSON.stringify(req.params) + ", req.cookies=" + JSON.stringify(req.cookies) + ", req.body=" + JSON.stringify(req.body));
+  TslLogUtil.debug("[BEGIN] " + req.url + ",\n req.params=" + JSON.stringify(req.params) + ",\nreq.cookies=" + JSON.stringify(req.cookies) + ",\nreq.body=" + JSON.stringify(req.body));
   next();
-  TslLogUtil.debug("[  END] " + req.url);
+  TslLogUtil.debug("[  END] " + req.url + ",\n res.cookie=" + res.get('Set-Cookie'));
 });
 
 routing(app);

@@ -52,6 +52,20 @@ export const addUserRouting = ((app: Express): void => {
       res.render("pages/404");
     }
   });
+  app.post(URL_PREFIX + "/login2", function(req, res, next) {
+    const oneDayMilliSeconds = 24 * 60 * 60 * 1000;
+    res.cookie('uid', req.body.uid, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
+    res.cookie('token', req.body.token, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
+
+    const user = userLogic.findUser("1");
+    if ( user !== null ) {
+      userLogic.setLoggedInUser(user);
+      res.redirect(URL_PREFIX + "/my-page?toast");
+    } else {
+      // not found
+      res.render("pages/404", {user: userLogic.getLoggedInUser()});
+    }
+  });
   app.get(URL_PREFIX + "/my-page", function(req, res, next) {
     const toast = req.query.toast != undefined;
     res.render("pages/user/my-page", {user: userLogic.getLoggedInUser(), toast: toast});
