@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+</head>
+
+<body>
+  login test
+  <!-- The surrounding HTML is left untouched by FirebaseUI.
+     Your app may use that space for branding, controls and other customizations.-->
+  <h1>Welcome to My Awesome App</h1>
+  <button onclick="login();">login!!!!</button>
+  <div id="firebaseui-auth-container"></div>
+  <div id="loader">Loading...</div>
+  <button onclick="logout();">logout!!!!</button>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+    import { getAuth, signInWithRedirect, getRedirectResult, signOut, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyAW0fJXkv5YGBZDcFdNeaQdH4s0JwRVIec",
+      authDomain: "tokyo-sanpo-life.firebaseapp.com",
+      projectId: "tokyo-sanpo-life",
+      storageBucket: "tokyo-sanpo-life.appspot.com",
+      messagingSenderId: "702612803712",
+      appId: "1:702612803712:web:1700ffd54eef1da20a1665",
+      measurementId: "G-DNVGJXLX5J"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    // Initialize Firebase Authentication and get a reference to the service
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+
+    const login = (() => {
+    signInWithRedirect(auth, provider);
+    });
+    window.login = login;
+    export {login};
+
+    const logout = (() => {
+      signOut(auth).then(() => {
+        // Sign-out successful.
+        console.log('Sign-out successful.');
+      }).catch((error) => {
+        // An error happened.
+        console.error('An error happened.');
+        console.error(error);
+      });
+
+    });
+    window.logout = logout;
+    export {logout}; 
+
+    getRedirectResult(auth)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access Google APIs.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        console.log('credential : ' + credential);
+        const token = credential.accessToken;
+        console.log('token : ' + token);
+
+        // The signed-in user info.
+        const user = result.user;
+        console.log('user : ' + user);
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        console.error('errorCode: ' + errorCode);
+        const errorMessage = error.message;
+        console.error('errorMessage: ' + errorMessage);
+        // The email of the user's account used.
+        const email = error.customData.email;
+        console.error('email: ' + email);
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+        console.error('credential: ' + credential);
+      });
+  </script>
+</body>
+
+</html>
