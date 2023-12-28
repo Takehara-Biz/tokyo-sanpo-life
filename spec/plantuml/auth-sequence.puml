@@ -1,0 +1,50 @@
+@startuml AuthSequence Diagram
+title AuthSequence Diagram
+autonumber
+
+participant WebBrowser as wb
+participant FirebaseAuth as fa
+participant "Provider(Google, X)" as pro
+participant "Node.js" as node
+
+== Log in ==
+
+wb <- node : render login page
+wb -> wb : click login button
+wb -> fa : call auth function
+fa -> pro : delegate
+wb <- pro : return token, etc.
+wb -> node : call inplicitly (token)
+node -> node : keep token internally
+node -> node : set token into cookie in response
+wb <- node : return response (cookie)
+
+== When requires a page for logged in users ==
+
+wb -> node : require a page (cookie)
+alt when already login
+  node -> node : check the validity of the token in the cookie
+  alt valid
+    wb <- node : render a page which can be seen only logged in user
+  else invalid (expired or something)
+    wb <- node : make redirect to the login page to urge re-login
+  end
+else not yet login
+  wb <- node : render a page for anonymous
+end
+
+== Log out ==
+
+wb -> fa : logout
+wb <- fa : successful
+wb -> node : nofity logged out (cookie)
+node -> node : check the validity of the token in the cookie
+alt valid
+  node -> node : remove token which the server has kept
+  node -> node : remove token from the cookie
+  wb <- node : make redirect to the login page with logout successful message
+else invalid (expired or something)
+  wb <- node : make redirect to the login page to urge re-login
+end
+
+@enduml
