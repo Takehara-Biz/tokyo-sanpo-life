@@ -37,26 +37,17 @@
           </div>
           <form action="/user/create" method="POST" onSubmit="return confirm('本当に登録してもよろしいですか？')">
             <div class="mt-3">
-              <label for="userName" class="form-label">ユーザ名（必須）</label>
-              <input type="text" id="userName" name="userName" required maxlength="20" class="form-control" />
+              <label for="firebaseUserId" class="form-label">ユーザID（固定）</label>
+              <span><%= firebaseUserId %></span>
             </div>
             <div class="mt-3">
-              <label for="formFile" class="form-label">アイコン画像（必須）</label>
-              <input class="form-control" type="file" id="uploadPhoto" name="iconImage" required
-                accept=".jpg, .jpeg, .png" />
+              <label for="userName" class="form-label">ユーザ名（必須）</label>
+              <input type="text" id="userName" name="userName" required maxlength="20" class="form-control" />
             </div>
             <div class="mt-3">
               <label for="selfIntroTextarea" class="form-label">自己紹介</label>
               <textarea name="comment" required class="form-control" id="selfIntro" name="selfIntro" maxlength="200"
                 rows="3"></textarea>
-            </div>
-            <div class="mt-3">
-              <label for="formFile" class="form-label">X（ツイッター）のプロフィールURL</label>
-              <input type="url" id="xProfileURL" name="xProfileURL" class="form-control" />
-            </div>
-            <div class="mt-3">
-              <label for="formFile" class="form-label">インスタグラムのプロフィールURL</label>
-              <input type="url" id="instaProfileURL" name="instaProfileURL" class="form-control" />
             </div>
             <button type="submit" class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" onsubmit="return confirm('登録してもよろしいですか？');">
               <span class="material-symbols-outlined align-[-6px]">
@@ -65,6 +56,7 @@
               決定
             </button>
           </form>
+          <p>※アイコンは、後から自由に設定・変更ができます。</p>
         </div>
       </div>
       <%- include('../../partials/footer', {currentMenu: null}); %>

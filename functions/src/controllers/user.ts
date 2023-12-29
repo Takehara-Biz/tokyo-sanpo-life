@@ -83,6 +83,9 @@ export const addUserRouting = ((app: Express): void => {
     const toast = req.query.toast != undefined;
     res.render("pages/user/my-page", {user: userLogic.getLoggedInUser(), toast: toast});
   });
+  app.get(URL_PREFIX + "/update-user-icon", function(req, res, next) {
+    res.render("pages/user/update-user-icon", {user: userLogic.getLoggedInUser()});
+  });
   app.get(URL_PREFIX + "/update", function(req, res, next) {
     res.render("pages/user/update", {user: userLogic.getLoggedInUser()});
   });

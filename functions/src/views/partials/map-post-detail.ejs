@@ -2,7 +2,7 @@
   <div id="bodyContent" class="flex justify-between">
     <img src='<%= post.imageUrl %>' width='50%' />
     <div class="w-1/2 p-2">
-      <%- include('../partials/user-icon-name', {iconUrl: post.user.iconUrl, userName: post.user.userName}) %>
+      <%- include('../partials/user-icon-name-s', {iconUrl: post.user.iconUrl, userName: post.user.userName}) %>
       <p class="text-sm">
         <%= post.insertDate.toLocaleString("ja-JP") %>
       </p>
