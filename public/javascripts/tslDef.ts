@@ -56,7 +56,7 @@ CategoryIdAndMarkerTypeDefMap.set(PostCategory.Other.getId(), {iconKeyWord: "lig
 interface IUser {
   id: string,
   userName: string,
-  iconUrl: string,
+  userIconBase64: string,
   selfIntroduction?: string;
   twitterProfileLink?: string;
   instagramProfileLink?: string;

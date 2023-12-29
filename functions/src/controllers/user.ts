@@ -2,6 +2,7 @@ import { Express } from "express";
 import { userLogic } from "../models/bizlogic/userLogic";
 import { IUser } from "../models/serverTslDef";
 import { FirebaseAuthDao } from "../models/dao/firebaseAuthDao";
+import { defaultUserIconBase64 } from "../models/dao/defaultUserIconBase64";
 
 const firebaseAuthDao = new FirebaseAuthDao();
 
@@ -15,15 +16,15 @@ export const addUserRouting = ((app: Express): void => {
 
   app.get(URL_PREFIX + "/create", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
-    const printUserId = userLogic.createUserIdToPrint(firebaseUserId!);
-    res.render("pages/user/create", { user: userLogic.getLoggedInUser(), firebaseUserId: printUserId});
+    res.render("pages/user/create", { user: userLogic.getLoggedInUser(), firebaseUserId: firebaseUserId});
   });
   app.post(URL_PREFIX + "/create", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
+
     const newUser: IUser = {
       id: firebaseUserId!,
       userName: req.body.userName,
-      iconUrl: "/images/user-icon/kkrn_icon_user_9.svg",
+      userIconBase64: defaultUserIconBase64,
       selfIntroduction: req.body.selfIntro,
       twitterProfileLink: req.body.xProfileURL,
       instagramProfileLink: req.body.instaProfileURL,

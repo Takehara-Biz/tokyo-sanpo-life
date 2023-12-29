@@ -25,13 +25,13 @@
                 <dl>
                   <dt>ID</dt>
                   <dd>
-                    <%= user.id %>
+                    <%- include('../../partials/printable-user-id', {id: user.id}) %>
                   </dd>
                 </dl>
                 <dl>
                   <dt>アイコンとユーザ名</dt>
                   <dd>
-                    <%- include('../../partials/user-icon-name-s', {iconUrl: user.iconUrl, userName: user.userName}) %>
+                    <%- include('../../partials/user-icon-name-s', {iconUrl: user.userIconBase64, userName: user.userName}) %>
                   </dd>
                 </dl>
                 <dl>

@@ -1,6 +1,7 @@
 import { TslLogUtil } from "../../utils/tslLogUtil";
 import { IUser } from "../serverTslDef";
 import { DaoUtil } from "./daoUtil";
+import { defaultUserIconBase64 } from "./defaultUserIconBase64";
 
 export class UsersDao {
   private idAndUserMap: Map<string, IUser> = new Map<string, IUser>();
@@ -14,7 +15,7 @@ export class UsersDao {
       const user = {
         id: i.toString(),
         userName: DaoUtil.generateRandomString(3, 12),
-        iconUrl: "/images/user-icon/kkrn_icon_user_9.svg",
+        userIconBase64: defaultUserIconBase64,
         selfIntroduction: "こんにちは〜。" + DaoUtil.generateRandomString(1, 50),
         twitterProfileLink: "https://www.yahoo.co.jp",
         instagramProfileLink: "https://www.yahoo.co.jp",

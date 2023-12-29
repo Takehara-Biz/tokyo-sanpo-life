@@ -31,14 +31,5 @@ class UserLogic {
   public createUser(user: IUser): void {
     return this.usersDao.createUser(user);
   }
-
-  /**
-   * 
-   * @param firebaseUserId e.g. "kkiIciQOf2RdW4J4eplQz9FxPUH3"
-   * @returns "kkiIci"
-   */
-  public createUserIdToPrint(firebaseUserId: string): string {
-    return firebaseUserId.substring(0, 6);
-  }
 }
 export const userLogic = new UserLogic();

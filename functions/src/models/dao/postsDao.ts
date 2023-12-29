@@ -1,6 +1,7 @@
 import { TslLogUtil } from "../../utils/tslLogUtil";
 import {IPost, IPostComment, PostCategory} from "../serverTslDef";
 import { DaoUtil } from "./daoUtil";
+import { defaultUserIconBase64 } from "./defaultUserIconBase64";
 
 export class PostsDao {
   private idAndPostMap: Map<string, IPost> = new Map<string, IPost>();
@@ -20,7 +21,7 @@ export class PostsDao {
         user: {
           id: i.toString(),
           userName: DaoUtil.generateRandomString(3, 12),
-          iconUrl: "/images/user-icon/kkrn_icon_user_9.svg",
+          userIconBase64: defaultUserIconBase64,
         },
         postCategory: this.chooseContentTypeEnumRandomly(),
         imageUrl: "/images/post-sample.jpeg",
@@ -42,7 +43,7 @@ export class PostsDao {
         user: {
           id: i.toString(),
           userName: DaoUtil.generateRandomString(3, 12),
-          iconUrl: "/images/user-icon/kkrn_icon_user_9.svg",
+          userIconBase64: "/images/user-icon/kkrn_icon_user_9.svg",
         },
         comment: DaoUtil.generateRandomString(1, 100),
         commentDate: new Date("2023/12/01"),
