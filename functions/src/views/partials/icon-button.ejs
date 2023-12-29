@@ -1,13 +1,16 @@
 <div class="mx-3">
   <button 
-    <% if (locals.buttonId != undefined) { %>
-      id="<%= buttonId %>" 
+    <% if (locals.id != undefined) { %>
+      id="<%= id %>" 
     <% } %>
     <% if (locals.typeSubmit != undefined) { %>
       type="submit" 
     <% } %>
     <% if (locals.onclickCode != undefined) { %>
       onclick="<%= onclickCode %>" 
+    <% } %>
+    <% if (locals.onSubmitCode != undefined) { %>
+      onsubmit="<%= onSubmitCode %>" 
     <% } %>
     class="mt-3 btn text-white w-full bg-accent h-12" style="background-color: #ff0099; height: 48px;">
     <% if (locals.googleIconName != undefined) { %>
