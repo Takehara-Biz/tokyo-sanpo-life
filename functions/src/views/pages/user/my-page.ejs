@@ -41,7 +41,7 @@
                   </dd>
                 </dl>
                 <%- include('../../partials/icon-link-button', {label: "ユーザ情報編集", href: "/user/update", googleIconName: "manage_accounts"}); %>
-                <%- include('../../partials/icon-link-button', {label: "ユーザアイコン編集", googleIconName: "face", href: "/user/update-user-icon"}) %>
+                <%- include('../../partials/icon-link-button', {label: "ユーザアイコンの変更", googleIconName: "face", href: "/user/update-user-icon"}) %>
                 
                 <form action="/user/logout" method="post" onsubmit="return confirm('ログアウトしてよろしいですか？');">
                   <%- include('../../partials/icon-button', {label: "ダミーログアウト", typeSubmit: true, onSubmitCode: "return confirm('ログアウトしてよろしいですか？');", googleIconName: "logout"}); %>

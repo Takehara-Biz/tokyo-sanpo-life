@@ -25,9 +25,9 @@ export const addUserRouting = ((app: Express): void => {
       id: firebaseUserId!,
       userName: req.body.userName,
       userIconBase64: defaultUserIconBase64,
-      selfIntroduction: req.body.selfIntro,
-      twitterProfileLink: req.body.xProfileURL,
-      instagramProfileLink: req.body.instaProfileURL,
+      selfIntroduction: req.body.selfIntro ?? "",
+      twitterProfileLink: req.body.xProfileURL ?? "",
+      instagramProfileLink: req.body.instaProfileURL ?? "",
     };
     userLogic.createUser(newUser);
     userLogic.setLoggedInUser(newUser);
@@ -85,6 +85,11 @@ export const addUserRouting = ((app: Express): void => {
   app.get(URL_PREFIX + "/update", function (req, res, next) {
     res.render("pages/user/update", { user: userLogic.getLoggedInUser() });
   });
+  app.put(URL_PREFIX + "/update", function (req, res, next) {
+    // todo!
+    res.render("pages/user/update", { user: userLogic.getLoggedInUser() });
+  });
+
   app.post(URL_PREFIX + "/logout", function (req, res, next) {
     userLogic.logout();
     res.redirect(URL_PREFIX + "/login?successfulLogoutToast");

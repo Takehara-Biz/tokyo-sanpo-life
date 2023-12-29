@@ -60,9 +60,9 @@ export interface IUser {
   id: string,
   userName: string,
   userIconBase64: string,
-  selfIntroduction?: string;
-  twitterProfileLink?: string;
-  instagramProfileLink?: string;
+  selfIntroduction: string;
+  twitterProfileLink: string;
+  instagramProfileLink: string;
 }
 
 /**
