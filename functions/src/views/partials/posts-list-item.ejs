@@ -3,13 +3,7 @@
     <img width="100%" src="<%= post.imageUrl %>" style="border: 1px solid; " />
   </div>
   <div class="p-1" style="width:50%;">
-    <div class="flex items-center">
-      <img class="ml-1" width="30px" height="30px" src="<%= post.user.iconUrl %>"
-        style="border: 2px solid #ff0099; border-radius:50%;" />
-      <span class="font-bold pl-2" style="font-family:Kaisai Decol; color:#ff0099;">
-        <%= post.user.userName %>
-      </span>
-    </div>
+    <%- include('../partials/user-icon-name', {iconUrl: post.user.iconUrl, userName: post.user.userName}) %>
     <p class="truncate"><%= post.description %></p>
     <p><%= post.postCategory.getEmoji() %>&nbsp;<%= post.postCategory.getLabel() %></p>
     <span class="text-sm">

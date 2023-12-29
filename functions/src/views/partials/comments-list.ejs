@@ -2,13 +2,7 @@
   <hr />
   <div class="w-full px-4 py-2">
     <div style="display:flex; justify-content:space-between;">
-      <div style="display:flex;">
-        <img width="40px" height="40px" src="<%= comment.user.iconUrl %>"
-          style="border: 2px solid #ff0099; border-radius:50%" />
-        <span style="font-weight:bold; font-family:Kaisai Decol; color:#ff0099; padding-left:10px;">
-          <%= comment.user.userName %>
-        </span>
-      </div>
+      <%- include('../partials/user-icon-name', {iconUrl: post.user.iconUrl, userName: post.user.userName}) %>
       <span style="font-size: small; margin-left:20px;">
         <%= comment.commentDate.toLocaleString("ja-JP") %>
       </span>
