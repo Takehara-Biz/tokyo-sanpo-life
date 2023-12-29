@@ -23,20 +23,21 @@
         <%- include('../../partials/page-title', {title: 'ログイン（新規登録）' }); %>
           <div class="p-1">
             <p>ログインすると、散歩情報を投稿できるようになります。</p>
-            <form action="/user/login" method="post">
+            <!-- <form action="/user/login" method="post">
               <button class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" type="submit">
                 <span class="material-symbols-outlined align-[-6px]">
                   login
                 </span>
                 ログイン（あとで消す）  
               </button>
-            </form>
-            <button class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" onclick="loginWithGoogle();">
+            </form> -->
+            <%- include('../../partials/icon-button', {label: "Googleでログイン", onclickCode: "loginWithGoogle();", googleIconName: "login"}); %>
+            <!-- <button class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" onclick="loginWithGoogle();">
               <span class="material-symbols-outlined align-[-6px]">
                 login
               </span>
               Googleでログイン
-            </button>
+            </button> -->
             <!-- <button class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" onclick="loginWithTwitter();">
               <span class="material-symbols-outlined align-[-6px]">
                 login
@@ -44,17 +45,17 @@
               X(Twitter)でログイン
             </button> -->
             <form action="/user/login2" method="post">
-              <input type="hidden" id="uid" name="uid" />
-              <input type="hidden" id="token" name="token" />
               <input type="hidden" id="idToken" name="idToken" />
-              <button id="submit" class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" type="submit">
+              <%- include('../../partials/icon-button', {label: "/login2を呼ぶ。後で非表示にする", id: "submit", typeSubmit: true, onclickCode: "loginWithGoogle();", googleIconName: "login"}); %>
+              <!-- <button id="submit" class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" type="submit">
                 <span class="material-symbols-outlined align-[-6px]">
                   login
                 </span>
                 /login2を呼ぶ。後で非表示にする
-              </button>
+              </button> -->
             </form>
-            <a class="w-full btn bg-accent" href="/user/update-user-icon" role="button">ユーザアイコン編集</a>
+            <%- include('../../partials/icon-link-button', {label: "ユーザアイコン編集（あとでマイページに移動させる）", googleIconName: "face", href: "/user/update-user-icon"}) %>
+            <!-- <a class="w-full btn bg-accent" href="/user/update-user-icon" role="button">ユーザアイコン編集</a> -->
             <hr />
 
             <small>

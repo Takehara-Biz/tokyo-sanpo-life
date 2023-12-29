@@ -17,7 +17,7 @@
       <!-- Main Body -->
       <div class="grow overflow-y-scroll">
         <%- include('../../partials/page-title', {title: 'ユーザアイコン設定' }); %>
-          <div class="p-1 pb-10">
+          <div class="pt-1 px-1 pb-10">
             <div class="accordion mt-3" id="accordionExample">
               <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -50,6 +50,7 @@
             <div id="cropperTargetDiv" class="w-full" style='height: 200px'>
               <img id="target" src="">
             </div>
+            <%- include('../../partials/icon-button', {label: "丸く切り取る", id: "cropButton", googleIconName: "content_cut"}); %>
             <button id="cropButton" class="btn bg-accent text-white" style="background-color: #ff0099;">
               <span class="material-symbols-outlined align-[-6px]">
                 content_cut
@@ -69,6 +70,7 @@
                   style="border: 2px solid #ff0099;">
               </div>
             </div>
+            <%- include('../../partials/icon-button', {label: "初期設定に戻す", id: "useDefaultIconButton", googleIconName: "reset_image"}); %>
             <button id="useDefaultIconButton" class="btn bg-accent text-white" style="background-color: #ff0099;">
               <span class="material-symbols-outlined align-[-6px]">
                 reset_image
