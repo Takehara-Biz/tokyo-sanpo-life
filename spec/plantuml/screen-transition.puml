@@ -1,0 +1,47 @@
+@startuml ScreenTransition Diagram
+title ScreenTransition Diagram
+'left to right direction
+
+state HeaderMenu {
+  state LoginFacade : Before login
+  state OAuthLogin #LightBlue : Google Login page
+  state RegisterPage : Urge to input user info
+  state MyPage : Need login
+
+  LoginFacade --> OAuthLogin : Log in
+  OAuthLogin --> RegisterPage : when not yet registered
+  RegisterPage --> MyPage : after registeration
+  OAuthLogin --> MyPage : when already registered
+  MyPage --> LoginFacade : Log out or Unregister
+}
+state FooterMenu #HotPink {
+  state 1_HowToUse
+  state 2_NewSanpoInfoList
+  state 3_SanpoInfoMap
+  state 4_AddStepRecord
+  state 5_Others
+}
+
+[*] --> 1_HowToUse
+
+state SanpoInfoDetail
+2_NewSanpoInfoList --> SanpoInfoDetail
+state MySanpoInfoList : Need login
+2_NewSanpoInfoList --> MySanpoInfoList : Tab Switch
+MySanpoInfoList --> SanpoInfoDetail
+
+state AddSanpoInfo : Need login
+4_AddStepRecord --> AddSanpoInfo : Tab Switch
+AddSanpoInfo --> SanpoInfoDetail : After added
+
+state OthersDetailList {
+  state AboutThisSite
+  state DeveloperIntro
+  state TechInfo
+  state TermsOfService
+  state PrivacyPolicy
+  state CookiePolicy
+}
+5_Others --> OthersDetailList
+
+@enduml
