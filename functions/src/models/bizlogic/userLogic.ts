@@ -1,16 +1,19 @@
+import { TslLogUtil } from "../../utils/tslLogUtil";
 import { UsersDao } from "../dao/usersDao";
 import { IUser} from "../serverTslDef";
 
-export class UserLogic {
+class UserLogic {
   private loggedInUser: IUser | undefined;
 
   public setLoggedInUser(loggedInUser: IUser) {
     this.loggedInUser = loggedInUser;
   }
   public logout(): void {
+    TslLogUtil.info('called logout');
     this.loggedInUser = undefined;
   }
   public getLoggedInUser(): IUser | undefined {
+    TslLogUtil.debug('loggedInUser: ' + this.loggedInUser);
     return this.loggedInUser;
   }
   public alreadyLoggedIn(): boolean {
@@ -29,3 +32,4 @@ export class UserLogic {
     return this.usersDao.createUser(user);
   }
 }
+export const userLogic = new UserLogic();
