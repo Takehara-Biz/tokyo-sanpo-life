@@ -14,19 +14,12 @@ export const addUserRouting = ((app: Express): void => {
 
   const URL_PREFIX = "/user";
 
-  app.get(URL_PREFIX + "/create", function (req, res, next) {
-    res.render("pages/user/create", { user: userLogic.getLoggedInUser() });
+  app.get(URL_PREFIX + "/create", async function (req, res, next) {
+    const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
+    const printUserId = userLogic.createUserIdToPrint(firebaseUserId!);
+    res.render("pages/user/create", { user: userLogic.getLoggedInUser(), firebaseUserId: printUserId});
   });
   app.post(URL_PREFIX + "/create", function (req, res, next) {
-    TslLogUtil.debug("req : " + req);
-    TslLogUtil.debug("req.params : " + req.params);
-    TslLogUtil.debug("req.body : " + JSON.stringify(req.body));
-    TslLogUtil.debug("req.body.userName : " + req.body.userName);
-    TslLogUtil.debug("req.body.iconImage : " + req.body.iconImage);
-    TslLogUtil.debug("req.body.selfIntro : " + req.body.selfIntro);
-    TslLogUtil.debug("req.body.xProfileURL : " + req.body.xProfileURL);
-    TslLogUtil.debug("req.body.instaProfileURL : " + req.body.instaProfileURL);
-
     const newUser: IUser = {
       id: "1",
       userName: req.body.userName,
@@ -39,10 +32,10 @@ export const addUserRouting = ((app: Express): void => {
     userLogic.setLoggedInUser(newUser);
     res.render("pages/user/my-page", { user: userLogic.getLoggedInUser(), toast: false });
   });
+
   app.get(URL_PREFIX + "/login", function (req, res, next) {
     const successfulLogoutToast = req.query.successfulLogoutToast != undefined;
-    const urgeRegisterToast = req.query.urgeRegisterToast != undefined;
-    res.render("pages/user/login", { user: userLogic.getLoggedInUser(), urgeRegisterToast: urgeRegisterToast, successfulLogoutToast: successfulLogoutToast });
+    res.render("pages/user/login", { user: userLogic.getLoggedInUser(), successfulLogoutToast: successfulLogoutToast });
   });
   app.post(URL_PREFIX + "/login", function (req, res, next) {
     const user = userLogic.findUser("1");
@@ -54,9 +47,10 @@ export const addUserRouting = ((app: Express): void => {
       res.render("pages/404");
     }
   });
+
   app.post(URL_PREFIX + "/login2", async function (req, res, next) {
-    const result = await firebaseAuthDao.verifyIdToken(req.body.idToken);
-    if (!result) {
+    const uid = await firebaseAuthDao.verifyIdToken(req.body.idToken);
+    if (uid == null) {
       // unauthorized
       res.render("pages/401", { user: userLogic.getLoggedInUser() });
       return;
@@ -74,17 +68,19 @@ export const addUserRouting = ((app: Express): void => {
       res.redirect(URL_PREFIX + "/my-page?toast");
     } else {
       // not found, must be registered at first!
-      res.redirect(URL_PREFIX + "/login?urgeRegisterToast");
-      //res.render("pages/404", {user: userLogic.getLoggedInUser()});
+      res.redirect(URL_PREFIX + "/create");
     }
   });
+
   app.get(URL_PREFIX + "/my-page", function (req, res, next) {
     const toast = req.query.toast != undefined;
     res.render("pages/user/my-page", { user: userLogic.getLoggedInUser(), toast: toast });
   });
+
   app.get(URL_PREFIX + "/update-user-icon", function (req, res, next) {
     res.render("pages/user/update-user-icon", { user: userLogic.getLoggedInUser() });
   });
+  
   app.get(URL_PREFIX + "/update", function (req, res, next) {
     res.render("pages/user/update", { user: userLogic.getLoggedInUser() });
   });

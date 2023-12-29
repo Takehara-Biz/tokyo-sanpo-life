@@ -23,8 +23,9 @@ export class FirebaseAuthDao {
    * Reference
    * https://firebase.google.com/docs/auth/admin/verify-id-tokens?hl=ja#verify_id_tokens_using_the_firebase_admin_sdk
    * @param idToken
+   * @returns uid (Firebase User Id), or null (if invalid idToken)
    */
-  public async verifyIdToken(idToken: string): Promise<boolean>{
+  public async verifyIdToken(idToken: string): Promise<string | null>{
     return await getAuth(this.app)
     .verifyIdToken(idToken)
     .then((decodedToken) => {
@@ -32,13 +33,13 @@ export class FirebaseAuthDao {
       const uid = decodedToken.uid;
       TslLogUtil.info('uid : ' + uid);
       // ...
-      return true;
+      return uid;
     })
     .catch((error) => {
       TslLogUtil.error('error occurred!');
       TslLogUtil.error(error);
       // Handle error
-      return false;
+      return null;
     });
   }
 }
