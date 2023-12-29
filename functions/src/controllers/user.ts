@@ -1,7 +1,6 @@
 import { Express } from "express";
 import { userLogic } from "../models/bizlogic/userLogic";
 import { IUser } from "../models/serverTslDef";
-import { TslLogUtil } from "../utils/tslLogUtil";
 import { FirebaseAuthDao } from "../models/dao/firebaseAuthDao";
 
 const firebaseAuthDao = new FirebaseAuthDao();
@@ -19,9 +18,10 @@ export const addUserRouting = ((app: Express): void => {
     const printUserId = userLogic.createUserIdToPrint(firebaseUserId!);
     res.render("pages/user/create", { user: userLogic.getLoggedInUser(), firebaseUserId: printUserId});
   });
-  app.post(URL_PREFIX + "/create", function (req, res, next) {
+  app.post(URL_PREFIX + "/create", async function (req, res, next) {
+    const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
     const newUser: IUser = {
-      id: "1",
+      id: firebaseUserId!,
       userName: req.body.userName,
       iconUrl: "/images/user-icon/kkrn_icon_user_9.svg",
       selfIntroduction: req.body.selfIntro,
@@ -49,8 +49,8 @@ export const addUserRouting = ((app: Express): void => {
   });
 
   app.post(URL_PREFIX + "/login2", async function (req, res, next) {
-    const uid = await firebaseAuthDao.verifyIdToken(req.body.idToken);
-    if (uid == null) {
+    const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.body.idToken);
+    if (firebaseUserId == null) {
       // unauthorized
       res.render("pages/401", { user: userLogic.getLoggedInUser() });
       return;
@@ -62,7 +62,7 @@ export const addUserRouting = ((app: Express): void => {
     res.cookie('idToken', req.body.idToken, { maxAge: oneDayMilliSeconds, httpOnly: true, path: "/" });
 
 
-    const user = userLogic.findUser("99999");
+    const user = userLogic.findUser(firebaseUserId!);
     if (user !== null) {
       userLogic.setLoggedInUser(user);
       res.redirect(URL_PREFIX + "/my-page?toast");
@@ -80,7 +80,7 @@ export const addUserRouting = ((app: Express): void => {
   app.get(URL_PREFIX + "/update-user-icon", function (req, res, next) {
     res.render("pages/user/update-user-icon", { user: userLogic.getLoggedInUser() });
   });
-  
+
   app.get(URL_PREFIX + "/update", function (req, res, next) {
     res.render("pages/user/update", { user: userLogic.getLoggedInUser() });
   });
