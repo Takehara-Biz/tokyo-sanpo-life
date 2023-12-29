@@ -18,7 +18,13 @@
       <div class="grow overflow-y-scroll">
         <%- include('../../partials/page-title', {title: 'ユーザアイコン設定' }); %>
           <div class="pt-1 px-1 pb-10">
-            <div class="accordion mt-3" id="accordionExample">
+            <% const warningList = [
+              "後からいつでも変更・削除できます。",
+              "公序良俗に反する画像は登録しないこと。",
+              "著作権・肖像権に注意すること。",
+            ] %>
+            <%- include('../../partials/warning-accordion', {title: "登録前の注意事項", warningList: warningList}); %>
+            <!--<div class="accordion mt-3" id="accordionExample">
               <div class="accordion-item">
                 <h2 class="accordion-header">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -40,7 +46,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div>-->
             <div class="mt-3">
               <label for="formFile" class="form-label">写真選択</label>
               <input class="form-control" type="file" id="uploadPhoto" name="uploadPhoto" required
