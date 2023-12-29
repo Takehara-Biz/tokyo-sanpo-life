@@ -5,6 +5,7 @@ import {IPost, PostCategory} from "../models/serverTslDef";
 import {TslLogUtil} from "../utils/tslLogUtil";
 import { addUserRouting } from "./user";
 import { addOthersRouting } from "./others";
+import { addErrorsRouting } from "./errors";
 
 const postLogic = new PostLogic();
 const userLogic = new UserLogic();
@@ -117,14 +118,6 @@ export const routing = ((app: Express): void => {
 
   addOthersRouting(app);
 
-  // 以下、エラーページ
-
-  app.get("/500", function(req, res, next) {
-    res.render("pages/500", {user: userLogic.getLoggedInUser()});
-  });
-
-  app.all("*", (req, res) => {
-    TslLogUtil.warn(req.url);
-    res.render("pages/404", {user: userLogic.getLoggedInUser()});
-  });
+  // this must be called at last definitely!
+  addErrorsRouting(app);
 });

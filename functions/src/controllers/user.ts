@@ -2,8 +2,10 @@ import {Express} from "express";
 import {UserLogic} from "../models/bizlogic/userLogic";
 import {IUser} from "../models/serverTslDef";
 import {TslLogUtil} from "../utils/tslLogUtil";
+import { FirebaseAuthDao } from "../models/dao/firebaseAuthDao";
 
 const userLogic = new UserLogic();
+const firebaseAuthDao = new FirebaseAuthDao();
 
 /**
  * implements URL related to user or authentication
@@ -39,8 +41,9 @@ export const addUserRouting = ((app: Express): void => {
     res.render("pages/user/my-page", {user: userLogic.getLoggedInUser(), toast: false});
   });
   app.get(URL_PREFIX + "/login", function(req, res, next) {
-    const toast = req.query.toast != undefined;
-    res.render("pages/user/login", {user: userLogic.getLoggedInUser(), toast: toast});
+    const successfulLogoutToast = req.query.successfulLogoutToast != undefined;
+    const urgeRegisterToast = req.query.urgeRegisterToast != undefined;
+    res.render("pages/user/login", {user: userLogic.getLoggedInUser(), urgeRegisterToast: urgeRegisterToast, successfulLogoutToast: successfulLogoutToast});
   });
   app.post(URL_PREFIX + "/login", function(req, res, next) {
     const user = userLogic.findUser("1");
@@ -52,18 +55,28 @@ export const addUserRouting = ((app: Express): void => {
       res.render("pages/404");
     }
   });
-  app.post(URL_PREFIX + "/login2", function(req, res, next) {
-    const oneDayMilliSeconds = 24 * 60 * 60 * 1000;
-    res.cookie('uid', req.body.uid, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
-    res.cookie('token', req.body.token, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
+  app.post(URL_PREFIX + "/login2", async function(req, res, next) {
+    const result = await firebaseAuthDao.verifyIdToken(req.body.idToken);
+    if(!result){
+      // unauthorized
+      res.render("pages/401", {user: userLogic.getLoggedInUser()});
+      return;
+    }
 
-    const user = userLogic.findUser("1");
+    const oneDayMilliSeconds = 24 * 60 * 60 * 1000;
+    //res.cookie('uid', req.body.uid, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
+    //res.cookie('token', req.body.token, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
+    res.cookie('idToken', req.body.idToken, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
+    
+
+    const user = userLogic.findUser("99999");
     if ( user !== null ) {
       userLogic.setLoggedInUser(user);
       res.redirect(URL_PREFIX + "/my-page?toast");
     } else {
-      // not found
-      res.render("pages/404", {user: userLogic.getLoggedInUser()});
+      // not found, must be registered at first!
+      res.redirect(URL_PREFIX + "/login?urgeRegisterToast");
+      //res.render("pages/404", {user: userLogic.getLoggedInUser()});
     }
   });
   app.get(URL_PREFIX + "/my-page", function(req, res, next) {
@@ -75,6 +88,6 @@ export const addUserRouting = ((app: Express): void => {
   });
   app.post(URL_PREFIX + "/logout", function(req, res, next) {
     userLogic.logout();
-    res.redirect(URL_PREFIX + "/login?toast");
+    res.redirect(URL_PREFIX + "/login?successfulLogoutToast");
   });
 });
