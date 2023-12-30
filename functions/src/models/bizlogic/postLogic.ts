@@ -1,9 +1,12 @@
+import { IEmojiEvaluationsDao } from "../dao/iEmojiEvaluationsDao";
 import { IPostsDao } from "../dao/iPostsDao";
+import { MockEmojiEvaluationsDao } from "../dao/mockEmojiEvaluationsDao";
 import {MockPostsDao} from "../dao/mockPostsDao";
 import {IPost} from "../serverTslDef";
 
 export class PostLogic {
   private postsDao: IPostsDao = new MockPostsDao();
+  private emojiEvaluationsDao: IEmojiEvaluationsDao = new MockEmojiEvaluationsDao();
 
   public findPostsMax(): IPost[] {
     const result = this.postsDao.listOrderbyCreatedDateTime(100, 0);
@@ -39,7 +42,7 @@ export class PostLogic {
    * @returns 
    */
   public findEmojiEvaluations(postId: string, userId: string | null): Map<string, [number, boolean]> {
-    const emojiEvaluations = this.postsDao.listEmojiEvaluations(postId);
+    const emojiEvaluations = this.emojiEvaluationsDao.list(postId);
     const unicode_count_userPut : Map<string, [number, boolean]> = new Map<string, [number, boolean]>();
 
     for (let emojiEvaluation of emojiEvaluations) {
@@ -71,40 +74,11 @@ export class PostLogic {
   }
 
   public putEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
-    this.postsDao.createEmojiEvaluation(postId, unicode, evaluatingUserId);
+    this.emojiEvaluationsDao.create(postId, unicode, evaluatingUserId);
   }
 
   public removeEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
-    this.postsDao.deleteEmojiEvaluation(postId, unicode, evaluatingUserId);
+    this.emojiEvaluationsDao.delete(postId, unicode, evaluatingUserId);
   }
 }
 export const postLogic = new PostLogic();
-
-/**
- * 絵文字評価を表示するためのクラス。
- */
-export class EmojiEvaluationCount {
-  constructor(
-    /**
-     * 絵文字の種類
-     */
-    private unicode: string,
-    /**
-     * この絵文字がつけられた数。
-     */
-    private count: number,
-    /**
-     * このユーザは、この絵文字を評価したかどうか。
-     */
-    private userAlreadyPut: boolean) {}
-
-    public getUnicode(): string{
-      return this.unicode;
-    }
-    public getCount(): number{
-      return this.count;
-    }
-    public getUserAlreadyPut(): boolean{
-      return this.userAlreadyPut;
-    }
-}
