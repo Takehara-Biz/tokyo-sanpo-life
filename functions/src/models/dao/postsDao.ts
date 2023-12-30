@@ -1,5 +1,5 @@
 import { TslLogUtil } from "../../utils/tslLogUtil";
-import {IPost, IPostComment, PostCategory} from "../serverTslDef";
+import {IEmojiEvaluation, IPost, IPostComment, PostCategory} from "../serverTslDef";
 import { DaoUtil } from "./daoUtil";
 import { defaultUserIconBase64 } from "./defaultUserIconBase64";
 
@@ -16,6 +16,7 @@ export class PostsDao {
     for (let i = 0; i < postCount; i++) {
       const commentsCount = Math.floor(Math.random() * 9)
       const comments: IPostComment[] = this.createRandomComments(commentsCount);
+      const emojiEvaluations: IEmojiEvaluation[] = this.createRandomEmojiEvaluations(commentsCount * 4, i.toString());
       const post = {
         id: i.toString(),
         user: {
@@ -33,6 +34,7 @@ export class PostsDao {
         description: DaoUtil.generateRandomString(1, 100),
         insertDate: new Date("2023/12/01"),
         postComments: comments,
+        emojiEvaluations : emojiEvaluations
       };
       this.idAndPostMap.set(i.toString(), post);
     }
@@ -56,6 +58,28 @@ export class PostsDao {
       },);
     }
     return comments;
+  }
+
+  private createRandomEmojiEvaluations(count: number, postId: string): IEmojiEvaluation[] {
+    const evaluations: IEmojiEvaluation[] = [];
+    
+    for (let i = 0; i < count; i++) {
+      const evaluatingUserId = DaoUtil.generateRandomNumber(0, DaoUtil.dummyUserCount);
+      evaluations.push({
+        evaludatedPostId: postId,
+        unicode: this.generateRandomEmoji(),
+        evaluatingUserId: evaluatingUserId.toString()
+      },);
+    }
+    return evaluations;
+  }
+
+  private generateRandomEmoji(): string {
+    const start = 0x1f600;
+    const end = 0x1f64f;
+    const range = end - start;
+    const code = Math.floor(Math.random() * range) + start;
+    return String.fromCodePoint(code);
   }
 
   private chooseContentTypeEnumRandomly(): PostCategory {

@@ -10,4 +10,10 @@ export class DaoUtil {
     }
     return result;
   }
+
+  public static generateRandomNumber(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  public static dummyUserCount = 10;
 }

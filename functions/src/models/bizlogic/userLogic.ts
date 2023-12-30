@@ -1,4 +1,5 @@
 import { TslLogUtil } from "../../utils/tslLogUtil";
+import { DaoUtil } from "../dao/daoUtil";
 import { UsersDao } from "../dao/usersDao";
 import { IUser} from "../serverTslDef";
 
@@ -20,7 +21,7 @@ class UserLogic {
     return this.loggedInUser !== undefined;
   }
 
-  private usersDao = new UsersDao(10);
+  private usersDao = new UsersDao(DaoUtil.dummyUserCount);
 
   public findUser(id: string): IUser | null {
     const result = this.usersDao.findUser(id);

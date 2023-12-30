@@ -57,9 +57,9 @@ CategoryIdAndMarkerTypeDefMap.set(PostCategory.Building.getId(), {iconKeyWord: "
 CategoryIdAndMarkerTypeDefMap.set(PostCategory.Other.getId(), {iconKeyWord: "lightbulb", glyphColor: "#ff3300", bgColor: "#ffffcc"});
 
 export interface IUser {
-  id: string,
-  userName: string,
-  userIconBase64: string,
+  id: string;
+  userName: string;
+  userIconBase64: string;
   selfIntroduction: string;
   twitterProfileLink: string;
   instagramProfileLink: string;
@@ -79,8 +79,8 @@ export interface IPostComment {
  * 投稿
  */
 export interface IPost {
-  id: string,
-  user: IUser,
+  id: string;
+  user: IUser;
   imageUrl: string;
   lat: number;
   lng: number;
@@ -88,4 +88,19 @@ export interface IPost {
   description: string;
   insertDate: Date;
   postComments: IPostComment[];
+  emojiEvaluations: IEmojiEvaluation[];
+}
+
+/**
+ * 絵文字評価
+ */
+export interface IEmojiEvaluation {
+
+  evaludatedPostId: string;
+  /**
+   * the type of emoji
+   */
+  unicode: string;
+
+  evaluatingUserId: string;
 }

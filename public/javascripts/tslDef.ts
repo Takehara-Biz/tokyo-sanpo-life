@@ -85,4 +85,19 @@ interface IPost {
   description: string;
   insertDate: Date;
   postComments: IPostComment[];
+  emojiEvaluations: IEmojiEvaluation[];
+}
+
+/**
+ * 絵文字評価
+ */
+export interface IEmojiEvaluation {
+
+  evaludatedPostId: string;
+  /**
+   * the type of emoji
+   */
+  unicode: string;
+
+  evaluatingUserId: string;
 }

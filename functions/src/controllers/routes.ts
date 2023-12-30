@@ -54,8 +54,6 @@ export const routing = ((app: Express): void => {
   });
 
   app.post("/post", function (req, res, next) {
-    TslLogUtil.debug("req : " + req);
-    TslLogUtil.debug("req.params : " + req.params);
     TslLogUtil.debug("req.body : " + JSON.stringify(req.body));
     TslLogUtil.debug("req.body.comment : " + req.body.comment);
     TslLogUtil.debug("req.body.postCategory : " + req.body.postCategory);
@@ -76,6 +74,7 @@ export const routing = ((app: Express): void => {
       postCategory: postCategory,
       insertDate: new Date(),
       postComments: [],
+      emojiEvaluations: [],
     };
     postLogic.createPost(newPost);
     const post = postLogic.findPost(newPost.id);
