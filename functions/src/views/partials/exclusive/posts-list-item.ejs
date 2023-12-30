@@ -3,7 +3,7 @@
     <img width="100%" src="<%= post.imageUrl %>" style="border: 1px solid; " />
   </div>
   <div class="p-1" style="width:50%;">
-    <%- include('../util/user-icon-name-s', {iconUrl: post.user.iconUrl, userName: post.user.userName}) %>
+    <%- include('../util/user-icon-name-s', {iconUrl: post.user.userIconBase64, userName: post.user.userName}) %>
     <p class="truncate"><%= post.description %></p>
     <p><%= post.postCategory.getEmoji() %>&nbsp;<%= post.postCategory.getLabel() %></p>
     <span class="text-sm">

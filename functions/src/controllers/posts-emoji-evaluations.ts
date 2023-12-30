@@ -10,9 +10,16 @@ export const addPostsEmojiEvalulationsRouting = ((app: Express): void => {
   const URL_PREFIX = "/posts/:id/emojiEvaluations"
 
   app.get(URL_PREFIX, async function (req, res, next) {
-    const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
-    const unicode_count_userPut = postLogic.findEmojiEvaluations(req.params.id as string, firebaseUserId!);
-    res.render("partials/util/emoji-evaluation-count-section", {unicode_count_userPut: unicode_count_userPut});
+    const idToken: string | undefined = req.cookies.idToken;
+    console.log("idToken : " + idToken);
+    let firebaseUserId: string | null = null;
+    let alreadyLoggedIn = firebaseAuthDao.alreadyLoggedIn(idToken);
+    console.log("alreadyLoggedIn : " + alreadyLoggedIn);
+    if(alreadyLoggedIn){
+      firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
+    }
+    const unicode_count_userPut = postLogic.findEmojiEvaluations(req.params.id as string, firebaseUserId);
+    res.render("partials/util/emoji-evaluation-count-section", {unicode_count_userPut: unicode_count_userPut, alreadyLoggedIn: alreadyLoggedIn});
   });
 
   // パラメータの絵文字を付与する

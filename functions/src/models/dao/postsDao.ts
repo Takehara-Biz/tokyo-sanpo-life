@@ -17,7 +17,7 @@ export class PostsDao {
     for (let i = 0; i < postCount; i++) {
       const commentsCount = Math.floor(Math.random() * 9)
       const comments: IPostComment[] = this.createRandomComments(commentsCount);
-      const emojiEvaluations: IEmojiEvaluation[] = this.createRandomEmojiEvaluations(commentsCount * 3 + 5, i.toString());
+      const emojiEvaluations: IEmojiEvaluation[] = this.createRandomEmojiEvaluations(0, 10, 1, 50, i.toString());
       const post = {
         id: i.toString(),
         user: {
@@ -61,26 +61,44 @@ export class PostsDao {
     return comments;
   }
 
-  private createRandomEmojiEvaluations(count: number, postId: string): IEmojiEvaluation[] {
+  private createRandomEmojiEvaluations(minTypeCount: number, maxTypeCount: number, minTotalCount: number, maxTotalCount: number, postId: string): IEmojiEvaluation[] {
     const evaluations: IEmojiEvaluation[] = [];
+    const typeCount = DaoUtil.generateRandomNumber(minTypeCount, maxTypeCount);
+    if(minTotalCount < 1){
+      minTotalCount  = 1;
+    }
     
-    for (let i = 0; i < count; i++) {
-      const evaluatingUserId = DaoUtil.generateRandomNumber(0, DaoUtil.dummyUserCount);
-      evaluations.push({
-        evaludatedPostId: postId,
-        unicode: this.generateRandomEmoji(),
-        evaluatingUserId: evaluatingUserId.toString()
-      },);
+    const uniqueEmojis = this.generateUniqueRandomEmojis(typeCount);
+    
+    for (let i = 0; i < uniqueEmojis.length; i++) {
+      const totalCount = DaoUtil.generateRandomNumber(minTotalCount, maxTotalCount);
+      for(let j = 0; j < totalCount; j++){
+        evaluations.push({
+          evaludatedPostId: postId,
+          unicode: uniqueEmojis[i],
+          evaluatingUserId: j.toString(),
+        },);
+      }
     }
     return evaluations;
   }
 
-  private generateRandomEmoji(): string {
+  private generateUniqueRandomEmojis(count: number): string[] {
     const start = 0x1f600;
     const end = 0x1f64f;
     const range = end - start;
-    const code = Math.floor(Math.random() * range) + start;
-    return String.fromCodePoint(code);
+    
+    const unicodes: string[] = [];
+    while(unicodes.length < count){
+      const code = Math.floor(Math.random() * range) + start;
+      const unicode = String.fromCodePoint(code);
+      if(unicodes.includes(unicode)){
+        continue;
+      } else {
+        unicodes.push(unicode);
+      }
+    }
+    return unicodes;
   }
 
   private chooseContentTypeEnumRandomly(): PostCategory {

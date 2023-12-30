@@ -42,5 +42,9 @@ class FirebaseAuthDao {
       return null;
     });
   }
+
+  public alreadyLoggedIn(idToken: string | undefined): boolean{
+    return idToken != undefined;
+  }
 }
 export const firebaseAuthDao = new FirebaseAuthDao();

@@ -32,13 +32,19 @@ export class PostLogic {
     return this.postsDao.delete(id);
   }
 
-  public findEmojiEvaluations(postId: string, userId: string): Map<string, [number, boolean]> {
+  /**
+   * 
+   * @param postId 
+   * @param userId null when not logged in.
+   * @returns 
+   */
+  public findEmojiEvaluations(postId: string, userId: string | null): Map<string, [number, boolean]> {
     const emojiEvaluations = this.postsDao.findEmojiEvaluations(postId);
     const unicode_count_userPut : Map<string, [number, boolean]> = new Map<string, [number, boolean]>();
 
     for (let emojiEvaluation of emojiEvaluations) {
       let userPut = false;
-      if(emojiEvaluation.evaluatingUserId == userId){
+      if(emojiEvaluation.evaluatingUserId === userId){
         userPut = true;
       }
 
