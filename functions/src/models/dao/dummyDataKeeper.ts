@@ -1,5 +1,5 @@
 import { TslLogUtil } from "../../utils/tslLogUtil";
-import { IEmojiEvaluation, IPost, IPostComment, PostCategory } from "../serverTslDef";
+import { IEmojiEvaluation, IPost, IPostComment, IUser, PostCategory } from "../serverTslDef";
 import { defaultUserIconBase64 } from "./defaultUserIconBase64";
 
 /**
@@ -10,15 +10,31 @@ class DummyDataKeeper {
   public readonly userCount = 3;
   public idAndPostMap: Map<string, IPost> = new Map<string, IPost>();
   public idSequence: number = 0;
+  public idAndUserMap: Map<string, IUser> = new Map<string, IUser>();
   
   constructor() {
     TslLogUtil.info('[BEGIN] PostsDao constructor');
     this.generateRandomPosts(this.postCount);
     this.idSequence = this.postCount - 1;
+    this.generateRandomUsers(this.userCount);
   }
 
   public nextval(): number {
     return ++this.idSequence;
+  }
+
+  private generateRandomUsers(postCount: number): void {
+    for (let i = 0; i < postCount; i++) {
+      const user = {
+        id: i.toString(),
+        userName: dummyDataKeeper.generateRandomString(3, 12),
+        userIconBase64: defaultUserIconBase64,
+        selfIntroduction: "こんにちは〜。" + dummyDataKeeper.generateRandomString(1, 50),
+        xProfileLink: "https://www.yahoo.co.jp",
+        instagramProfileLink: "https://www.yahoo.co.jp",
+      };
+      this.idAndUserMap.set(i.toString(), user);
+    }
   }
 
   private generateRandomPosts(postCount: number): void {

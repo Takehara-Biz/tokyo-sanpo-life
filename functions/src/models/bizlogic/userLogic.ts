@@ -1,9 +1,10 @@
 import { TslLogUtil } from "../../utils/tslLogUtil"
-import { dummyDataKeeper } from "../dao/dummyDataKeeper";
-import { UsersDao } from "../dao/usersDao";
+import { IUsersDao } from "../dao/iUsersDao";
+import { MockUsersDao } from "../dao/mockUsersDao";
 import { IUser} from "../serverTslDef";
 
 class UserLogic {
+  private usersDao: IUsersDao = new MockUsersDao();
   private loggedInUser: IUser | undefined;
 
   public setLoggedInUser(loggedInUser: IUser) {
@@ -32,20 +33,18 @@ class UserLogic {
     return this.loggedInUser !== undefined;
   }
 
-  private usersDao = new UsersDao(dummyDataKeeper.postCount);
-
-  public findUser(id: string): IUser | null {
-    const result = this.usersDao.findUser(id);
+  public findUser(userId: string): IUser | null {
+    const result = this.usersDao.read(userId);
     //TslLogUtil.debug('findUser result : ' + JSON.stringify(result));
     return result;
   }
 
   public createUser(user: IUser): void {
-    return this.usersDao.createUser(user);
+    return this.usersDao.create(user);
   }
 
   public updateUser(user: IUser): void {
-    return this.usersDao.updateUser(user);
+    return this.usersDao.update(user);
   }
 }
 export const userLogic = new UserLogic();
