@@ -1,4 +1,4 @@
-import { IEmojiEvaluation, IPost, IPostComment } from "../serverTslDef";
+import { IPostComment } from "../serverTslDef";
 
 export interface IPostCommentsDao {
   list(postId: string): IPostComment[];

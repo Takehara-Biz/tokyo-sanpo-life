@@ -8,7 +8,7 @@ export class PostLogic {
   private postsDao: IPostsDao = new MockPostsDao();
   private emojiEvaluationsDao: IEmojiEvaluationsDao = new MockEmojiEvaluationsDao();
 
-  public findPostsMax(): IPost[] {
+  public findPosts(): IPost[] {
     const result = this.postsDao.listOrderbyCreatedDateTime(100, 0);
     //TslLogUtil.info('findPosts length : ' + result.length);
     return result;

@@ -1,5 +1,5 @@
 import { TslLogUtil } from "../../utils/tslLogUtil";
-import {IEmojiEvaluation, IPost} from "../serverTslDef";
+import { IPost} from "../serverTslDef";
 import { dummyDataKeeper } from "./dummyDataKeeper";
 import { IPostsDao } from "./iPostsDao";
 

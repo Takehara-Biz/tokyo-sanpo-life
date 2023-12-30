@@ -27,9 +27,9 @@ class DummyDataKeeper {
     for (let i = 0; i < postCount; i++) {
       const user = {
         id: i.toString(),
-        userName: dummyDataKeeper.generateRandomString(3, 12),
+        userName: DummyDataKeeper.generateRandomString(3, 12),
         userIconBase64: defaultUserIconBase64,
-        selfIntroduction: "こんにちは〜。" + dummyDataKeeper.generateRandomString(1, 50),
+        selfIntroduction: "こんにちは〜。" + DummyDataKeeper.generateRandomString(1, 50),
         xProfileLink: "https://www.yahoo.co.jp",
         instagramProfileLink: "https://www.yahoo.co.jp",
       };
@@ -46,7 +46,7 @@ class DummyDataKeeper {
         id: i.toString(),
         user: {
           id: i.toString(),
-          userName: this.generateRandomString(3, 12),
+          userName: DummyDataKeeper.generateRandomString(3, 12),
           userIconBase64: defaultUserIconBase64,
           selfIntroduction: "",
           xProfileLink: "",
@@ -56,7 +56,7 @@ class DummyDataKeeper {
         imageUrl: "/images/post-sample.jpeg",
         lat: 35.2 + (Math.random()),
         lng: 139.3 + (Math.random()),
-        description: this.generateRandomString(1, 100),
+        description: DummyDataKeeper.generateRandomString(1, 100),
         insertDate: new Date("2023/12/01"),
         postComments: comments,
         emojiEvaluations : emojiEvaluations
@@ -72,13 +72,13 @@ class DummyDataKeeper {
         id: i.toString(),
         user: {
           id: i.toString(),
-          userName: this.generateRandomString(3, 12),
+          userName: DummyDataKeeper.generateRandomString(3, 12),
           userIconBase64: defaultUserIconBase64,
           selfIntroduction: "",
           xProfileLink: "",
           instagramProfileLink: "",
         },
-        comment: this.generateRandomString(1, 100),
+        comment: DummyDataKeeper.generateRandomString(1, 100),
         commentDate: new Date("2023/12/01"),
       },);
     }
@@ -87,7 +87,7 @@ class DummyDataKeeper {
 
   private createRandomEmojiEvaluations(minTypeCount: number, maxTypeCount: number, minTotalCount: number, maxTotalCount: number, postId: string): IEmojiEvaluation[] {
     const evaluations: IEmojiEvaluation[] = [];
-    const typeCount = this.generateRandomNumber(minTypeCount, maxTypeCount);
+    const typeCount = DummyDataKeeper.generateRandomNumber(minTypeCount, maxTypeCount);
     if(minTotalCount < 1){
       minTotalCount  = 1;
     }
@@ -95,7 +95,7 @@ class DummyDataKeeper {
     const uniqueEmojis = this.generateUniqueRandomEmojis(typeCount);
     
     for (let i = 0; i < uniqueEmojis.length; i++) {
-      const totalCount = this.generateRandomNumber(minTotalCount, maxTotalCount);
+      const totalCount = DummyDataKeeper.generateRandomNumber(minTotalCount, maxTotalCount);
       for(let j = 0; j < totalCount; j++){
         evaluations.push({
           evaludatedPostId: postId,
@@ -130,7 +130,7 @@ class DummyDataKeeper {
     return PostCategory.Categories[index];
   }
 
-  public generateRandomString(charMinCount: number, charMaxCount: number): string {
+  public static generateRandomString(charMinCount: number, charMaxCount: number): string {
     const useChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const strLength = Math.floor(Math.random() * (charMaxCount - charMinCount)) + charMinCount;
     let result = "";
@@ -140,7 +140,7 @@ class DummyDataKeeper {
     return result;
   }
 
-  private generateRandomNumber(min: number, max: number): number {
+  private static generateRandomNumber(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 }

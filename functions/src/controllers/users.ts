@@ -3,7 +3,7 @@ import { userLogic } from "../models/bizlogic/userLogic";
 import { IUser } from "../models/serverTslDef";
 import { firebaseAuthDao } from "../models/dao/firebaseAuthDao";
 import { defaultUserIconBase64 } from "../models/dao/defaultUserIconBase64";
-import { EJS_401_PAGE_PATH } from "./errors";
+import { EJS_401_PAGE_PATH, EJS_404_PAGE_PATH } from "./errors";
 
 /**
  * implements URL related to user or authentication
@@ -11,11 +11,12 @@ import { EJS_401_PAGE_PATH } from "./errors";
  */
 export const addUsersRouting = ((app: Express): void => {
 
+  const EJS_PREFIX = "pages/users/"
   const URL_PREFIX = "/users";
 
   app.get(URL_PREFIX + "/create", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
-    res.render("pages/user/create", { user: userLogic.getLoggedInUser(), firebaseUserId: firebaseUserId});
+    res.render(EJS_PREFIX + "create", { user: userLogic.getLoggedInUser(), firebaseUserId: firebaseUserId});
   });
   app.post(URL_PREFIX + "/create", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
@@ -29,7 +30,7 @@ export const addUsersRouting = ((app: Express): void => {
     };
     userLogic.createUser(newUser);
     userLogic.setLoggedInUser(newUser);
-    res.render("pages/user/my-page", { user: userLogic.getLoggedInUser(), toast: false });
+    res.render(EJS_PREFIX + "my-page", { user: userLogic.getLoggedInUser(), toast: false });
   });
 
   app.get(URL_PREFIX + "/login", function (req, res, next) {
@@ -43,7 +44,7 @@ export const addUsersRouting = ((app: Express): void => {
       res.redirect(URL_PREFIX + "/my-page?toast");
     } else {
       // not found
-      res.render("pages/404");
+      res.render(EJS_404_PAGE_PATH);
     }
   });
 
@@ -51,7 +52,7 @@ export const addUsersRouting = ((app: Express): void => {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.body.idToken);
     if (firebaseUserId == null) {
       // unauthorized
-      res.render("pages/401", { user: userLogic.getLoggedInUser() });
+      res.render(EJS_401_PAGE_PATH, { user: userLogic.getLoggedInUser() });
       return;
     }
 
@@ -73,11 +74,11 @@ export const addUsersRouting = ((app: Express): void => {
 
   app.get(URL_PREFIX + "/my-page", function (req, res, next) {
     const toast = req.query.toast != undefined;
-    res.render("pages/user/my-page", { user: userLogic.getLoggedInUser(), toast: toast });
+    res.render(EJS_PREFIX + "my-page", { user: userLogic.getLoggedInUser(), toast: toast });
   });
 
   app.get(URL_PREFIX + "/update-user-icon", function (req, res, next) {
-    res.render("pages/user/update-user-icon", { user: userLogic.getLoggedInUser() });
+    res.render(EJS_PREFIX + "update-user-icon", { user: userLogic.getLoggedInUser() });
   });
 
   app.post(URL_PREFIX + "/update-user-icon", function (req, res, next) {
@@ -104,7 +105,7 @@ export const addUsersRouting = ((app: Express): void => {
     user!.instagramProfileLink = req.body.instaProfileURL ?? "",
     userLogic.updateUser(user!);
     userLogic.setLoggedInUser(user!);
-    res.render("pages/user/my-page", { user: userLogic.getLoggedInUser(), toast: false });
+    res.render(EJS_PREFIX + "my-page", { user: userLogic.getLoggedInUser(), toast: false });
   });
 
   app.post(URL_PREFIX + "/logout", function (req, res, next) {

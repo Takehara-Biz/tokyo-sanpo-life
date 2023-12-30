@@ -1,4 +1,4 @@
-import { IEmojiEvaluation, IPost } from "../serverTslDef";
+import { IPost } from "../serverTslDef";
 
 export interface IPostsDao {
   /**
