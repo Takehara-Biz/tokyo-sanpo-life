@@ -15,5 +15,5 @@ export class DaoUtil {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
-  public static dummyUserCount = 10;
+  public static dummyUserCount = 3;
 }

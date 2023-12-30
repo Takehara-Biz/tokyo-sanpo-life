@@ -8,6 +8,7 @@ export class PostsDao {
   private idSequence: number;
 
   constructor(postCount: number) {
+    TslLogUtil.info('[BEGIN] PostsDao constructor');
     this.generateRandomPosts(postCount);
     this.idSequence = postCount - 1;
   }
@@ -16,7 +17,7 @@ export class PostsDao {
     for (let i = 0; i < postCount; i++) {
       const commentsCount = Math.floor(Math.random() * 9)
       const comments: IPostComment[] = this.createRandomComments(commentsCount);
-      const emojiEvaluations: IEmojiEvaluation[] = this.createRandomEmojiEvaluations(commentsCount * 4, i.toString());
+      const emojiEvaluations: IEmojiEvaluation[] = this.createRandomEmojiEvaluations(commentsCount * 3 + 5, i.toString());
       const post = {
         id: i.toString(),
         user: {
@@ -125,5 +126,43 @@ export class PostsDao {
     const post = this.idAndPostMap.get(postId);
     TslLogUtil.info('emojiEvaluations length : ' + post!.emojiEvaluations.length);
     return post!.emojiEvaluations;
+  }
+
+  /**
+   * even if there is already an evaluation which meets the param, it is OK. just do nothing.
+   * @param postId 
+   * @param unicode 
+   * @param evaluatingUserId 
+   * @returns 
+   */
+  public putEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
+    const post = this.idAndPostMap.get(postId);
+    for(let emojiEvaluation of post!.emojiEvaluations) {
+      if(emojiEvaluation.evaluatingUserId == evaluatingUserId && emojiEvaluation.unicode == unicode){
+        TslLogUtil.info("do nothing. It's OK.");
+        return;
+      }
+    }
+
+    post!.emojiEvaluations.push({evaludatedPostId: postId, unicode: unicode, evaluatingUserId: evaluatingUserId});
+  }
+
+  /**
+   * even if there is no evaluation which meets the param, it is OK. just do nothing.
+   * @param postId 
+   * @param unicode 
+   * @param evaluatingUserId 
+   */
+  public removeEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
+    const post = this.idAndPostMap.get(postId);
+    const beforeCount = post!.emojiEvaluations.length;
+    post!.emojiEvaluations = post!.emojiEvaluations.filter((item) => 
+      item.evaluatingUserId != evaluatingUserId &&
+      item.unicode != unicode &&
+      item.evaludatedPostId != postId
+    );
+    if(beforeCount != post!.emojiEvaluations.length){
+      TslLogUtil.info('deleted!');
+    }
   }
 }

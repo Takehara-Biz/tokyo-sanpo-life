@@ -1,8 +1,9 @@
+import { DaoUtil } from "../dao/daoUtil";
 import {PostsDao} from "../dao/postsDao";
 import {IEmojiEvaluation, IPost} from "../serverTslDef";
 
 export class PostLogic {
-  private postsDao = new PostsDao(10);
+  private postsDao = new PostsDao(DaoUtil.dummyUserCount);
 
   public findPosts(): IPost[] {
     const result = this.postsDao.findPosts();
@@ -34,4 +35,13 @@ export class PostLogic {
   public findEmojiEvaluations(postId: string): IEmojiEvaluation[] {
     return this.postsDao.findEmojiEvaluations(postId);
   }
+
+  public putEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
+    this.postsDao.putEmojiEvaluation(postId, unicode, evaluatingUserId);
+  }
+
+  public removeEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
+    this.postsDao.removeEmojiEvaluation(postId, unicode, evaluatingUserId);
+  }
 }
+export const postLogic = new PostLogic();

@@ -1,13 +1,11 @@
 import { Express } from "express";
-import { PostLogic } from "../models/bizlogic/postLogic";
+import { postLogic } from "../models/bizlogic/postLogic";
 import { userLogic } from "../models/bizlogic/userLogic";
 import { IPost, PostCategory } from "../models/serverTslDef";
 import { TslLogUtil } from "../utils/tslLogUtil";
 import { addUserRouting } from "./user";
 import { addOthersRouting } from "./others";
 import { addErrorsRouting } from "./errors";
-
-const postLogic = new PostLogic();
 
 export const routing = ((app: Express): void => {
 
@@ -46,6 +44,16 @@ export const routing = ((app: Express): void => {
      //const json = JSON.parse(JSON.stringify(emojiEvaluations))
     // console.log(json);
     // res.json(json);
+  });
+
+  // パラメータの絵文字を付与する
+  app.post("/post/:id/emojiEvaluation/:unicode", function (req, res, next) {
+    postLogic.putEmojiEvaluation(req.params.id, req.params.unicode, "1");
+  });
+
+  // パラメータの絵文字を解除する
+  app.delete("/post/:id/emojiEvaluation/:unicode", function (req, res, next) {
+    postLogic.removeEmojiEvaluation(req.params.id, req.params.unicode, "1");
   });
 
   app.delete("/post/:id", function (req, res, next) {
