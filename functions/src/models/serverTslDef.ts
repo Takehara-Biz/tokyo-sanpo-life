@@ -61,7 +61,7 @@ export interface IUser {
   userName: string;
   userIconBase64: string;
   selfIntroduction: string;
-  twitterProfileLink: string;
+  xProfileLink: string;
   instagramProfileLink: string;
 }
 

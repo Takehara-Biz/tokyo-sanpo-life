@@ -1,7 +1,7 @@
 import { TslLogUtil } from "../../utils/tslLogUtil";
 import { IUser } from "../serverTslDef";
-import { DaoUtil } from "./daoUtil";
 import { defaultUserIconBase64 } from "./defaultUserIconBase64";
+import { dummyDataKeeper } from "./dummyDataKeeper";
 
 export class UsersDao {
   private idAndUserMap: Map<string, IUser> = new Map<string, IUser>();
@@ -14,10 +14,10 @@ export class UsersDao {
     for (let i = 0; i < postCount; i++) {
       const user = {
         id: i.toString(),
-        userName: DaoUtil.generateRandomString(3, 12),
+        userName: dummyDataKeeper.generateRandomString(3, 12),
         userIconBase64: defaultUserIconBase64,
-        selfIntroduction: "こんにちは〜。" + DaoUtil.generateRandomString(1, 50),
-        twitterProfileLink: "https://www.yahoo.co.jp",
+        selfIntroduction: "こんにちは〜。" + dummyDataKeeper.generateRandomString(1, 50),
+        xProfileLink: "https://www.yahoo.co.jp",
         instagramProfileLink: "https://www.yahoo.co.jp",
       };
       this.idAndUserMap.set(i.toString(), user);
@@ -32,6 +32,11 @@ export class UsersDao {
 
   public createUser(user: IUser): void {
     TslLogUtil.info('createUser : ' + JSON.stringify(user));
+    this.idAndUserMap.set(user.id, user);
+  }
+
+  public updateUser(user: IUser): void {
+    TslLogUtil.info('updateUser : ' + JSON.stringify(user));
     this.idAndUserMap.set(user.id, user);
   }
 }

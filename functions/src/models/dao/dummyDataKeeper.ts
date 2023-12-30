@@ -7,6 +7,7 @@ import { defaultUserIconBase64 } from "./defaultUserIconBase64";
  */
 class DummyDataKeeper {
   public readonly postCount = 3;
+  public readonly userCount = 3;
   public idAndPostMap: Map<string, IPost> = new Map<string, IPost>();
   public idSequence: number = 0;
   
@@ -32,7 +33,7 @@ class DummyDataKeeper {
           userName: this.generateRandomString(3, 12),
           userIconBase64: defaultUserIconBase64,
           selfIntroduction: "",
-          twitterProfileLink: "",
+          xProfileLink: "",
           instagramProfileLink: "",
         },
         postCategory: this.chooseContentTypeEnumRandomly(),
@@ -58,7 +59,7 @@ class DummyDataKeeper {
           userName: this.generateRandomString(3, 12),
           userIconBase64: defaultUserIconBase64,
           selfIntroduction: "",
-          twitterProfileLink: "",
+          xProfileLink: "",
           instagramProfileLink: "",
         },
         comment: this.generateRandomString(1, 100),
@@ -113,7 +114,7 @@ class DummyDataKeeper {
     return PostCategory.Categories[index];
   }
 
-  private generateRandomString(charMinCount: number, charMaxCount: number): string {
+  public generateRandomString(charMinCount: number, charMaxCount: number): string {
     const useChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const strLength = Math.floor(Math.random() * (charMaxCount - charMinCount)) + charMinCount;
     let result = "";

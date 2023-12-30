@@ -24,5 +24,7 @@ export const addErrorsRouting = ((app: Express): void => {
     res.render(EJS_PREFIX + "404", { user: userLogic.getLoggedInUser() });
   });
 });
+export const EJS_401_PAGE_PATH = "pages/errors/401";
+export const EJS_403_PAGE_PATH = "pages/errors/403";
 export const EJS_404_PAGE_PATH = "pages/errors/404";
 export const EJS_500_PAGE_PATH = "pages/errors/500";

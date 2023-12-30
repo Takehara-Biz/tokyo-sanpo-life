@@ -1,6 +1,5 @@
-import { TslLogUtil } from "../../utils/tslLogUtil";
-import { DaoUtil } from "../dao/daoUtil";
-import { defaultUserIconBase64 } from "../dao/defaultUserIconBase64";
+import { TslLogUtil } from "../../utils/tslLogUtil"
+import { dummyDataKeeper } from "../dao/dummyDataKeeper";
 import { UsersDao } from "../dao/usersDao";
 import { IUser} from "../serverTslDef";
 
@@ -33,7 +32,7 @@ class UserLogic {
     return this.loggedInUser !== undefined;
   }
 
-  private usersDao = new UsersDao(DaoUtil.dummyUserCount);
+  private usersDao = new UsersDao(dummyDataKeeper.postCount);
 
   public findUser(id: string): IUser | null {
     const result = this.usersDao.findUser(id);
@@ -43,6 +42,10 @@ class UserLogic {
 
   public createUser(user: IUser): void {
     return this.usersDao.createUser(user);
+  }
+
+  public updateUser(user: IUser): void {
+    return this.usersDao.updateUser(user);
   }
 }
 export const userLogic = new UserLogic();

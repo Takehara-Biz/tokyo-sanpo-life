@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../../partials/common/head'); %>
+  </head>
+  <body>
+    <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
+    <%- include('../../partials/common/header'); %>
+    <!-- Main Body -->
+    <div class="flex-grow flex justify-center items-center">
+      <p>😭その操作の権限がありません。（他人の投稿を削除しようとした時など）</p>
+    </div>
+    <%- include('../../partials/common/footer', {currentMenu: null}); %>
+    </div>
+  </body>
+</html>

@@ -10,7 +10,7 @@
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
     <%- include('../../partials/common/header'); %>
       <!-- Main Body -->
-      <div class="grow overflow-y-scroll flex flex-col">
+      <div class="grow overflow-y-scroll">
         <%- include('../../partials/common/page-title', {title: 'マイページ' }); %>
           <% if (user === undefined) { %>
             <div class="grow flex justify-center items-center">
@@ -40,7 +40,7 @@
                     <%= user.selfIntroduction %>
                   </dd>
                 </dl>
-                <%- include('../../partials/util/icon-link-button', {label: "ユーザ情報編集", href: "/user/update", googleIconName: "manage_accounts"}); %>
+                <%- include('../../partials/util/icon-link-button', {label: "ユーザ情報編集", href: "/users/update", googleIconName: "manage_accounts"}); %>
                 <%- include('../../partials/util/icon-link-button', {label: "ユーザアイコンの変更", googleIconName: "face", href: "/user/update-user-icon"}) %>
                 
                 <form action="/users/logout" method="post" onsubmit="return confirm('ログアウトしてよろしいですか？');">

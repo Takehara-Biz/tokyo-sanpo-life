@@ -3,6 +3,7 @@ import { userLogic } from "../models/bizlogic/userLogic";
 import { IUser } from "../models/serverTslDef";
 import { firebaseAuthDao } from "../models/dao/firebaseAuthDao";
 import { defaultUserIconBase64 } from "../models/dao/defaultUserIconBase64";
+import { EJS_401_PAGE_PATH } from "./errors";
 
 /**
  * implements URL related to user or authentication
@@ -18,13 +19,12 @@ export const addUsersRouting = ((app: Express): void => {
   });
   app.post(URL_PREFIX + "/create", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
-
     const newUser: IUser = {
       id: firebaseUserId!,
       userName: req.body.userName,
       userIconBase64: defaultUserIconBase64,
-      selfIntroduction: req.body.selfIntro ?? "",
-      twitterProfileLink: req.body.xProfileURL ?? "",
+      selfIntroduction: req.body.selfIntroduction ?? "",
+      xProfileLink: req.body.xProfileURL ?? "",
       instagramProfileLink: req.body.instaProfileURL ?? "",
     };
     userLogic.createUser(newUser);
@@ -85,11 +85,26 @@ export const addUsersRouting = ((app: Express): void => {
   });
 
   app.get(URL_PREFIX + "/update", function (req, res, next) {
-    res.render("pages/user/update", { user: userLogic.getLoggedInUser() });
+    res.render(URL_PREFIX + "/update", { user: userLogic.getLoggedInUser() });
   });
-  app.put(URL_PREFIX + "/update", function (req, res, next) {
-    // todo!
-    res.redirect(URL_PREFIX + "/my-page");
+  /**
+   * called with Ajax
+   */
+  app.put(URL_PREFIX + "/:id", async function (req, res, next) {
+    const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.body.idToken);
+    if(req.params.id != firebaseUserId){
+      res.render(EJS_401_PAGE_PATH, { user: userLogic.getLoggedInUser() });
+      return;
+    }
+
+    const user = userLogic.findUser(firebaseUserId!);
+    user!.userName = req.body.userName,
+    user!.selfIntroduction = req.body.selfIntroduction ?? "",
+    user!.xProfileLink = req.body.xProfileURL ?? "",
+    user!.instagramProfileLink = req.body.instaProfileURL ?? "",
+    userLogic.updateUser(user!);
+    userLogic.setLoggedInUser(user!);
+    res.render("pages/user/my-page", { user: userLogic.getLoggedInUser(), toast: false });
   });
 
   app.post(URL_PREFIX + "/logout", function (req, res, next) {
