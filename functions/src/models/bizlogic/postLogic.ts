@@ -1,9 +1,8 @@
-import { DaoUtil } from "../dao/daoUtil";
 import {PostsDao} from "../dao/postsDao";
 import {IPost} from "../serverTslDef";
 
 export class PostLogic {
-  private postsDao = new PostsDao(DaoUtil.dummyUserCount);
+  private postsDao = new PostsDao();
 
   public findPosts(): IPost[] {
     const result = this.postsDao.findPosts();
