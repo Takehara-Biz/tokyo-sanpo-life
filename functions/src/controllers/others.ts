@@ -6,26 +6,28 @@ import { userLogic } from "../models/bizlogic/userLogic";
  * @param app 
  */
 export const addOthersRouting = ((app: Express): void => {
+  const EJS_PREFIX = "pages/others";
+  const URL_PREFIX = "/others";
 
-  app.get("/others", function (req, res, next) {
-    res.render("pages/others", { user: userLogic.getLoggedInUser() });
+  app.get(URL_PREFIX, function (req, res, next) {
+    res.render(EJS_PREFIX, { user: userLogic.getLoggedInUser() });
   });
-  app.get("/others/about", function (req, res, next) {
-    res.render("pages/others/about", { user: userLogic.getLoggedInUser(), showBack: true });
+  app.get(URL_PREFIX + "/about", function (req, res, next) {
+    res.render(EJS_PREFIX + "/about", { user: userLogic.getLoggedInUser(), showBack: true });
   });
-  app.get("/others/developer", function (req, res, next) {
-    res.render("pages/others/developer", { user: userLogic.getLoggedInUser(), showBack: true });
+  app.get(URL_PREFIX + "/developer", function (req, res, next) {
+    res.render(EJS_PREFIX + "/developer", { user: userLogic.getLoggedInUser(), showBack: true });
   });
-  app.get("/others/tech", function (req, res, next) {
-    res.render("pages/others/tech", { user: userLogic.getLoggedInUser(), showBack: true });
+  app.get(URL_PREFIX + "/tech", function (req, res, next) {
+    res.render(EJS_PREFIX + "/tech", { user: userLogic.getLoggedInUser(), showBack: true });
   });
-  app.get("/others/terms-of-service", function (req, res, next) {
-    res.render("pages/others/terms-of-service", { user: userLogic.getLoggedInUser(), showBack: true });
+  app.get(URL_PREFIX + "/terms-of-service", function (req, res, next) {
+    res.render(EJS_PREFIX + "/terms-of-service", { user: userLogic.getLoggedInUser(), showBack: true });
   });
-  app.get("/others/privacy-policy", function (req, res, next) {
-    res.render("pages/others/privacy-policy", { user: userLogic.getLoggedInUser(), showBack: true });
+  app.get(URL_PREFIX + "/privacy-policy", function (req, res, next) {
+    res.render(EJS_PREFIX + "/privacy-policy", { user: userLogic.getLoggedInUser(), showBack: true });
   });
-  app.get("/others/cookie-policy", function (req, res, next) {
-    res.render("pages/others/cookie-policy", { user: userLogic.getLoggedInUser(), showBack: true });
+  app.get(URL_PREFIX + "/cookie-policy", function (req, res, next) {
+    res.render(EJS_PREFIX + "/cookie-policy", { user: userLogic.getLoggedInUser(), showBack: true });
   });
 });

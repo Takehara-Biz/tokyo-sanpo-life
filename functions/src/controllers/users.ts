@@ -8,9 +8,9 @@ import { defaultUserIconBase64 } from "../models/dao/defaultUserIconBase64";
  * implements URL related to user or authentication
  * @param app 
  */
-export const addUserRouting = ((app: Express): void => {
+export const addUsersRouting = ((app: Express): void => {
 
-  const URL_PREFIX = "/user";
+  const URL_PREFIX = "/users";
 
   app.get(URL_PREFIX + "/create", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);

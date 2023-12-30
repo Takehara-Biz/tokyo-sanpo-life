@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <%- include('../../partials/head'); %>
+  <%- include('../../partials/common/head'); %>
   <style>
     h2 {
       font-size: large;
@@ -12,13 +12,13 @@
 
 <body>
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
-    <%- include('../../partials/header', {user: user}); %>
+    <%- include('../../partials/common/header', {user: user}); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll">
-        <%- include('../../partials/page-title', {title: 'このサイトについて' }); %>
+        <%- include('../../partials/common/page-title', {title: 'このサイトについて' }); %>
           <div class="p-1">
             <h2>目的</h2>
-            <p>散歩好きなエンジニアが、散歩のオフ会を活性化するために、散歩情報を集めたサイトを作りました。無料でお使いいただけます。</p>
+            <p>散歩好きなエンジニアが、散歩のオフ会を活性化するために、散歩のクチコミ情報を、誰でも簡単に登録・閲覧できるWebアプリを作りました。無料でお使いいただけます。</p>
             <h2>本サービスに関するお問い合わせ先</h2>
             X（旧：ツイッター）からDMをください。
             <p><a href="https://twitter.com/tokyosanpolife">@tokyosanpolife</a></p>
@@ -42,7 +42,7 @@
           <p class="text-center m-0"><small >(c) LIBERTY</small></p>
           
       </div>
-      <%- include('../../partials/footer', {currentMenu: 5}); %>
+      <%- include('../../partials/common/footer', {currentMenu: 5}); %>
   </div>
 </body>
 

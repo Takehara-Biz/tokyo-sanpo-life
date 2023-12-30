@@ -7,10 +7,10 @@
 
 <body>
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
-    <%- include('../../partials/header'); %>
+    <%- include('../../partials/common/header'); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll">
-        <%- include('../../partials/page-title', {title: 'ユーザ新規登録' }); %>
+        <%- include('../../partials/common/page-title', {title: 'ユーザ新規登録' }); %>
         <div class="p-1 pb-10">
           <% const warningList = [
               "後からいつでも変更・削除できます。",
@@ -18,9 +18,9 @@
               "公序良俗に反する記載は行わないこと。",
               "著作権・肖像権に注意すること。",
             ]; %>
-            <%- include('../../partials/warning-accordion', {title: "登録前の注意事項", warningList: warningList}); %>
+            <%- include('../../partials/util/warning-accordion', {title: "登録前の注意事項", warningList: warningList}); %>
 
-          <form action="/user/create" method="POST" onSubmit="return confirm('本当に登録してもよろしいですか？');">
+          <form action="/users/create" method="POST" onSubmit="return confirm('本当に登録してもよろしいですか？');">
             <div class="mt-3">
               <label for="firebaseUserId" class="form-label">ユーザID（固定・変更不可）</label>
               <div><%- include('../../partials/printable-user-id', {id: firebaseUserId}) %></div>
@@ -35,13 +35,13 @@
                 rows="3"></textarea>
             </div>
             <p>ユーザアイコンは、デフォルトのものが指定されますが、後から自由に設定・変更ができます。</p>
-            <%- include('../../partials/icon-button', {label: "決定", typeSubmit: true, onSubmitCode: "return confirm('登録してもよろしいですか？');", googleIconName: "person_add"}); %>
+            <%- include('../../partials/util/icon-button', {label: "決定", typeSubmit: true, onSubmitCode: "return confirm('登録してもよろしいですか？');", googleIconName: "person_add"}); %>
           </form>
         </div>
       </div>
-      <%- include('../../partials/footer', {currentMenu: null}); %>
+      <%- include('../../partials/common/footer', {currentMenu: null}); %>
       <!-- Toast -->
-      <%- include('../../partials/toast', {message: "新しいユーザのため、アカウントの新規登録を行ってください。"}); %>
+      <%- include('../../partials/util/toast', {message: "新しいユーザのため、アカウントの新規登録を行ってください。"}); %>
       <script>
         window.onload = (() => {  
           const toastLiveExample = document.getElementById('liveToast');

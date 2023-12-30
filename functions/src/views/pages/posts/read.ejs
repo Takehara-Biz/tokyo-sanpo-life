@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <%- include('../partials/head'); %>
+  <%- include('../../partials/common/head'); %>
 
     <script src="/javascripts/gMapKey.js?ver=2023122001332"></script>
     <!-- prettier-ignore -->
@@ -19,14 +19,14 @@
 
 <body>
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
-    <%- include('../partials/header', {showBack2: showBack}); %>
+    <%- include('../../partials/common/header', {showBack2: showBack}); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll p-2">
         <input id="postId" type="hidden" value="<%= post.id %>" />
         <input id="myUserId" type="hidden" value="<%= post.user.id %>" />
         <img width="100%" height="80px" src="<%= post.imageUrl %>" style="border: 1px solid; " />
         <div class="flex justify-between mt-1 items-center">
-          <%- include('../partials/user-icon-name-s', {iconUrl: post.user.userIconBase64, userName: post.user.userName}) %>
+          <%- include('../../partials/util/user-icon-name-s', {iconUrl: post.user.userIconBase64, userName: post.user.userName}) %>
             <span class="text-sm ml-5">
               <%= post.insertDate.toLocaleString("ja-JP") %>
             </span>
@@ -65,7 +65,7 @@
             });
             async function renderEmojiEvaluationCountSection(){
               const postIdInput = document.getElementById('postId');
-              const targetUrl = '/post/' + postIdInput.value + '/emojiEvaluations';
+              const targetUrl = '/posts/' + postIdInput.value + '/emojiEvaluations';
               const resultHTML = await fetch(targetUrl, {
                 method: 'GET'
               }).then(res => {
@@ -88,7 +88,7 @@
             async function putEmojiEvaluation(unicode){
               console.log('[BEGIN] putEmojiEvaluation');
               const postIdInput = document.getElementById('postId');
-              const targetUrl = '/post/' + postIdInput.value + '/emojiEvaluation/' + unicode;
+              const targetUrl = '/posts/' + postIdInput.value + '/emojiEvaluation/' + unicode;
               await fetch(targetUrl, {
                 method: 'POST'
               }).then(res => {
@@ -102,7 +102,7 @@
             async function removeEmojiEvaluation(unicode){
               console.log('[BEGIN] deleteEmojiEvaluation');
               const postIdInput = document.getElementById('postId');
-              const targetUrl = '/post/' + postIdInput.value + '/emojiEvaluation/' + unicode;
+              const targetUrl = '/posts/' + postIdInput.value + '/emojiEvaluation/' + unicode;
               await fetch(targetUrl, {
                 method: 'DELETE'
               }).then(res => {
@@ -165,10 +165,10 @@
                   return;
                 }
 
-                fetch('/post/<%= post.id %>', {
+                fetch('/posts/<%= post.id %>', {
                   method: 'DELETE',
                 }).then((response) => {
-                  window.location = '/new-posts?deletedToast=true';
+                  window.location = '/posts/new-list?deletedToast=true';
                 }).catch((error) => {
                   console.error(error);
                   window.location = '/500';
@@ -180,13 +180,13 @@
         <div class="flex justify-center items-center">
           <div id="map" class="w-[90%] h-[200px] border"></div>
         </div>
-        <%- include('../partials/comments-list'); %>
+        <%- include('../../partials/util/comments-list'); %>
           <hr />
-          <%- include('../partials/add-comment-section'); %>
+          <%- include('../../partials/util/add-comment-section'); %>
       </div>
-      <%- include('../partials/footer', {currentMenu: 2}); %>
+      <%- include('../../partials/common/footer', {currentMenu: 2}); %>
         <!-- Toast -->
-        <%- include('../partials/toast', {message: "" }); %>
+        <%- include('../../partials/util/toast', {message: "" }); %>
   </div>
 </body>
 

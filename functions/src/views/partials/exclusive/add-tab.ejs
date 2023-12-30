@@ -1,0 +1,18 @@
+<ul class="nav nav-tabs nav-justified">
+  <li class="nav-item">
+    <a class="nav-link <% if (currentMenu === 1) { %>text-accent border-b-2 border-accent<% } %>" 
+      <% if (currentMenu === 1) { %>style="color: #ff0099; border-bottom: 2px solid #ff0099;" <% } %> 
+      <% if (currentMenu === 1) { %>aria-current="page"<% } %> 
+      href="<% if (currentMenu === 1) { %>#<% } else { %>/add-record<% } %>">
+      <span <% if (currentMenu !== 1) { %>class="text-gray-300"<% } %>>👣&nbsp;毎日歩数計</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link <% if (currentMenu === 2) { %>text-accent border-b-2 border-accent<% } %>" 
+      <% if (currentMenu === 2) { %>style="color: #ff0099; border-bottom: 2px solid #ff0099;" <% } %> 
+      <% if (currentMenu === 2) { %>aria-current="page"<% } %> 
+      href="<% if (currentMenu === 2) { %>#<% } else { %>/posts/create<% } %>">
+      <span <% if (currentMenu !== 2) { %>class="text-gray-300"<% } %>>📍&nbsp;地図に追加</span>
+    </a>
+  </li>
+</ul>

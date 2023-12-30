@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <%- include('../../partials/head'); %>
+  <%- include('../../partials/common/head'); %>
     <style>
       h2 {
         font-size: medium;
@@ -16,10 +16,10 @@
 
 <body>
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
-    <%- include('../../partials/header', {user: user}); %>
+    <%- include('../../partials/common/header', {user: user}); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll">
-        <%- include('../../partials/page-title', {title: 'プライバシーポリシー' }); %>
+        <%- include('../../partials/common/page-title', {title: 'プライバシーポリシー' }); %>
           <div class="p-1">
             <p>
               LIBERTY（以下，「当社」といいます。）は，本ウェブサイト上で提供するサービス（以下,「本サービス」といいます。）における，ユーザーの個人情報の取扱いについて，以下のとおりプライバシーポリシー（以下，「本ポリシー」といいます。）を定めます。
@@ -122,7 +122,7 @@
             <p class="tR">以上</p>
           </div>
       </div>
-      <%- include('../../partials/footer', {currentMenu: 5}); %>
+      <%- include('../../partials/common/footer', {currentMenu: 5}); %>
   </div>
 </body>
 

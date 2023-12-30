@@ -2,26 +2,22 @@
 <html>
 
 <head>
-  <%- include('../partials/head'); %>
+  <%- include('../../partials/common/head'); %>
 </head>
 
 <body>
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
-    <%- include('../partials/header'); %>
+    <%- include('../../partials/common/header'); %>
       <!-- Main Body -->
-      <div class="grow overflow-y-scroll flex flex-col">
-        <%- include('../partials/posts-tab', {currentMenu: 2}); %>
-        <% if (user === undefined) { %>
-          <%- include('../partials/urge-login'); %>
-        <% } else { %>
-          <% for (var post of myPosts) { %>
-            <%- include('../partials/posts-list-item', {post: post}); %>
+      <div class="grow overflow-y-scroll max-w-screen">
+        <%- include('../../partials/exclusive/posts-tab', {currentMenu: 1}); %>
+        <% for (var post of targetPosts) { %>
+          <%- include('../../partials/exclusive/posts-list-item', {post: post}); %>
           <% } %>
-        <% } %>
       </div>
-      <%- include('../partials/footer', {currentMenu: 2}); %>
+      <%- include('../../partials/common/footer', {currentMenu: 2}); %>
         <!-- Toast -->
-        <%- include('../partials/toast', {message: "投稿を削除しました"}); %>
+        <%- include('../../partials/util/toast', {message: "投稿を削除しました"}); %>
         <script>
           window.onload = (() => {
             let toast = false;

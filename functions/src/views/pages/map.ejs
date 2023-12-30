@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <%- include('../partials/head'); %>
+  <%- include('../partials/common/head'); %>
   
   <script src="/javascripts/gMapKey.js?ver=2023122001332"></script>
   <!-- prettier-ignore -->
@@ -19,14 +19,14 @@
 
 <body>
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
-    <%- include('../partials/header'); %>
+    <%- include('../partials/common/header'); %>
 
     <!-- Main Body -->
     <div id="map" style="flex-grow: 1;"></div>
 
     <!-- The Modal -->
     <div id="info" class="overflow-y-scroll" style="display:none; height:calc(50svh); overflow-y: scroll;">情報ウィンドウ表示場所</div>
-    <%- include('../partials/footer', {currentMenu: 3}); %>
+    <%- include('../partials/common/footer', {currentMenu: 3}); %>
   </div>
 </body>
 

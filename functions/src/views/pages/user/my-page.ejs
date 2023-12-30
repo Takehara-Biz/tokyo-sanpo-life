@@ -2,16 +2,16 @@
 <html>
 
 <head>
-  <%- include('../../partials/head'); %>
+  <%- include('../../partials/common/head'); %>
   <script type="module" src="/javascripts/firebaseAuth.js"></script>
 </head>
 
 <body>
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
-    <%- include('../../partials/header'); %>
+    <%- include('../../partials/common/header'); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll flex flex-col">
-        <%- include('../../partials/page-title', {title: 'マイページ' }); %>
+        <%- include('../../partials/common/page-title', {title: 'マイページ' }); %>
           <% if (user === undefined) { %>
             <div class="grow flex justify-center items-center">
               <div>
@@ -25,13 +25,13 @@
                 <dl>
                   <dt>ID</dt>
                   <dd>
-                    <%- include('../../partials/printable-user-id', {id: user.id}) %>
+                    <%- include('../../partials/util/printable-user-id', {id: user.id}) %>
                   </dd>
                 </dl>
                 <dl>
                   <dt>アイコンとユーザ名</dt>
                   <dd>
-                    <%- include('../../partials/user-icon-name-s', {iconUrl: user.userIconBase64, userName: user.userName}) %>
+                    <%- include('../../partials/util/user-icon-name-s', {iconUrl: user.userIconBase64, userName: user.userName}) %>
                   </dd>
                 </dl>
                 <dl>
@@ -40,14 +40,14 @@
                     <%= user.selfIntroduction %>
                   </dd>
                 </dl>
-                <%- include('../../partials/icon-link-button', {label: "ユーザ情報編集", href: "/user/update", googleIconName: "manage_accounts"}); %>
-                <%- include('../../partials/icon-link-button', {label: "ユーザアイコンの変更", googleIconName: "face", href: "/user/update-user-icon"}) %>
+                <%- include('../../partials/util/icon-link-button', {label: "ユーザ情報編集", href: "/user/update", googleIconName: "manage_accounts"}); %>
+                <%- include('../../partials/util/icon-link-button', {label: "ユーザアイコンの変更", googleIconName: "face", href: "/user/update-user-icon"}) %>
                 
-                <form action="/user/logout" method="post" onsubmit="return confirm('ログアウトしてよろしいですか？');">
-                  <%- include('../../partials/icon-button', {label: "ダミーログアウト", typeSubmit: true, onSubmitCode: "return confirm('ログアウトしてよろしいですか？');", googleIconName: "logout"}); %>
+                <form action="/users/logout" method="post" onsubmit="return confirm('ログアウトしてよろしいですか？');">
+                  <%- include('../../partials/util/icon-button', {label: "ダミーログアウト", typeSubmit: true, onSubmitCode: "return confirm('ログアウトしてよろしいですか？');", googleIconName: "logout"}); %>
                 </form>
 
-                <%- include('../../partials/icon-button', {label: "ログアウト2", onClickCode: "logout();", googleIconName: "logout"}); %>
+                <%- include('../../partials/util/icon-button', {label: "ログアウト2", onClickCode: "logout();", googleIconName: "logout"}); %>
 
                 <button class="mt-3 btn text-white w-full h-12" style="background-color:#ff0000; height: 48px;" onclick="return confirm('本当にアカウントを削除してもよろしいですか？');">
                   <span class="material-symbols-outlined align-[-6px]" data-bs-toggle="dropdown" aria-expanded="false">
@@ -58,9 +58,9 @@
               </div>
               <% } %>
       </div>
-      <%- include('../../partials/footer', {currentMenu: 5}); %>
+      <%- include('../../partials/common/footer', {currentMenu: 5}); %>
         <!-- Toast -->
-        <%- include('../../partials/toast', {message: "ログインに成功しました"}); %>
+        <%- include('../../partials/util/toast', {message: "ログインに成功しました"}); %>
         <script>
           window.onload = (() => {
             let toast = false;
