@@ -38,6 +38,9 @@
             <div id="reactionDropdown" class="dropdown-menu">
               <emoji-picker style="max-width:90%; --num-columns: 8;"></emoji-picker>
             </div>
+            <div id="evaludatedEmojiDiv">
+              
+            </div>
           </div>
           <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
           <script type="module">
@@ -57,6 +60,16 @@
               document.getElementById('toastMessage').innerHTML = JSON.stringify(designatedEmojiCountJson);
               const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
               toastBootstrap.show();
+
+              const evaludatedEmojiDiv = document.getElementById('evaludatedEmojiDiv');
+              evaludatedEmojiDiv.innerHTML = '';
+              for(let key in designatedEmojiCountJson) {
+                const span = document.createElement('span');
+                span.classList.add('rounded-full', 'border-1', 'border-solid', 'border-accent', 'm-1', 'px-2', 'py-1');
+                span.style.borderColor = '#ff0099';
+                span.innerHTML = emoji + '&nbsp;' + designatedEmojiCountJson[key];
+                evaludatedEmojiDiv.appendChild(span);
+              }
             })
           </script>
         </div>
