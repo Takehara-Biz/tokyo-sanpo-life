@@ -1,30 +1,31 @@
-import {PostsDao} from "../dao/postsDao";
+import { IPostsDao } from "../dao/iPostsDao";
+import {MockPostsDao} from "../dao/mockPostsDao";
 import {IPost} from "../serverTslDef";
 
 export class PostLogic {
-  private postsDao = new PostsDao();
+  private postsDao: IPostsDao = new MockPostsDao();
 
-  public findPosts(): IPost[] {
-    const result = this.postsDao.findPosts();
+  public findPostsMax(): IPost[] {
+    const result = this.postsDao.listOrderbyCreatedDateTime(100, 0);
     //TslLogUtil.info('findPosts length : ' + result.length);
     return result;
   }
 
   public findPostsByUserId(userId: string): IPost[] {
-    const result = this.postsDao.findPostsByUserId(userId);
+    const result = this.postsDao.listByUserId(userId);
     //TslLogUtil.info('findPostsByUserId length : ' + result.length);
     return result;
   }
 
   public findPost(id: string): IPost | null {
-    const result = this.postsDao.findPost(id);
+    const result = this.postsDao.read(id);
     //TslLogUtil.debug('findPost result : ' + JSON.stringify(result));
     return result;
   }
 
   public createPost(post: IPost): void {
     //TslLogUtil.info('createPost : ' + JSON.stringify(post));
-    return this.postsDao.createPost(post);
+    return this.postsDao.create(post);
   }
 
   public deletePost(id: string): void {
@@ -38,7 +39,7 @@ export class PostLogic {
    * @returns 
    */
   public findEmojiEvaluations(postId: string, userId: string | null): Map<string, [number, boolean]> {
-    const emojiEvaluations = this.postsDao.findEmojiEvaluations(postId);
+    const emojiEvaluations = this.postsDao.listEmojiEvaluations(postId);
     const unicode_count_userPut : Map<string, [number, boolean]> = new Map<string, [number, boolean]>();
 
     for (let emojiEvaluation of emojiEvaluations) {
@@ -70,11 +71,11 @@ export class PostLogic {
   }
 
   public putEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
-    this.postsDao.putEmojiEvaluation(postId, unicode, evaluatingUserId);
+    this.postsDao.createEmojiEvaluation(postId, unicode, evaluatingUserId);
   }
 
   public removeEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
-    this.postsDao.removeEmojiEvaluation(postId, unicode, evaluatingUserId);
+    this.postsDao.deleteEmojiEvaluation(postId, unicode, evaluatingUserId);
   }
 }
 export const postLogic = new PostLogic();

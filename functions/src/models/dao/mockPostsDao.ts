@@ -1,28 +1,35 @@
 import { TslLogUtil } from "../../utils/tslLogUtil";
 import {IEmojiEvaluation, IPost} from "../serverTslDef";
 import { dummyDataKeeper } from "./dummyDataKeeper";
+import { IPostsDao } from "./iPostsDao";
 
-export class PostsDao {
+export class MockPostsDao implements IPostsDao {
 
-  public findPosts(): IPost[] {
-    const result = [...dummyDataKeeper.idAndPostMap.values()]
+  public listOrderbyCreatedDateTime(limit: number, offset: number): IPost[] {
+    const result = [...dummyDataKeeper.idAndPostMap.values()].slice(0, limit);
     TslLogUtil.info('findPosts length : ' + result.length);
     return result;
   }
 
-  public findPostsByUserId(userId: string): IPost[] {
+  public listByGeoQuery(lat: number, lng: number, distanceKM: number): IPost[] {
+    const result = [...dummyDataKeeper.idAndPostMap.values()].slice(0, 50);
+    TslLogUtil.info('findPosts length : ' + result.length);
+    return result;
+  }
+
+  public listByUserId(userId: string): IPost[] {
     const result = [...dummyDataKeeper.idAndPostMap.values()].filter((value: IPost) => value.user.id === userId);
     TslLogUtil.info('findPosts length : ' + result.length);
     return result;
   }
 
-  public findPost(id: string): IPost | null {
-    const result = dummyDataKeeper.idAndPostMap.get(id) ?? null;
+  public read(postId: string): IPost | null {
+    const result = dummyDataKeeper.idAndPostMap.get(postId) ?? null;
     TslLogUtil.debug('findPost result : ' + JSON.stringify(result));
     return result;
   }
 
-  public createPost(post: IPost):void {
+  public create(post: IPost):void {
     post.id = dummyDataKeeper.nextval().toString();
     TslLogUtil.info('createPost : ' + JSON.stringify(post));
     dummyDataKeeper.idAndPostMap.set(post.id, post);
@@ -33,7 +40,7 @@ export class PostsDao {
     TslLogUtil.info('deleted post ' + id + ', and the result is ' + result);
   }
 
-  public findEmojiEvaluations(postId: string): IEmojiEvaluation[] {
+  public listEmojiEvaluations(postId: string): IEmojiEvaluation[] {
     TslLogUtil.debug('postId: ' + postId);
     const post = dummyDataKeeper.idAndPostMap.get(postId);
     TslLogUtil.info('emojiEvaluations length : ' + post!.emojiEvaluations.length);
@@ -47,7 +54,7 @@ export class PostsDao {
    * @param evaluatingUserId 
    * @returns 
    */
-  public putEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
+  public createEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
     const post = dummyDataKeeper.idAndPostMap.get(postId);
     for(let emojiEvaluation of post!.emojiEvaluations) {
       if(emojiEvaluation.evaluatingUserId == evaluatingUserId && emojiEvaluation.unicode == unicode){
@@ -66,7 +73,7 @@ export class PostsDao {
    * @param unicode 
    * @param evaluatingUserId 
    */
-  public removeEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
+  public deleteEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
     const post = dummyDataKeeper.idAndPostMap.get(postId);
     const beforeCount = post!.emojiEvaluations.length;
     post!.emojiEvaluations = post!.emojiEvaluations.filter((item) => 
