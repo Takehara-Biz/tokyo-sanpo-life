@@ -3,7 +3,7 @@ import { App, initializeApp } from 'firebase-admin/app';
 import { getAuth } from 'firebase-admin/auth';
 import { TslLogUtil } from '../../utils/tslLogUtil';
 
-export class FirebaseAuthDao {
+class FirebaseAuthDao {
   public app: App;
   constructor(){
     const firebaseConfig = {
@@ -43,3 +43,4 @@ export class FirebaseAuthDao {
     });
   }
 }
+export const firebaseAuthDao = new FirebaseAuthDao();

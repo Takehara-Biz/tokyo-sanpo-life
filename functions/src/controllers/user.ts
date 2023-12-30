@@ -1,10 +1,8 @@
 import { Express } from "express";
 import { userLogic } from "../models/bizlogic/userLogic";
 import { IUser } from "../models/serverTslDef";
-import { FirebaseAuthDao } from "../models/dao/firebaseAuthDao";
+import { firebaseAuthDao } from "../models/dao/firebaseAuthDao";
 import { defaultUserIconBase64 } from "../models/dao/defaultUserIconBase64";
-
-const firebaseAuthDao = new FirebaseAuthDao();
 
 /**
  * implements URL related to user or authentication
@@ -82,12 +80,16 @@ export const addUserRouting = ((app: Express): void => {
     res.render("pages/user/update-user-icon", { user: userLogic.getLoggedInUser() });
   });
 
+  app.post(URL_PREFIX + "/update-user-icon", function (req, res, next) {
+    res.redirect(URL_PREFIX + "/my-page");
+  });
+
   app.get(URL_PREFIX + "/update", function (req, res, next) {
     res.render("pages/user/update", { user: userLogic.getLoggedInUser() });
   });
   app.put(URL_PREFIX + "/update", function (req, res, next) {
     // todo!
-    res.render("pages/user/update", { user: userLogic.getLoggedInUser() });
+    res.redirect(URL_PREFIX + "/my-page");
   });
 
   app.post(URL_PREFIX + "/logout", function (req, res, next) {

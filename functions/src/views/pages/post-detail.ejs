@@ -37,6 +37,7 @@
         <div>
           <!-- リアクションアイコン -->
           <div class="w-full dropdown text-right">
+            <% if (user !== undefined) { %>
             <span class="material-symbols-outlined" data-bs-toggle="dropdown" data-bs-auto-close="outside"
               aria-expanded="false">
               add_reaction
@@ -44,10 +45,9 @@
             <div id="reactionDropdown" class="dropdown-menu">
               <emoji-picker style="max-width:90%; --num-columns: 8;"></emoji-picker>
             </div>
-            <div id="evaludatedEmojiDiv" class="max-w-screen flex flex-wrap">
-
-            </div>
+            <% } %>
           </div>
+          <div id="targetEvaludatedEmojiDiv"></div>
           <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
           <script type="module">
             const designatedEmojiCountJson = {};
@@ -55,91 +55,36 @@
               const emoji = e.detail.unicode
               console.log(emoji);
               document.getElementById('reactionDropdown').classList.remove('show');
-
-              // if(designatedEmojiCountJson[emoji] != undefined){
-              //   designatedEmojiCountJson[emoji]++;
-              // } else {
-              //   designatedEmojiCountJson[emoji] = 1;
-              // }
-
-              // const toastLiveExample = document.getElementById('liveToast')
-              // document.getElementById('toastMessage').innerHTML = JSON.stringify(designatedEmojiCountJson);
-              // const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
-              // toastBootstrap.show();
-
-              // const evaludatedEmojiDiv = document.getElementById('evaludatedEmojiDiv');
-              // evaludatedEmojiDiv.innerHTML = '';
-              // for(let key in designatedEmojiCountJson) {
-              //   const span = document.createElement('span');
-              //   span.classList.add('rounded-full', 'border-1', 'border-solid', 'border-accent', 'm-1', 'px-2', 'py-1');
-              //   span.style.borderColor = '#ff0099';
-              //   span.innerHTML = emoji + '&nbsp;' + designatedEmojiCountJson[key];
-              //   evaludatedEmojiDiv.appendChild(span);
-              // }
             });
           </script>
+          <% if (user !== undefined) { %>
           <script>
             addEventListener('load', async function () {
               console.log('onload!');
+              renderEmojiEvaluationCountSection();
+            });
+            async function renderEmojiEvaluationCountSection(){
               const postIdInput = document.getElementById('postId');
               const targetUrl = '/post/' + postIdInput.value + '/emojiEvaluations';
-              const emojiEvaluations = await fetch(targetUrl, {
+              const resultHTML = await fetch(targetUrl, {
                 method: 'GET'
               }).then(res => {
                 console.info('[BEGIN] fetch then');
-                return res.json();
+                return res.text();
               }).catch(error => {
                 alert(error);
                 console.error('fetch Error!!', error);
-                return;
+                return null;
               });
-              console.log('emojiEvaluations: ' + emojiEvaluations);
-
-              if (emojiEvaluations === undefined) {
-                console.error('fetch Failed!!');
-                return;
+              const targetEvaludatedEmojiDiv = document.getElementById('targetEvaludatedEmojiDiv');
+              if(resultHTML != null) {
+                targetEvaludatedEmojiDiv.innerHTML = resultHTML;
+              } else {
+                targetEvaludatedEmojiDiv.innerHTML = 'サーバ側でエラーが発生しました。';
               }
-              console.log('emojiEvaluations : ' + emojiEvaluations);
-              const emojiEvalationJson = {};
-              const myEvaluationUnicodes = [];
-
-              // can be "" when not login.
-              const myUserId = document.getElementById('myUserId').value;
-
-              for (let emojiEvaluation of emojiEvaluations) {
-                if (emojiEvalationJson[emojiEvaluation.unicode] == undefined) {
-                  emojiEvalationJson[emojiEvaluation.unicode] = [emojiEvaluation];
-                } else {
-                  emojiEvalationJson[emojiEvaluation.unicode].push(emojiEvaluation);
-                }
-
-                if(emojiEvaluation.evaluatingUserId === myUserId){
-                  myEvaluationUnicodes.push(emojiEvaluation.unicode);
-                }
-              }
-              console.log('emojiEvalationJson : ' + emojiEvalationJson);
-
-              const evaludatedEmojiDiv = document.getElementById('evaludatedEmojiDiv');
-              evaludatedEmojiDiv.innerHTML = '';
-              for (let unicode in emojiEvalationJson) {
-                const div = document.createElement('div');
-                div.classList.add('rounded-full', 'border-1', 'border-solid', 'border-accent', 'px-2', 'py-1');
-                div.style.borderColor = '#ff0099';
-                div.style.marginTop = '12px';
-                div.style.marginLeft = '8px';
-                if(myEvaluationUnicodes.includes(unicode)){
-                  div.style.backgroundColor = '#ff0099';
-                  div.style.color = 'white';
-                  div.setAttribute('onclick', "removeEmojiEvaluation('" + unicode + "')");
-                } else {
-                  div.style.backgroundColor = 'white';
-                  div.style.color = '#ff0099';
-                  div.setAttribute('onclick', "putEmojiEvaluation('" + unicode + "')");
-                }
-                div.innerHTML = unicode + '&nbsp;' + emojiEvalationJson[unicode].length;
-                evaludatedEmojiDiv.appendChild(div);
-              }
-            });
+              
+              console.log('updated targetEvaludatedEmojiDiv!');
+            }
             async function putEmojiEvaluation(unicode){
               console.log('[BEGIN] putEmojiEvaluation');
               const postIdInput = document.getElementById('postId');
@@ -147,12 +92,12 @@
               await fetch(targetUrl, {
                 method: 'POST'
               }).then(res => {
-                console.log('OK!');
+                console.log('put OK!');
               }).catch(error => {
                 console.error('error occurred!');
                 console.error(error);
               });
-              console.log('need to get the latest emojiEvaluations and render again!');
+              renderEmojiEvaluationCountSection();
             };
             async function removeEmojiEvaluation(unicode){
               console.log('[BEGIN] deleteEmojiEvaluation');
@@ -161,14 +106,15 @@
               await fetch(targetUrl, {
                 method: 'DELETE'
               }).then(res => {
-                console.log('OK!');
+                console.log('remove OK!');
               }).catch(error => {
                 console.error('error occurred!');
                 console.error(error);
               });
-              console.log('need to get the latest emojiEvaluations and render again!');
+              renderEmojiEvaluationCountSection();
             };
           </script>
+          <% } %>
         </div>
         <div>
           <a class="mt-3 btn text-white bg-accent" style="background-color:#ff0099;" role="button"
@@ -178,7 +124,7 @@
             </span>
             Xでシェアする
           </a>
-          <% if (user !==undefined && user.id===post.user.id) { %>
+          <% if (user !== undefined && user.id === post.user.id) { %>
             <!-- ログイン済み、かつ、投稿したユーザなら、編集と削除が可能。 -->
 
             <div class="w-full dropdown text-right">

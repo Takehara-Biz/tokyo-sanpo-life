@@ -6,6 +6,7 @@ import { TslLogUtil } from "../utils/tslLogUtil";
 import { addUserRouting } from "./user";
 import { addOthersRouting } from "./others";
 import { addErrorsRouting } from "./errors";
+import { firebaseAuthDao } from "../models/dao/firebaseAuthDao";
 
 export const routing = ((app: Express): void => {
 
@@ -37,14 +38,14 @@ export const routing = ((app: Express): void => {
       res.render("pages/404");
     }
   });
-  app.get("/post/:id/emojiEvaluations", function (req, res, next) {
-    res.json(postLogic.findEmojiEvaluations(req.params.id as string));
-     //const emojiEvaluations = postLogic.findEmojiEvaluations(req.params.id as string)
-    // console.log(emojiEvaluations);
-     //const json = JSON.parse(JSON.stringify(emojiEvaluations))
-    // console.log(json);
-    // res.json(json);
+
+  app.get("/post/:id/emojiEvaluations", async function (req, res, next) {
+    const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
+    const unicode_count_userPut = postLogic.findEmojiEvaluations(req.params.id as string, firebaseUserId!);
+    res.render("partials/emoji-evaluation-count-section", {unicode_count_userPut: unicode_count_userPut});
   });
+
+
 
   // パラメータの絵文字を付与する
   app.post("/post/:id/emojiEvaluation/:unicode", function (req, res, next) {

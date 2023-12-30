@@ -45,9 +45,11 @@ app.use(express.static("public"));
 
 app.use(function(req: Request, res: Response, next: NextFunction) {
   //TslLogUtil.debug("[BEGIN] " + req.url + ", req.params=" + JSON.stringify(req.params) + ", req.cookies=" + JSON.stringify(req.cookies) + ", req.body=" + JSON.stringify(req.body));
-  TslLogUtil.debug("[BEGIN] " + req.url + ",\n req.params=" + JSON.stringify(req.params) + ",\nreq.cookies=" + JSON.stringify(req.cookies) + ",\nreq.body=" + JSON.stringify(req.body));
+  TslLogUtil.info("[BEGIN] " + req.url + ",\nreq.params=" + JSON.stringify(req.params) + ",\nreq.body=" + JSON.stringify(req.body));
+  //TslLogUtil.debug("req.cookies=" + JSON.stringify(req.cookies));
   next();
-  TslLogUtil.debug("[  END] " + req.url + ",\n res.cookie=" + res.get('Set-Cookie'));
+  TslLogUtil.info("[  END] " + req.url);
+  //TslLogUtil.debug("res.cookie=" + res.get('Set-Cookie'));
 });
 
 routing(app);

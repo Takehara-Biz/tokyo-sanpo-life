@@ -139,12 +139,13 @@ export class PostsDao {
     const post = this.idAndPostMap.get(postId);
     for(let emojiEvaluation of post!.emojiEvaluations) {
       if(emojiEvaluation.evaluatingUserId == evaluatingUserId && emojiEvaluation.unicode == unicode){
-        TslLogUtil.info("do nothing. It's OK.");
+        TslLogUtil.info("do nothing, but it's OK.");
         return;
       }
     }
 
     post!.emojiEvaluations.push({evaludatedPostId: postId, unicode: unicode, evaluatingUserId: evaluatingUserId});
+    TslLogUtil.info("did put!" + unicode);
   }
 
   /**
@@ -163,6 +164,8 @@ export class PostsDao {
     );
     if(beforeCount != post!.emojiEvaluations.length){
       TslLogUtil.info('deleted!');
+    } else {
+      TslLogUtil.info("do nothing, but it's OK.");
     }
   }
 }
