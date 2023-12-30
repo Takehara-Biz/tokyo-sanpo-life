@@ -22,24 +22,26 @@
     <%- include('../partials/header', {showBack2: showBack}); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll p-2">
+        <input id="postId" type="hidden" value="<%= post.id %>" />
         <img width="100%" height="80px" src="<%= post.imageUrl %>" style="border: 1px solid; " />
         <div class="flex justify-between mt-1 items-center">
           <%- include('../partials/user-icon-name-s', {iconUrl: post.user.iconUrl, userName: post.user.userName}) %>
-          <span class="text-sm ml-5">
-            <%= post.insertDate.toLocaleString("ja-JP") %>
-          </span>
+            <span class="text-sm ml-5">
+              <%= post.insertDate.toLocaleString("ja-JP") %>
+            </span>
         </div>
         <div>
           <!-- リアクションアイコン -->
           <div class="w-full dropdown text-right">
-            <span class="material-symbols-outlined" data-bs-toggle="dropdown" data-bs-auto-close="outside"  aria-expanded="false">
+            <span class="material-symbols-outlined" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+              aria-expanded="false">
               add_reaction
             </span>
             <div id="reactionDropdown" class="dropdown-menu">
               <emoji-picker style="max-width:90%; --num-columns: 8;"></emoji-picker>
             </div>
-            <div id="evaludatedEmojiDiv">
-              
+            <div id="evaludatedEmojiDiv" class="max-w-screen flex flex-wrap">
+
             </div>
           </div>
           <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
@@ -50,27 +52,72 @@
               console.log(emoji);
               document.getElementById('reactionDropdown').classList.remove('show');
 
-              if(designatedEmojiCountJson[emoji] != undefined){
-                designatedEmojiCountJson[emoji]++;
-              } else {
-                designatedEmojiCountJson[emoji] = 1;
-              }
+              // if(designatedEmojiCountJson[emoji] != undefined){
+              //   designatedEmojiCountJson[emoji]++;
+              // } else {
+              //   designatedEmojiCountJson[emoji] = 1;
+              // }
 
-              const toastLiveExample = document.getElementById('liveToast')
-              document.getElementById('toastMessage').innerHTML = JSON.stringify(designatedEmojiCountJson);
-              const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
-              toastBootstrap.show();
+              // const toastLiveExample = document.getElementById('liveToast')
+              // document.getElementById('toastMessage').innerHTML = JSON.stringify(designatedEmojiCountJson);
+              // const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+              // toastBootstrap.show();
+
+              // const evaludatedEmojiDiv = document.getElementById('evaludatedEmojiDiv');
+              // evaludatedEmojiDiv.innerHTML = '';
+              // for(let key in designatedEmojiCountJson) {
+              //   const span = document.createElement('span');
+              //   span.classList.add('rounded-full', 'border-1', 'border-solid', 'border-accent', 'm-1', 'px-2', 'py-1');
+              //   span.style.borderColor = '#ff0099';
+              //   span.innerHTML = emoji + '&nbsp;' + designatedEmojiCountJson[key];
+              //   evaludatedEmojiDiv.appendChild(span);
+              // }
+            });
+          </script>
+          <script>
+            addEventListener('load', async function () {
+              console.log('onload!');
+              const postIdInput = document.getElementById('postId');
+              const targetUrl = '/post/' + postIdInput.value + '/emojiEvaluations';
+              const emojiEvaluations = await fetch(targetUrl, {
+                method: 'GET'
+              }).then(res => {
+                console.info('[BEGIN] fetch then');
+                return res.json();
+              }).catch(error => {
+                alert(error);
+                console.error('fetch Error!!', error);
+                return;
+              });
+              console.log('emojiEvaluations: ' + emojiEvaluations);
+
+              if (emojiEvaluations === undefined) {
+                console.error('fetch Failed!!');
+                return;
+              }
+              console.log('emojiEvaluations : ' + emojiEvaluations);
+              const emojiEvalationJson = {};
+              for (let emojiEvaluation of emojiEvaluations) {
+                if (emojiEvalationJson[emojiEvaluation.unicode] == undefined) {
+                  emojiEvalationJson[emojiEvaluation.unicode] = [emojiEvaluation];
+                } else {
+                  emojiEvalationJson[emojiEvaluation.unicode].push(emojiEvaluation);
+                }
+              }
+              console.log('emojiEvalationJson : ' + emojiEvalationJson);
 
               const evaludatedEmojiDiv = document.getElementById('evaludatedEmojiDiv');
               evaludatedEmojiDiv.innerHTML = '';
-              for(let key in designatedEmojiCountJson) {
-                const span = document.createElement('span');
-                span.classList.add('rounded-full', 'border-1', 'border-solid', 'border-accent', 'm-1', 'px-2', 'py-1');
-                span.style.borderColor = '#ff0099';
-                span.innerHTML = emoji + '&nbsp;' + designatedEmojiCountJson[key];
-                evaludatedEmojiDiv.appendChild(span);
+              for (let unicode in emojiEvalationJson) {
+                const div = document.createElement('div');
+                div.classList.add('rounded-full', 'border-1', 'border-solid', 'border-accent', 'px-2', 'py-1');
+                div.style.borderColor = '#ff0099';
+                div.style.marginTop = '12px';
+                div.style.marginLeft = '4px';
+                div.innerHTML = unicode + '&nbsp;' + emojiEvalationJson[unicode].length;
+                evaludatedEmojiDiv.appendChild(div);
               }
-            })
+            });
           </script>
         </div>
         <div>
@@ -140,13 +187,13 @@
         <div class="flex justify-center items-center">
           <div id="map" class="w-[90%] h-[200px] border"></div>
         </div>
-          <%- include('../partials/comments-list'); %>
+        <%- include('../partials/comments-list'); %>
           <hr />
           <%- include('../partials/add-comment-section'); %>
       </div>
       <%- include('../partials/footer', {currentMenu: 2}); %>
-      <!-- Toast -->
-      <%- include('../partials/toast', {message: ""}); %>
+        <!-- Toast -->
+        <%- include('../partials/toast', {message: "" }); %>
   </div>
 </body>
 

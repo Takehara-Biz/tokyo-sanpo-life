@@ -39,6 +39,14 @@ export const routing = ((app: Express): void => {
       res.render("pages/404");
     }
   });
+  app.get("/post/:id/emojiEvaluations", function (req, res, next) {
+    res.json(postLogic.findEmojiEvaluations(req.params.id as string));
+     //const emojiEvaluations = postLogic.findEmojiEvaluations(req.params.id as string)
+    // console.log(emojiEvaluations);
+     //const json = JSON.parse(JSON.stringify(emojiEvaluations))
+    // console.log(json);
+    // res.json(json);
+  });
 
   app.delete("/post/:id", function (req, res, next) {
     // needs authorization

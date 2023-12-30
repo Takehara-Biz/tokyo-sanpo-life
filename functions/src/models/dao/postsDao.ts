@@ -119,4 +119,11 @@ export class PostsDao {
     const result = this.idAndPostMap.delete(id);
     TslLogUtil.info('deleted post ' + id + ', and the result is ' + result);
   }
+
+  public findEmojiEvaluations(postId: string): IEmojiEvaluation[] {
+    TslLogUtil.debug('postId: ' + postId);
+    const post = this.idAndPostMap.get(postId);
+    TslLogUtil.info('emojiEvaluations length : ' + post!.emojiEvaluations.length);
+    return post!.emojiEvaluations;
+  }
 }

@@ -91,7 +91,7 @@ interface IPost {
 /**
  * 絵文字評価
  */
-export interface IEmojiEvaluation {
+interface IEmojiEvaluation {
 
   evaludatedPostId: string;
   /**

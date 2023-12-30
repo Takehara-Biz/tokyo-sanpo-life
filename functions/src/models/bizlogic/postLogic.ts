@@ -1,5 +1,5 @@
 import {PostsDao} from "../dao/postsDao";
-import {IPost} from "../serverTslDef";
+import {IEmojiEvaluation, IPost} from "../serverTslDef";
 
 export class PostLogic {
   private postsDao = new PostsDao(10);
@@ -29,5 +29,9 @@ export class PostLogic {
 
   public deletePost(id: string): void {
     return this.postsDao.delete(id);
+  }
+
+  public findEmojiEvaluations(postId: string): IEmojiEvaluation[] {
+    return this.postsDao.findEmojiEvaluations(postId);
   }
 }
