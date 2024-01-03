@@ -2,12 +2,12 @@
 # https://github.com/milan-lakhani/action-hosting-deploy-withFuntions/blob/main/README.md#deploy-to-your-live-channel-on-merge
 # https://github.com/marketplace/actions/deploy-to-firebase-hosting-with-functions
 
-name: Deploy to Dev env
+name: Deploy to Stg env
 
 on:
   push:
     branches:
-      - develop
+      - staging
     # Optionally configure to run only for specific files. For example:
     # paths:
     # - "website/**"
@@ -25,10 +25,10 @@ jobs:
           node-version: "20"
           cache: npm
       - name: run-before-deploy
-        run: ./run-before-deploy.bash dev
+        run: ./run-before-deploy.bash stg
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}"
-          projectId: tokyo-sanpo-life-dev
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_STG }}"
+          projectId: tokyo-sanpo-life-stg
           channelId: live
