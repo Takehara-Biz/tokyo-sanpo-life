@@ -5,6 +5,9 @@
 set -x
 
 npm install
+cd functions
+npm install
+cd ../
 
 echo "(1/5) prepare env related files"
 ./env/overwriteEnvJSFiles.bash $1
