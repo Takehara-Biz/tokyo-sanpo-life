@@ -6,7 +6,7 @@ set -x
 # https://stackoverflow.com/questions/43171648/sed-gives-sed-cant-read-no-such-file-or-directory
 SEDOPTION=
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  SEDOPTION="-i ''"
+  SEDOPTION=-i ''
 fi
 
 # Cache Buster
