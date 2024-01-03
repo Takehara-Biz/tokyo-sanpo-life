@@ -30,8 +30,16 @@ export const addPostsRouting = ((app: Express): void => {
   });
   app.get(URL_PREFIX + "/:id", function (req, res, next) {
     const post = postLogic.findPost(req.params.id);
+
+    // when comes from list screen.
+    let showBack = true;
+    // when comes after created a post.
+    if (req.params.showBack === "false") {
+      showBack = false;
+    }
+
     if (post !== null) {
-      res.render(EJS_PREFIX + "read", { user: userLogic.getLoggedInUser(), post: post, showBack: true });
+      res.render(EJS_PREFIX + "read", { user: userLogic.getLoggedInUser(), post: post, showBack: showBack });
     } else {
       // not found
       res.render(EJS_404_PAGE_PATH, { user: userLogic.getLoggedInUser() });
@@ -76,7 +84,7 @@ export const addPostsRouting = ((app: Express): void => {
     };
     postLogic.createPost(newPost);
     const post = postLogic.findPost(newPost.id);
-    res.redirect("/posts/" + post!.id)
+    res.redirect("/posts/" + post!.id + "?showBack=false")
   });
 
   app.get(URL_PREFIX + "/update/:id", function (req, res, next) {

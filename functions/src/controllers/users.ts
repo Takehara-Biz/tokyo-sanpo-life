@@ -35,7 +35,7 @@ export const addUsersRouting = ((app: Express): void => {
 
   app.get(URL_PREFIX + "/login", function (req, res, next) {
     const successfulLogoutToast = req.query.successfulLogoutToast != undefined;
-    res.render("pages/user/login", { user: userLogic.getLoggedInUser(), successfulLogoutToast: successfulLogoutToast });
+    res.render(EJS_PREFIX + "login", { user: userLogic.getLoggedInUser(), successfulLogoutToast: successfulLogoutToast });
   });
   app.post(URL_PREFIX + "/login", function (req, res, next) {
     const user = userLogic.findUser("1");
