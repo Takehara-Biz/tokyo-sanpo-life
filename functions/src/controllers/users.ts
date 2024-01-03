@@ -1,7 +1,7 @@
 import { Express } from "express";
 import { userLogic } from "../models/bizlogic/userLogic";
 import { IUser } from "../models/serverTslDef";
-import { firebaseAuthDao } from "../models/dao/firebaseAuthDao";
+import { firebaseAuthDao } from "../models/auth/firebaseAuthDao";
 import { defaultUserIconBase64 } from "../models/dao/defaultUserIconBase64";
 import { EJS_401_PAGE_PATH, EJS_404_PAGE_PATH } from "./errors";
 
@@ -35,7 +35,7 @@ export const addUsersRouting = ((app: Express): void => {
 
   app.get(URL_PREFIX + "/login", function (req, res, next) {
     const successfulLogoutToast = req.query.successfulLogoutToast != undefined;
-    res.render("pages/user/login", { user: userLogic.getLoggedInUser(), successfulLogoutToast: successfulLogoutToast });
+    res.render(EJS_PREFIX + "login", { user: userLogic.getLoggedInUser(), successfulLogoutToast: successfulLogoutToast });
   });
   app.post(URL_PREFIX + "/login", function (req, res, next) {
     const user = userLogic.findUser("1");

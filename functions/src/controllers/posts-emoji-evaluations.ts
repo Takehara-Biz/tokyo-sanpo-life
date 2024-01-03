@@ -1,6 +1,6 @@
 import { Express } from "express";
 import { postLogic } from "../models/bizlogic/postLogic";
-import { firebaseAuthDao } from "../models/dao/firebaseAuthDao";
+import { firebaseAuthDao } from "../models/auth/firebaseAuthDao";
 
 /**
  * implements URL related to "posts/:id/emojiEvaluations" pages.

@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "tokyo-sanpo-life"
-  }
+    "dev": "tokyo-sanpo-life-dev",
+    "stg": "tokyo-sanpo-life-stg",
+    "prod": "tokyo-sanpo-life"
+  },
+  "targets": {},
+  "etags": {}
 }

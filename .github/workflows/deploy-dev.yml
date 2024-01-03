@@ -1,0 +1,34 @@
+# Reference
+# https://github.com/milan-lakhani/action-hosting-deploy-withFuntions/blob/main/README.md#deploy-to-your-live-channel-on-merge
+# https://github.com/marketplace/actions/deploy-to-firebase-hosting-with-functions
+
+name: Deploy to Live Channel
+
+on:
+  push:
+    branches:
+      - develop
+    # Optionally configure to run only for specific files. For example:
+    # paths:
+    # - "website/**"
+
+jobs:
+  deploy_live_website:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Add any build steps here. For example:
+      # - run: npm ci && npm run build
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - name: run-before-deploy
+        run: ./run-before-deploy.bash dev
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}"
+          projectId: tokyo-sanpo-life-dev
+          channelId: live
