@@ -1,7 +1,7 @@
 import { Express } from "express";
 import { userLogic } from "../models/bizlogic/userLogic";
 import { IUser } from "../models/serverTslDef";
-import { firebaseAuthDao } from "../models/dao/firebaseAuthDao";
+import { firebaseAuthDao } from "../models/auth/firebaseAuthDao";
 import { defaultUserIconBase64 } from "../models/dao/defaultUserIconBase64";
 import { EJS_401_PAGE_PATH, EJS_404_PAGE_PATH } from "./errors";
 
