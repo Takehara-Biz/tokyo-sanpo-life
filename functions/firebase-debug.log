@@ -1,0 +1,39 @@
+[debug] [2024-01-03T16:08:13.238Z] ----------------------------------------------------------------------
+[debug] [2024-01-03T16:08:13.240Z] Command:       /Users/libertytakehara/.nodebrew/node/v20.6.1/bin/node /Users/libertytakehara/.nodebrew/current/bin/firebase serve
+[debug] [2024-01-03T16:08:13.240Z] CLI Version:   13.0.2
+[debug] [2024-01-03T16:08:13.240Z] Platform:      darwin
+[debug] [2024-01-03T16:08:13.240Z] Node Version:  v20.6.1
+[debug] [2024-01-03T16:08:13.240Z] Time:          Thu Jan 04 2024 01:08:13 GMT+0900 (Japan Standard Time)
+[debug] [2024-01-03T16:08:13.240Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-01-03T16:08:13.277Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-01-03T16:08:13.277Z] > authorizing via signed-in user (takehara@liberty-it.biz)
+[debug] [2024-01-03T16:08:13.277Z] [iam] checking project tokyo-sanpo-life-dev for permissions ["firebase.projects.get"]
+[debug] [2024-01-03T16:08:13.278Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/tokyo-sanpo-life-dev:testIamPermissions [none]
+[debug] [2024-01-03T16:08:13.278Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/tokyo-sanpo-life-dev:testIamPermissions x-goog-quota-user=projects/tokyo-sanpo-life-dev
+[debug] [2024-01-03T16:08:13.278Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/tokyo-sanpo-life-dev:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-01-03T16:08:13.993Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/tokyo-sanpo-life-dev:testIamPermissions 200
+[debug] [2024-01-03T16:08:13.994Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/tokyo-sanpo-life-dev:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2024-01-03T16:08:13.994Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev [none]
+[debug] [2024-01-03T16:08:14.398Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev 200
+[debug] [2024-01-03T16:08:14.399Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev {"projectId":"tokyo-sanpo-life-dev","projectNumber":"159581969806","displayName":"tokyo-sanpo-life-dev","name":"projects/tokyo-sanpo-life-dev","resources":{"hostingSite":"tokyo-sanpo-life-dev"},"state":"ACTIVE","etag":"1_4a665702-fab6-4b7a-90dd-00a7f590e16f"}
+[info] 
+[info] === Serving from '/Users/libertytakehara/Desktop/workspace/github/tokyo-sanpo-life'...
+[info] 
+[debug] [2024-01-03T16:08:14.404Z] defaultcredentials: writing to file /Users/libertytakehara/.config/firebase/takehara_liberty-it_biz_application_default_credentials.json
+[debug] [2024-01-03T16:08:14.405Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev/sites 
+[debug] [2024-01-03T16:08:14.409Z] Setting GAC to /Users/libertytakehara/.config/firebase/takehara_liberty-it_biz_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /Users/libertytakehara/.config/firebase/takehara_liberty-it_biz_application_default_credentials.json"}}
+[debug] [2024-01-03T16:08:14.409Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev/adminSdkConfig [none]
+[debug] [2024-01-03T16:08:14.656Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev/adminSdkConfig 200
+[debug] [2024-01-03T16:08:14.656Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev/adminSdkConfig {"projectId":"tokyo-sanpo-life-dev","storageBucket":"tokyo-sanpo-life-dev.appspot.com"}
+[debug] [2024-01-03T16:08:15.041Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev/sites 200
+[debug] [2024-01-03T16:08:15.042Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev/sites {"sites":[{"name":"projects/tokyo-sanpo-life-dev/sites/tokyo-sanpo-life-dev","defaultUrl":"https://tokyo-sanpo-life-dev.web.app","appId":"1:159581969806:web:19065f6a113d7e474498df","type":"DEFAULT_SITE"}]}
+[debug] [2024-01-03T16:08:15.042Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev/webApps/1:159581969806:web:19065f6a113d7e474498df/config [none]
+[debug] [2024-01-03T16:08:15.800Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev/webApps/1:159581969806:web:19065f6a113d7e474498df/config 200
+[debug] [2024-01-03T16:08:15.801Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev/webApps/1:159581969806:web:19065f6a113d7e474498df/config {"projectId":"tokyo-sanpo-life-dev","appId":"1:159581969806:web:19065f6a113d7e474498df","storageBucket":"tokyo-sanpo-life-dev.appspot.com","apiKey":"AIzaSyCM17cUkdRUoRDcn9y09z_bma0igDW9g6Y","authDomain":"tokyo-sanpo-life-dev.firebaseapp.com","messagingSenderId":"159581969806","measurementId":"G-40W74984P7"}
+[debug] [2024-01-03T16:08:15.825Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev [none]
+[debug] [2024-01-03T16:08:16.049Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev 200
+[debug] [2024-01-03T16:08:16.050Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/tokyo-sanpo-life-dev {"projectId":"tokyo-sanpo-life-dev","projectNumber":"159581969806","displayName":"tokyo-sanpo-life-dev","name":"projects/tokyo-sanpo-life-dev","resources":{"hostingSite":"tokyo-sanpo-life-dev"},"state":"ACTIVE","etag":"1_4a665702-fab6-4b7a-90dd-00a7f590e16f"}
+[info] i  functions: Watching "/Users/libertytakehara/Desktop/workspace/github/tokyo-sanpo-life/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/libertytakehara/Desktop/workspace/github/tokyo-sanpo-life/functions\" for Cloud Functions..."}}
+[info] i  hosting[tokyo-sanpo-life-dev]: Serving hosting files from: public {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mpublic\u001b[22m"}}
+[info] ✔  hosting[tokyo-sanpo-life-dev]: Local server: http://localhost:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:5000\u001b[22m\u001b[24m"}}
