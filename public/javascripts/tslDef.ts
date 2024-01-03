@@ -56,10 +56,10 @@ CategoryIdAndMarkerTypeDefMap.set(PostCategory.Other.getId(), {iconKeyWord: "lig
 interface IUser {
   id: string,
   userName: string,
-  iconUrl: string,
-  selfIntroduction?: string;
-  twitterProfileLink?: string;
-  instagramProfileLink?: string;
+  userIconBase64: string,
+  selfIntroduction: string;
+  xProfileLink: string;
+  instagramProfileLink: string;
 }
 
 /**
@@ -85,4 +85,19 @@ interface IPost {
   description: string;
   insertDate: Date;
   postComments: IPostComment[];
+  emojiEvaluations: IEmojiEvaluation[];
+}
+
+/**
+ * 絵文字評価
+ */
+interface IEmojiEvaluation {
+
+  evaludatedPostId: string;
+  /**
+   * the type of emoji
+   */
+  unicode: string;
+
+  evaluatingUserId: string;
 }

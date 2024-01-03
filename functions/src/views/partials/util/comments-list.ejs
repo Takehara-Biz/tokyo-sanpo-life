@@ -1,0 +1,14 @@
+<% for (const comment of post.postComments) { %>
+  <hr />
+  <div class="w-full px-4 py-2">
+    <div style="display:flex; justify-content:space-between;">
+      <%- include('./user-icon-name-s', {iconUrl: post.user.userIconBase64, userName: post.user.userName}) %>
+      <span style="font-size: small; margin-left:20px;">
+        <%= comment.commentDate.toLocaleString("ja-JP") %>
+      </span>
+    </div>
+    <p class="w-full break-words">
+      <%= comment.comment %>
+    </p>
+  </div>
+<% } %>

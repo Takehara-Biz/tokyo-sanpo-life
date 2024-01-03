@@ -1,0 +1,20 @@
+<!-- [BEGIN] Header -->
+<nav class="h-11 flex justify-between items-center" style="height: 44px; padding: 2px 8px;">
+  <div
+    class="material-symbols-outlined text-accent <% if (/* if showBack is not defined */ !locals.showBack) { %>invisible<% } %>"
+    onclick="history.back()">
+    arrow_back
+  </div>
+  <div class="flex justify-center items-center">
+    <img src="/images/tsl-symbol/kkrn_icon_kirakira_2.svg" width="40px" class="inline" />
+    <div class="mb-0 font-tsl_title text-accent text-2xl">東京散歩ライフ</div>
+    <img src="/images/tsl-symbol/kkrn_icon_kirakira_2.svg" width="40px" class="inline" />
+  </div>
+  <a class="nav-link flex flex-col items-center"
+    href="/users/<% if (user === undefined) { %>login<% } else { %>my-page<% } %>">
+    <img width="40px" height="40px"
+      src="<% if (user === undefined) { %>/images/user-icon/kkrn_icon_user_11.svg<% } else { %><%= user.userIconBase64 %><% } %>"
+      style="border: 2px solid #ff0099; border-radius:50%;" />
+  </a>
+</nav>
+<!-- [  END] Header -->

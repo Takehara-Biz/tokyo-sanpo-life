@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../../partials/common/head'); %>
+    <style>
+      h2 {
+        font-size: medium;
+      }
+
+      ul {
+        list-style-type: disc;
+      }
+    </style>
+</head>
+
+<body>
+  <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
+    <%- include('../../partials/common/header', {user: user}); %>
+      <!-- Main Body -->
+      <div class="grow overflow-y-scroll">
+        <%- include('../../partials/common/page-title', {title: '技術情報' }); %>
+          <div class="p-1">
+            <p>本Webアプリは、以下の技術により構成されています。</p>
+            <ul>
+              <li><a href="https://nodejs.org/en" target="_blank">Node.js</a></li>
+              <li><a href="https://expressjs.com/" target="_blank">Express</a></li>
+              <li><a href="https://ejs.co/" target="_blank">EJS</a></li>
+              <li><a href="https://www.typescriptlang.org/" target="_blank">TypeScript</a></li>
+              <li><a href="https://tailwindcss.com/" target="_blank">Tailwind CSS</a></li>
+              <li><a href="https://getbootstrap.com/" target="_blank">Bootstrap</a></li>
+              <li>
+                <a href="https://firebase.google.com/" target="_blank">Firebase</a>
+                <ul>
+                  <li><a href="https://firebase.google.com/docs/hosting" target="_blank">Hosting</a></li>
+                  <li><a href="https://firebase.google.com/docs/functions" target="_blank">Functions</a></li>
+                  <li><a href="https://firebase.google.com/docs/auth" target="_blank">Authentication</a></li>
+                  <li><a href="https://firebase.google.com/docs/firestore" target="_blank">Firestore</a></li>
+                  <li><a href="https://firebase.google.com/docs/storage" target="_blank">Storage</a></li>
+                </ul>
+              </li>
+              <li><a href="https://developers.google.com/maps" target="_blank">Google Maps Platform</a></li>
+            </ul>
+            <h2>フォント・アイコンなど</h2>
+            <ul>
+              <li><a href="https://fonts.google.com/specimen/Kaisei+Decol" target="_blank">Kaisei Decol</a></li>
+              <li><a href="https://fonts.google.com/noto/specimen/Noto+Sans+JP" target="_blank">Noto Sans Japanese</a>
+              </li>
+              <li><a href="https://fonts.google.com/icons" target="_blank">Google Fonts Icon</a></li>
+              <li><a href="https://github.com/nolanlawson/emoji-picker-element" target="_blank">emoji-picker-element</a>
+              </li>
+            </ul>
+          </div>
+      </div>
+      <%- include('../../partials/common/footer', {currentMenu: 5}); %>
+  </div>
+</body>
+
+</html>

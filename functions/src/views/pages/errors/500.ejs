@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../../partials/common/head'); %>
+  </head>
+  <body>
+    <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
+    <%- include('../../partials/common/header'); %>
+    <!-- Main Body -->
+    <div class="flex-grow flex justify-center items-center">
+      <p>😭サーバでエラーが発生しました。</p>
+      <p><%= errorMessage %></p>
+    </div>
+    <%- include('../../partials/common/footer', {currentMenu: null}); %>
+    </div>
+  </body>
+</html>

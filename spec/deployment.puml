@@ -1,0 +1,31 @@
+@startuml Deployment Diagram
+title Deployment Diagram
+left to right direction
+
+actor user
+note bottom : uses web browser from a smartphone
+
+cloud firebase {
+  folder hosting
+  note bottom
+    having
+    * images
+    * javascripts
+    * stylesheets
+  end note
+  node functions {
+    node Express
+    note bottom : Node.js framework
+  }
+  person authentication
+  database firestore
+}
+cloud "Google Maps Platform" as gmp
+
+user --> hosting
+hosting --> Express
+Express --> authentication
+Express --> firestore
+user --> gmp : when draws a map
+
+@enduml

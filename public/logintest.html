@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+</head>
+
+<body>
+  login test
+  <!-- The surrounding HTML is left untouched by FirebaseUI.
+     Your app may use that space for branding, controls and other customizations.-->
+  <h1>Welcome to My Awesome App</h1>
+  <button onclick="loginWithGoogle();">login with Google Account!</button>
+  <button onclick="loginWithTwitter();">login with X (Twitter) Account!</button>
+  <div id="firebaseui-auth-container"></div>
+  <div id="loader">Loading...</div>
+  <button onclick="logout();">logout!!!!</button>
+  <script type="module" src="/javascripts/firebaseAuth.js"></script>
+</body>
+
+</html>

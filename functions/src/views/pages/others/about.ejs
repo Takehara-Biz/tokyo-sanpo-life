@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../../partials/common/head'); %>
+  <style>
+    h2 {
+      font-size: large;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
+    <%- include('../../partials/common/header', {user: user}); %>
+      <!-- Main Body -->
+      <div class="grow overflow-y-scroll">
+        <%- include('../../partials/common/page-title', {title: 'このサイトについて' }); %>
+          <div class="p-1">
+            <h2>目的</h2>
+            <p>散歩好きなエンジニアが、散歩のオフ会を活性化するために、散歩のクチコミ情報を、誰でも簡単に登録・閲覧できるWebアプリを作りました。無料でお使いいただけます。</p>
+            <h2>本サービスに関するお問い合わせ先</h2>
+            X（旧：ツイッター）からDMをください。
+            <p><a href="https://twitter.com/tokyosanpolife">@tokyosanpolife</a></p>
+            <h2>想定デバイス</h2>
+            <p>スマホを縦向き🤳で快適にお使いいただけるデザインにしています。</p>
+            <h2>スペシャルサンクス</h2>
+            <p>本Webアプリ作成でお世話になった方々・サイトを紹介いたします😊。</p>
+            <dl>
+              <dt><a href="https://kiyaku.jp/index.html">Webサイトの利用規約</a></dt>
+              <dd>利用規約・プライバシーポリシー・クッキーポリシーでお世話になりました🙇‍♂️</dd>
+            </dl>
+            <dl>
+              <dt><a href="https://kotonohaworks.com/">コトノハワークス</a></dt>
+              <dd>さまざまなアイコン画像を使用させていただきました🙇‍♂️</dd>
+            </dl>
+            <dl>
+              <dt><a href="https://publicdomainq.net/cherry-blossoms-spring-0070421/">パブリックドメインQ</a></dt>
+              <dd>「[フリー写真] 桜が満開の川沿いの遊歩道の風景」を使用させていただきました🙇‍♂️</dd>
+            </dl>
+          </div>
+          <p class="text-center m-0"><small >(c) LIBERTY</small></p>
+          
+      </div>
+      <%- include('../../partials/common/footer', {currentMenu: 5}); %>
+  </div>
+</body>
+
+</html>

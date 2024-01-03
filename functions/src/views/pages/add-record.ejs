@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../partials/common/head'); %>
+</head>
+
+<body>
+  <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
+    <%- include('../partials/common/header'); %>
+      <!-- Main Body -->
+      <div class="grow overflow-y-scroll">
+        <%- include('../partials/exclusive/add-tab', {currentMenu: 1}); %>
+        <div class="p-2">
+          <p class="mt-3">
+            今日も一日おつかれさまでした。<br />
+            歩数をXにポストしましょう〜😌
+          </p>
+          <form onsubmit="return false;">
+            <div class="mt-3">
+              <label for="stepRecordLabel" class="form-label">⬇️今日の歩数を数字で入力してください</label>
+              <input id="stepRecord" type="number" class="form-control text-right" style="font-size: 200%;" id="stepRecordLabel" required min="0" max="99999">
+            </div>
+            <br />
+            <%- include('../partials/util/icon-button', {onClickCode: "validateAndOpenX();", googleIconName: "share", label: "Xで投稿する"}); %>
+            <!-- <button class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" onclick="validateAndOpenX();">
+              <span class="material-symbols-outlined align-[-6px]" data-bs-toggle="dropdown" aria-expanded="false">
+                share
+              </span>
+              Xで投稿する
+            </button> -->
+            <script>
+              function validateAndOpenX(){
+                const value = Number(document.getElementById('stepRecord').value);
+                //alert(value);
+                if(value == NaN || value < 1 || 99999 < value){
+                  alert('有効な数字を入力してください (1 ~ 99999)。');
+                  return;
+                }
+                const href = 'https://twitter.com/intent/tweet?url=https://tokyo-sanpo-life.web.app/how-to-use&text=今日は' + value + '歩あるきました！&hashtags=東京散歩ライフ';
+                location.href = href;
+              }
+            </script>
+          </form>
+      </div>
+      </div>
+      <%- include('../partials/common/footer', {currentMenu: 4}); %>
+  </div>
+</body>
+
+</html>

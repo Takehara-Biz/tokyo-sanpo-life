@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../../partials/common/head'); %>
+</head>
+
+<body>
+  <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
+    <%- include('../../partials/common/header'); %>
+      <!-- Main Body -->
+      <div class="grow overflow-y-scroll flex flex-col">
+        <%- include('../../partials/exclusive/posts-tab', {currentMenu: 2}); %>
+        <% if (user === undefined) { %>
+          <%- include('../../partials/common/urge-login'); %>
+        <% } else { %>
+          <% for (var post of myPosts) { %>
+            <%- include('../../partials/exclusive/posts-list-item', {post: post}); %>
+          <% } %>
+        <% } %>
+      </div>
+      <%- include('../../partials/common/footer', {currentMenu: 2}); %>
+        <!-- Toast -->
+        <%- include('../../partials/util/toast', {message: "投稿を削除しました"}); %>
+        <script>
+          window.onload = (() => {
+            let toast = false;
+            <% if (/* if toast is defined and true */ locals.deletedToast === true) { %>
+              toast = true;
+            <% } %>
+            if (toast) {
+              const toastLiveExample = document.getElementById('liveToast')
+              const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+              toastBootstrap.show();
+            }
+          });
+        </script>
+  </div>
+</body>
+
+</html>

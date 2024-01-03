@@ -1,0 +1,44 @@
+@startuml DomainModel Diagram
+title DomainModel Diagram
+left to right direction
+hide circle
+hide empty methods
+
+class User {}
+note right: can only see without login.
+
+class LoggedInUser {
+  UserId
+  UserName
+  UserIcon
+}
+
+class Post {
+  PostId
+  Image
+  Category
+  Description
+  Location
+  PostedDateTime
+}
+
+class Comment {
+  Comment
+  CommentedDateTime
+}
+
+class EmojiEvaluation {
+  EmojiCode
+  Count
+}
+
+User <|- LoggedInUser
+LoggedInUser "1" -- "0..*" Post
+Post "1" - "0..*" Comment
+'(LoggedInUser, Post) .. Emoji : evaluate
+'(LoggedInUser, Comment) .. Emoji : evaluate
+
+Post "1" -- "0..*" EmojiEvaluation
+Comment "1" -- "0..*" EmojiEvaluation
+
+@enduml

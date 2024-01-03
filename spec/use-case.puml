@@ -1,0 +1,24 @@
+@startuml UseCase Diagram
+title UseCase Diagram
+left to right direction
+
+actor "User" as user
+rectangle TokyoSanpoLife {
+  usecase "Search posts with Map" as searchWithMap
+  usecase "Search posts with List" as searchWithList
+  usecase "Look a post" as lookPost
+  usecase "Log in" as login
+  usecase "Edit my info" as editMyInfo
+  usecase "Share today's walked steps with X" as shareWalkedSteps
+  usecase "Submit a new post" as createPost
+}
+user --> searchWithMap
+user --> searchWithList
+searchWithMap ..> lookPost : <<extend>>
+searchWithList ..> lookPost : <<extend>>
+user --> editMyInfo
+editMyInfo ..> login : <<include>>
+user --> shareWalkedSteps
+user --> createPost
+
+@enduml

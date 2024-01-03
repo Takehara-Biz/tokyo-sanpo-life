@@ -1,0 +1,22 @@
+<div id="content">
+  <div id="bodyContent" class="flex justify-between">
+    <img src='<%= post.imageUrl %>' width='50%' />
+    <div class="w-1/2 p-2">
+      <%- include('../util/user-icon-name-s', {iconUrl: post.user.iconUrl, userName: post.user.userName}) %>
+      <p class="text-sm">
+        <%= post.insertDate.toLocaleString("ja-JP") %>
+      </p>
+    </div>
+  </div>
+  <div class="p-2">
+    <p class="w-full break-words">
+      <%= post.description %>
+    </p>
+    <div>
+      <p class="m-2 text-center text-sm">コメント</p>
+      <%- include('../util/comments-list'); %>
+    </div>
+    <hr />
+    <%- include('../util/add-comment-section'); %>
+  </div>
+</div>
