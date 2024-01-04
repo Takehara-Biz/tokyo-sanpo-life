@@ -19,7 +19,6 @@
 // });
 
 const functions = require("firebase-functions");
-// Expressの読み込み
 const express = require("express");
 const cookieParser = require('cookie-parser');
 
@@ -29,6 +28,7 @@ import { TslLogUtil } from "./utils/tslLogUtil";
 import { Request, Response, NextFunction } from "express";
 import { TSLThreadLocal } from "./utils/tslThreadLocal";
 import { userLogic } from "./models/bizlogic/userLogic";
+import { FirebaseAdminManager } from "./models/firebase/firebaseAdminManager";
 
 const app = express();
 // const port = 3000
@@ -51,10 +51,14 @@ app.use(express.static("public"));
  */
 app.use(function (req: Request, res: Response, next: NextFunction) {
   TslLogUtil.info("[BEGIN] " + req.method + " " + req.url + ",\nreq.params=" + JSON.stringify(req.params) + ",\nreq.body=" + JSON.stringify(req.body));
-  TslLogUtil.debug("req.cookies=" + JSON.stringify(req.cookies));
+
+  const reqCookies = "req.cookies=" + JSON.stringify(req.cookies);
+  TslLogUtil.debug(reqCookies.substring(0, 100));
   next();
-  TslLogUtil.info("[  END] " + req.url);
-  TslLogUtil.debug("res.cookie=" + res.get('Set-Cookie'));
+  TslLogUtil.info("[  END] " + req.method + " " + req.url);
+
+  const resCookie = "res.cookie=" + res.get('Set-Cookie');
+  TslLogUtil.debug(resCookie.substring(0, 100));
 });
 
 /**
@@ -64,13 +68,21 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
   const idToken = req.cookies['idToken'];
   const threadLocal = new TSLThreadLocal();
   if (idToken != null) {
+    TslLogUtil.debug('request has the "idToken" in the cookie!');
     const uid = await firebaseAuthDao.verifyIdToken(idToken);
     if (uid != null) {
       threadLocal.identifiedFirebaseUserId = uid;
       if (userLogic.alreadyLoggedIn(uid)) {
+        TslLogUtil.debug('already logged in user!');
         threadLocal.loggedInUser = userLogic.getLoggedInUser(uid);
+      } else {
+        TslLogUtil.debug('This user has not log in yet.');
       }
+    } else {
+      TslLogUtil.warn('invalid uid...');
     }
+  } else {
+    TslLogUtil.debug('request does NOT have the "idToken" in the cookie...');
   }
 
   TslLogUtil.debug('threadLocal.identifiedFirebaseUserId : ' + threadLocal.identifiedFirebaseUserId);
@@ -84,6 +96,8 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
   );
 });
 
+FirebaseAdminManager.initialize();
+//FirebaseManager.initialize();
 
 routing(app);
 

@@ -24,7 +24,7 @@ export const addPostsRouting = ((app: Express): void => {
   app.get(URL_PREFIX + "/my-list", function (req, res, next) {
     let myPosts: IPost[] = [];
     if (TSLThreadLocal.currentContext?.loggedInUser != undefined) {
-      const uid = TSLThreadLocal.currentContext!.loggedInUser!.id
+      const uid = TSLThreadLocal.currentContext!.loggedInUser!.firebaseUserId
       myPosts.push(...postLogic.findPostsByUserId(uid));
     }
     CtrlUtil.render(res, EJS_PREFIX + "my-list", { myPosts: myPosts });

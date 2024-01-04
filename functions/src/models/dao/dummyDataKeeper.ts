@@ -26,7 +26,7 @@ class DummyDataKeeper {
   private generateRandomUsers(postCount: number): void {
     for (let i = 0; i < postCount; i++) {
       const user = {
-        id: i.toString(),
+        firebaseUserId: i.toString(),
         userName: DummyDataKeeper.generateRandomString(3, 12),
         userIconBase64: defaultUserIconBase64,
         selfIntroduction: "こんにちは〜。" + DummyDataKeeper.generateRandomString(1, 50),
@@ -45,7 +45,7 @@ class DummyDataKeeper {
       const post = {
         id: i.toString(),
         user: {
-          id: i.toString(),
+          firebaseUserId: i.toString(),
           userName: DummyDataKeeper.generateRandomString(3, 12),
           userIconBase64: defaultUserIconBase64,
           selfIntroduction: "",
@@ -71,7 +71,7 @@ class DummyDataKeeper {
       comments.push({
         id: i.toString(),
         user: {
-          id: i.toString(),
+          firebaseUserId: i.toString(),
           userName: DummyDataKeeper.generateRandomString(3, 12),
           userIconBase64: defaultUserIconBase64,
           selfIntroduction: "",

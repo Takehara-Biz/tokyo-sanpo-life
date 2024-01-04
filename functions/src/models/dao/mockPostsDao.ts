@@ -24,7 +24,7 @@ export class MockPostsDao implements IPostsDao {
 
   public listByUserId(userId: string): IPost[] {
     let list = [...dummyDataKeeper.idAndPostMap.values()]
-    list = list.filter((value: IPost) => value.user.id === userId);
+    list = list.filter((value: IPost) => value.user.firebaseUserId === userId);
     for(let index in list){
       // remove data used in only detail screen...
       list[index].postComments = [];

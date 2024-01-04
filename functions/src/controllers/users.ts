@@ -24,7 +24,7 @@ export const addUsersRouting = ((app: Express): void => {
   app.post(URL_PREFIX + "create", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
     const newUser: IUser = {
-      id: firebaseUserId!,
+      firebaseUserId: firebaseUserId!,
       userName: req.body.userName,
       userIconBase64: defaultUserIconBase64,
       selfIntroduction: req.body.selfIntroduction ?? "",
@@ -53,14 +53,23 @@ export const addUsersRouting = ((app: Express): void => {
     //res.cookie('uid', req.body.uid, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
     //res.cookie('token', req.body.token, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
     res.cookie('idToken', req.body.idToken, { maxAge: oneDayMilliSeconds, httpOnly: true, path: "/" });
+    TslLogUtil.debug('set idToken into res cookie!');
+
+    const resCookie = "res.cookie=" + res.get('Set-Cookie');
+    TslLogUtil.debug(resCookie.substring(0, 200));
 
 
-    const user = userLogic.findUser(firebaseUserId!);
+    TslLogUtil.debug('aaa');
+    const user = await userLogic.findUser(firebaseUserId!);
+    TslLogUtil.debug('ccc');
+
     if (user !== null) {
       userLogic.setLoggedInUser(firebaseUserId, user);
+      TslLogUtil.debug('redirect to my-page');
       res.redirect(URL_PREFIX + "my-page?toast");
     } else {
       // not found, must be registered at first!
+      TslLogUtil.debug('redirect to create');
       res.redirect(URL_PREFIX + "create");
     }
   });
@@ -91,7 +100,7 @@ export const addUsersRouting = ((app: Express): void => {
       return;
     }
 
-    const user = userLogic.findUser(firebaseUserId!);
+    const user = await userLogic.findUser(firebaseUserId!);
     user!.userName = req.body.userName,
     user!.selfIntroduction = req.body.selfIntroduction ?? "",
     user!.xProfileLink = req.body.xProfileURL ?? "",

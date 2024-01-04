@@ -1,11 +1,13 @@
 import { TslLogUtil } from "../../utils/tslLogUtil"
 import { TSLThreadLocal } from "../../utils/tslThreadLocal";
+import { FirestoreUsersDao } from "../dao/firestoreUsersDao";
 import { IUsersDao } from "../dao/iUsersDao";
-import { MockUsersDao } from "../dao/mockUsersDao";
+//import { MockUsersDao } from "../dao/mockUsersDao";
 import { IUser} from "../serverTslDef";
 
 class UserLogic {
-  private usersDao: IUsersDao = new MockUsersDao();
+  //private usersDao: IUsersDao = new MockUsersDao();
+  private usersDao: IUsersDao = new FirestoreUsersDao();
   private uidAndLoggedInUser = new Map<string, IUser>();
 
   public setLoggedInUser(uid: string, loggedInUser: IUser) {
@@ -25,9 +27,10 @@ class UserLogic {
     return TSLThreadLocal.currentContext?.loggedInUser != undefined
   }
 
-  public findUser(userId: string): IUser | null {
-    const result = this.usersDao.read(userId);
+  public async findUser(userId: string): Promise<IUser | null> {
+    const result = await this.usersDao.read(userId);
     //TslLogUtil.debug('findUser result : ' + JSON.stringify(result));
+    TslLogUtil.debug('bbb');
     return result;
   }
 

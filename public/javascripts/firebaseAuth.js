@@ -42,10 +42,10 @@ getRedirectResult(auth)
 .then((result) => {
   console.log('getRedirectResult then result : ' + JSON.stringify(result));
   
-  if(result == null){
-    console.log('before auth...');
-    return;
-  }
+  // if(result == null){
+  //   console.log('before auth...');
+  //   return;
+  // }
   // This gives you a Google Access Token. You can use it to access Google APIs.
   //const credential = GoogleAuthProvider.credentialFromResult(result);
   //console.log('credential : ' + JSON.stringify(credential));
