@@ -12,7 +12,7 @@
       list-style-type: disc;
     }
   </style>
-  <script type="module" src="/javascripts/firebaseAuth.js?ver=20240104173159"></script>
+  <script type="module" src="/javascripts/firebaseAuth.js?ver=20240104174655"></script>
 </head>
 
 <body>
@@ -23,7 +23,7 @@
         <%- include('../../partials/common/page-title', {title: 'ログイン（新規登録）' }); %>
           <div class="p-1">
             <p>ログインすると、散歩情報を投稿できるようになります。</p>
-            <%- include('../../partials/util/icon-button', {label: "Googleでログイン", onClickCode: "loginWithGoogle();", googleIconName: "login"}); %>
+            <%- include('../../partials/util/icon-button', {label: "Googleでログイン（新規登録）", onClickCode: "loginWithGoogle();", googleIconName: "login"}); %>
             <form action="/users/login" method="post">
               <input type="hidden" id="idToken" name="idToken" />
               <div class="hidden">
@@ -42,6 +42,8 @@
                 <li><a href="/others/privacy-policy">プライバシーポリシー</a></li>
                 <li><a href="/others/cookie-policy">クッキーポリシー</a></li>
               </ul>
+              Googleのアカウント情報は、本サービスの認証のためだけに使用するものであり、<br />
+              あなたがお使いの、GメールやGoogleカレンダー、GoogleMapなどのデータを読み書きすることはありません。
             </small>
           </div>
       </div>

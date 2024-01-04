@@ -22,6 +22,7 @@ export class MockUsersDao implements IUsersDao{
   }
 
   public delete(userId: string): void {
-    console.log('todo!');
+    TslLogUtil.info('deleteUser : ' + JSON.stringify(userId));
+    dummyDataKeeper.idAndUserMap.delete(userId);
   }
 }

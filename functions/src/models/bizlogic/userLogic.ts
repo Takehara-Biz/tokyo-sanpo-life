@@ -46,5 +46,9 @@ class UserLogic {
   public updateUser(user: IUser): void {
     return this.usersDao.update(user);
   }
+
+  public deleteUser(userId: string): void {
+    return this.usersDao.delete(userId);
+  }
 }
 export const userLogic = new UserLogic();
