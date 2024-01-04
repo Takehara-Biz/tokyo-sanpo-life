@@ -26,9 +26,16 @@ jobs:
           cache: npm
       - name: run-before-deploy
         run: ./run-before-deploy.bash dev
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      # - uses: FirebaseExtended/action-hosting-deploy@v0
+      #   with:
+      #     repoToken: "${{ secrets.GITHUB_TOKEN }}"
+      #     firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}"
+      #     projectId: tokyo-sanpo-life-dev
+      #     channelId: live
+      # ここからがデプロイのステップ
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
         with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}"
-          projectId: tokyo-sanpo-life-dev
-          channelId: live
+          args: deploy
+        env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV }}
