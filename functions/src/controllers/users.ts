@@ -4,6 +4,7 @@ import { IUser } from "../models/serverTslDef";
 import { firebaseAuthDao } from "../models/auth/firebaseAuthDao";
 import { defaultUserIconBase64 } from "../models/dao/defaultUserIconBase64";
 import { EJS_401_PAGE_PATH, EJS_404_PAGE_PATH } from "./errors";
+import { TslLogUtil } from "../utils/tslLogUtil";
 
 /**
  * implements URL related to user or authentication
@@ -37,22 +38,12 @@ export const addUsersRouting = ((app: Express): void => {
     const successfulLogoutToast = req.query.successfulLogoutToast != undefined;
     res.render(EJS_PREFIX + "login", { user: userLogic.getLoggedInUser(), successfulLogoutToast: successfulLogoutToast });
   });
-  app.post(URL_PREFIX + "/login", function (req, res, next) {
-    const user = userLogic.findUser("1");
-    if (user !== null) {
-      userLogic.setLoggedInUser(user);
-      res.redirect(URL_PREFIX + "/my-page?toast");
-    } else {
-      // not found
-      res.render(EJS_404_PAGE_PATH);
-    }
-  });
-
-  app.post(URL_PREFIX + "/login2", async function (req, res, next) {
+  app.post(URL_PREFIX + "/login", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.body.idToken);
     if (firebaseUserId == null) {
-      // unauthorized
-      res.render(EJS_401_PAGE_PATH, { user: userLogic.getLoggedInUser() });
+      TslLogUtil.warn('unauthorized!');
+      //res.render(EJS_401_PAGE_PATH, { user: userLogic.getLoggedInUser() });
+      res.redirect("errors/401");
       return;
     }
 

@@ -23,13 +23,6 @@ const loginWithGoogle = (() => {
 window.loginWithGoogle = loginWithGoogle;
 export {loginWithGoogle};
 
-const twitterAuthProvider = new TwitterAuthProvider();
-const loginWithTwitter = (() => {
-  signInWithRedirect(auth, twitterAuthProvider);
-});
-window.loginWithTwitter = loginWithTwitter;
-export {loginWithTwitter};
-
 const logout = (() => {
   signOut(auth).then(() => {
     // Sign-out successful.

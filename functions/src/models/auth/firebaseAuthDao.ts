@@ -27,6 +27,7 @@ class FirebaseAuthDao {
    * @returns uid (Firebase User Id), or null (if invalid idToken)
    */
   public async verifyIdToken(idToken: string): Promise<string | null>{
+    TslLogUtil.debug("idToken: " + idToken);
     return await getAuth(this.app)
     .verifyIdToken(idToken)
     .then((decodedToken) => {
