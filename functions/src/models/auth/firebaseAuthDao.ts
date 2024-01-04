@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase-admin/auth';
-import { TslLogUtil } from '../../utils/tslLogUtil';
+import { ReqLogUtil } from '../../utils/reqLogUtil';
 import { FirebaseAdminManager } from '../firebase/firebaseAdminManager';
 
 class FirebaseAuthDao {
@@ -13,19 +13,19 @@ class FirebaseAuthDao {
    */
   public async verifyIdToken(idToken: string): Promise<string | null>{
     const log = "idToken: " + idToken;
-    TslLogUtil.debug(log.substring(0, 20));
+    ReqLogUtil.debug(log.substring(0, 20));
     return await getAuth(FirebaseAdminManager.app)
     .verifyIdToken(idToken)
     .then((decodedToken) => {
       //TslLogUtil.info('decodedToken : ' + JSON.stringify(decodedToken));
       const uid = decodedToken.uid;
-      TslLogUtil.info('uid : ' + uid);
+      ReqLogUtil.info('uid : ' + uid);
       // ...
       return uid;
     })
     .catch((error) => {
-      TslLogUtil.error('error occurred!');
-      TslLogUtil.error(error);
+      ReqLogUtil.error('error occurred!');
+      ReqLogUtil.error(error);
       // Handle error
       return null;
     });

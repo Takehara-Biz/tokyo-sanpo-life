@@ -1,4 +1,3 @@
-import { TslLogUtil } from "../../utils/tslLogUtil";
 import { IEmojiEvaluation, IPost, IPostComment, IUser, PostCategory } from "../serverTslDef";
 import { defaultUserIconBase64 } from "./defaultUserIconBase64";
 
@@ -13,7 +12,7 @@ class DummyDataKeeper {
   public idAndUserMap: Map<string, IUser> = new Map<string, IUser>();
   
   constructor() {
-    TslLogUtil.info('[BEGIN] PostsDao constructor');
+    console.info('[BEGIN] PostsDao constructor');
     this.generateRandomPosts(this.postCount);
     this.idSequence = this.postCount - 1;
     this.generateRandomUsers(this.userCount);

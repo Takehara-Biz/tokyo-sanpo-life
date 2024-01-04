@@ -1,7 +1,9 @@
+import { TSLThreadLocal } from "./tslThreadLocal";
+
 /**
- * Proxy class for logging.
+ * Proxy class for logging for request.
  */
-export class TslLogUtil {
+export class ReqLogUtil {
   // private static dateFormat = new Intl.DateTimeFormat(
   //   "ja-JP",
   //   {
@@ -28,7 +30,7 @@ export class TslLogUtil {
    * @param message
    */
   public static error(message: any): void {
-    console.error("[ERROR] " + message);
+    console.error("[" + TSLThreadLocal.currentContext.requestId + "] [ERROR] " + message);
   }
 
   /**
@@ -36,7 +38,7 @@ export class TslLogUtil {
    * @param message
    */
   public static warn(message: any): void {
-    console.warn("[ WARN] " + message);
+    console.warn("[" + TSLThreadLocal.currentContext.requestId + "] [ WARN] " + message);
   }
 
   /**
@@ -44,13 +46,13 @@ export class TslLogUtil {
    * @param message
    */
   public static info(message: any): void {
-    console.info("[ INFO] " + message);
+    console.info("[" + TSLThreadLocal.currentContext.requestId + "] [ INFO] " + message);
   }
   /**
    *
    * @param message
    */
   public static debug(message: any): void {
-    console.debug("[DEBUG] " + message);
+    console.debug("[" + TSLThreadLocal.currentContext.requestId + "] [DEBUG] " + message);
   }
 }

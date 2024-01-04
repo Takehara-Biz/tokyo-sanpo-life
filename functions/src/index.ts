@@ -24,7 +24,7 @@ const cookieParser = require('cookie-parser');
 
 import { routing } from "./controllers/routes";
 import { firebaseAuthDao } from "./models/auth/firebaseAuthDao";
-import { TslLogUtil } from "./utils/tslLogUtil";
+import { ReqLogUtil } from "./utils/reqLogUtil";
 import { Request, Response, NextFunction } from "express";
 import { TSLThreadLocal } from "./utils/tslThreadLocal";
 import { userLogic } from "./models/bizlogic/userLogic";
@@ -47,58 +47,67 @@ app.use(express.static("public"));
 // app.use(favicon("./src/kkrn_icon_kirakira_2.svg"));
 
 /**
+ * for local thread
+ */
+app.use(async function (req: Request, res: Response, next: NextFunction) {
+  console.debug('for local thread');
+  await TSLThreadLocal.storage.run(
+    new TSLThreadLocal(),
+    async () => {
+      next();
+    },
+  );
+});
+
+/**
  * for logging
  */
-app.use(function (req: Request, res: Response, next: NextFunction) {
-  TslLogUtil.info("[BEGIN] " + req.method + " " + req.url + ",\nreq.params=" + JSON.stringify(req.params) + ",\nreq.body=" + JSON.stringify(req.body));
+app.use(async function (req: Request, res: Response, next: NextFunction) {
+  console.debug('for logging');
+  ReqLogUtil.info("[BEGIN] " + req.method + " " + req.url + ",\nreq.params=" + JSON.stringify(req.params) + ",\nreq.body=" + JSON.stringify(req.body));
 
   const reqCookies = "req.cookies=" + JSON.stringify(req.cookies);
-  TslLogUtil.debug(reqCookies.substring(0, 100));
+  ReqLogUtil.debug(reqCookies.substring(0, 100));
   next();
-  TslLogUtil.info("[  END] " + req.method + " " + req.url);
+  ReqLogUtil.info("[  END] " + req.method + " " + req.url);
 
   const resCookie = "res.cookie=" + res.get('Set-Cookie');
-  TslLogUtil.debug(resCookie.substring(0, 100));
+  ReqLogUtil.debug(resCookie.substring(0, 100));
 });
 
 /**
  * for auth
  */
 app.use(async function (req: Request, res: Response, next: NextFunction) {
+  console.debug('for auth');
   const idToken = req.cookies['idToken'];
-  const threadLocal = new TSLThreadLocal();
   if (idToken != null) {
-    TslLogUtil.debug('request has the "idToken" in the cookie!');
+    ReqLogUtil.debug('request has the "idToken" in the cookie!');
     const uid = await firebaseAuthDao.verifyIdToken(idToken);
     if (uid != null) {
       const user = await userLogic.findUser(uid);
-      threadLocal.identifiedFirebaseUserId = uid;
+      TSLThreadLocal.currentContext.identifiedFirebaseUserId = uid;
       if (user != null) {
         if (user.loggedIn) {
-          TslLogUtil.debug('already logged in user!');
-          threadLocal.loggedInUser = user;
+          ReqLogUtil.debug('already logged in user!');
+          TSLThreadLocal.currentContext.loggedInUser = user;
         } else {
-          TslLogUtil.debug('This user has not log in yet.');
+          ReqLogUtil.debug('This user has not log in yet.');
         }
       } else {
-        TslLogUtil.debug('This user has not created the TSL account yet.');
+        ReqLogUtil.debug('This user has not created the TSL account yet.');
       }
     } else {
-      TslLogUtil.warn('invalid uid...');
+      ReqLogUtil.warn('invalid uid...');
     }
   } else {
-    TslLogUtil.debug('request does NOT have the "idToken" in the cookie...');
+    ReqLogUtil.debug('request does NOT have the "idToken" in the cookie...');
   }
 
-  TslLogUtil.debug('threadLocal.identifiedFirebaseUserId : ' + threadLocal.identifiedFirebaseUserId);
-  TslLogUtil.debug('threadLocal.loggedInUser : ' + threadLocal.loggedInUser);
+  ReqLogUtil.debug('threadLocal.identifiedFirebaseUserId : ' + TSLThreadLocal.currentContext.identifiedFirebaseUserId);
+  ReqLogUtil.debug('threadLocal.loggedInUser : ' + TSLThreadLocal.currentContext.loggedInUser);
 
-  TSLThreadLocal.storage.run(
-    threadLocal,
-    async () => {
-      next();
-    },
-  );
+  next();
 });
 
 FirebaseAdminManager.initialize();

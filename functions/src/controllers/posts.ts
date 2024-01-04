@@ -1,7 +1,7 @@
 import { Express } from "express";
 import { postLogic } from "../models/bizlogic/postLogic";
 import { IPost, PostCategory } from "../models/serverTslDef";
-import { TslLogUtil } from "../utils/tslLogUtil";
+import { ReqLogUtil } from "../utils/reqLogUtil";
 import { EJS_404_PAGE_PATH, EJS_500_PAGE_PATH } from "./errors";
 import { CtrlUtil } from "./ctrlUtil";
 import { TSLThreadLocal } from "../utils/tslThreadLocal";
@@ -55,8 +55,8 @@ export const addPostsRouting = ((app: Express): void => {
     try {
       postLogic.deletePost(req.params.id!.toString());
     } catch (error) {
-      TslLogUtil.warn('failed to delete the post ' + req.query.id);
-      TslLogUtil.warn(error);
+      ReqLogUtil.warn('failed to delete the post ' + req.query.id);
+      ReqLogUtil.warn(error);
       res.render(EJS_500_PAGE_PATH);
       return;
     }
@@ -64,16 +64,16 @@ export const addPostsRouting = ((app: Express): void => {
   });
 
   app.post(URL_PREFIX, function (req, res, next) {
-    TslLogUtil.debug("req.body : " + JSON.stringify(req.body));
-    TslLogUtil.debug("req.body.comment : " + req.body.comment);
-    TslLogUtil.debug("req.body.postCategory : " + req.body.postCategory);
-    TslLogUtil.debug("req.body.uploadPhoto : " + req.body.uploadPhoto);
-    TslLogUtil.debug("req.body.markerLat : " + req.body.markerLat);
-    TslLogUtil.debug("req.body.markerLng : " + req.body.markerLng);
+    ReqLogUtil.debug("req.body : " + JSON.stringify(req.body));
+    ReqLogUtil.debug("req.body.comment : " + req.body.comment);
+    ReqLogUtil.debug("req.body.postCategory : " + req.body.postCategory);
+    ReqLogUtil.debug("req.body.uploadPhoto : " + req.body.uploadPhoto);
+    ReqLogUtil.debug("req.body.markerLat : " + req.body.markerLat);
+    ReqLogUtil.debug("req.body.markerLng : " + req.body.markerLng);
 
     const postCategory = PostCategory.findCategory(Number(req.body.postCategory));
-    TslLogUtil.debug("aa" + postCategory);
-    TslLogUtil.debug("aa" + postCategory.getLabel());
+    ReqLogUtil.debug("aa" + postCategory);
+    ReqLogUtil.debug("aa" + postCategory.getLabel());
     const newPost: IPost = {
       id: "this will be updated in dao class",
       user: TSLThreadLocal.currentContext!.loggedInUser!,

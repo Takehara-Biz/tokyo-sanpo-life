@@ -1,13 +1,13 @@
-import { TslLogUtil } from "../../utils/tslLogUtil";
+import { ReqLogUtil } from "../../utils/reqLogUtil";
 import { IEmojiEvaluation } from "../serverTslDef";
 import { dummyDataKeeper } from "./dummyDataKeeper";
 import { IEmojiEvaluationsDao } from "./iEmojiEvaluationsDao";
 
 export class MockEmojiEvaluationsDao implements IEmojiEvaluationsDao {
   public list(postId: string): IEmojiEvaluation[] {
-    TslLogUtil.debug('postId: ' + postId);
+    ReqLogUtil.debug('postId: ' + postId);
     const post = dummyDataKeeper.idAndPostMap.get(postId);
-    TslLogUtil.info('emojiEvaluations length : ' + post!.emojiEvaluations.length);
+    ReqLogUtil.info('emojiEvaluations length : ' + post!.emojiEvaluations.length);
     return post!.emojiEvaluations;
   }
 
@@ -15,13 +15,13 @@ export class MockEmojiEvaluationsDao implements IEmojiEvaluationsDao {
     const post = dummyDataKeeper.idAndPostMap.get(postId);
     for(let emojiEvaluation of post!.emojiEvaluations) {
       if(emojiEvaluation.evaluatingUserId == evaluatingUserId && emojiEvaluation.unicode == unicode){
-        TslLogUtil.info("do nothing, but it's OK.");
+        ReqLogUtil.info("do nothing, but it's OK.");
         return;
       }
     }
 
     post!.emojiEvaluations.push({evaludatedPostId: postId, unicode: unicode, evaluatingUserId: evaluatingUserId});
-    TslLogUtil.info("did put!" + unicode);
+    ReqLogUtil.info("did put!" + unicode);
   }
 
   public delete(postId: string, unicode: string, evaluatingUserId: string): void{
@@ -33,9 +33,9 @@ export class MockEmojiEvaluationsDao implements IEmojiEvaluationsDao {
       item.evaludatedPostId != postId
     );
     if(beforeCount != post!.emojiEvaluations.length){
-      TslLogUtil.info('deleted!');
+      ReqLogUtil.info('deleted!');
     } else {
-      TslLogUtil.info("do nothing, but it's OK.");
+      ReqLogUtil.info("do nothing, but it's OK.");
     }
   }
 }

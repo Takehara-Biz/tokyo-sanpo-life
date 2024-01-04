@@ -1,5 +1,5 @@
 import { Express } from "express";
-import { TslLogUtil } from "../utils/tslLogUtil";
+import { ReqLogUtil } from "../utils/reqLogUtil";
 import { CtrlUtil } from "./ctrlUtil";
 import { ErrorRequestHandler, Request, Response, NextFunction} from "express";
 
@@ -22,13 +22,13 @@ export const addErrorsRouting = ((app: Express): void => {
 
   //. 500 エラーが発生した場合、
   app.use( function( err: ErrorRequestHandler, req: Request, res: Response, next: NextFunction ){
-    TslLogUtil.error('HTTP 500 error occurred! ' + err);
+    ReqLogUtil.error('HTTP 500 error occurred! ' + err);
     res.status( 500 ); //. 500 エラー
     CtrlUtil.render(res, EJS_PREFIX + "500", {errorMessage: "時間を空けて試すか、お手数ですが、管理者にお問い合わせください。"});
   });
 
   app.all("*", (req, res) => {
-    TslLogUtil.warn(req.url);
+    ReqLogUtil.warn(req.url);
     CtrlUtil.render(res, EJS_PREFIX + "404");
   });
 });

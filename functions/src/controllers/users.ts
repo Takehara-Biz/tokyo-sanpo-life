@@ -4,7 +4,7 @@ import { IUser } from "../models/serverTslDef";
 import { firebaseAuthDao } from "../models/auth/firebaseAuthDao";
 import { defaultUserIconBase64 } from "../models/dao/defaultUserIconBase64";
 import { EJS_401_PAGE_PATH } from "./errors";
-import { TslLogUtil } from "../utils/tslLogUtil";
+import { ReqLogUtil } from "../utils/reqLogUtil";
 import { CtrlUtil } from "./ctrlUtil";
 import { TSLThreadLocal } from "../utils/tslThreadLocal";
 
@@ -47,7 +47,7 @@ export const addUsersRouting = ((app: Express): void => {
   app.post(URL_PREFIX + "login", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.body.idToken);
     if (firebaseUserId == null) {
-      TslLogUtil.warn('unauthorized!');
+      ReqLogUtil.warn('unauthorized!');
       //res.render(EJS_401_PAGE_PATH, { user: userLogic.getLoggedInUser() });
       res.redirect("errors/401");
       return;
@@ -57,25 +57,25 @@ export const addUsersRouting = ((app: Express): void => {
     //res.cookie('uid', req.body.uid, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
     //res.cookie('token', req.body.token, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
     res.cookie('idToken', req.body.idToken, { maxAge: oneDayMilliSeconds, httpOnly: true, path: "/" });
-    TslLogUtil.debug('set idToken into res cookie!');
+    ReqLogUtil.debug('set idToken into res cookie!');
 
     const resCookie = "res.cookie=" + res.get('Set-Cookie');
-    TslLogUtil.debug(resCookie.substring(0, 200));
+    ReqLogUtil.debug(resCookie.substring(0, 200));
 
 
-    TslLogUtil.debug('aaa');
+    ReqLogUtil.debug('aaa');
     const user = await userLogic.findUser(firebaseUserId!);
-    TslLogUtil.debug('ccc');
+    ReqLogUtil.debug('ccc');
 
     if (user !== null) {
       user.loggedIn = true;
       userLogic.updateUser(user);
       TSLThreadLocal.currentContext.loggedInUser = user;
-      TslLogUtil.debug('redirect to my-page');
+      ReqLogUtil.debug('redirect to my-page');
       res.redirect(URL_PREFIX + "my-page?toast");
     } else {
       // not found, must be registered at first!
-      TslLogUtil.debug('redirect to create');
+      ReqLogUtil.debug('redirect to create');
       res.redirect(URL_PREFIX + "create");
     }
   });
@@ -101,8 +101,8 @@ export const addUsersRouting = ((app: Express): void => {
    */
   app.put(URL_PREFIX + ":id", async function (req, res, next) {
     const identifiedFirebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId;
-    TslLogUtil.debug('identifiedFirebaseUserId: ' + identifiedFirebaseUserId);
-    TslLogUtil.debug('req.params.firebaseUserId: ' + req.params.firebaseUserId);
+    ReqLogUtil.debug('identifiedFirebaseUserId: ' + identifiedFirebaseUserId);
+    ReqLogUtil.debug('req.params.firebaseUserId: ' + req.params.firebaseUserId);
     if(req.params.firebaseUserId != identifiedFirebaseUserId){
       throw new Error('no permission!');
     }
@@ -119,10 +119,10 @@ export const addUsersRouting = ((app: Express): void => {
     userLogic.logout();
 
     const resCookie1 = "res.cookie1: " + res.get('Set-Cookie');
-  TslLogUtil.debug(resCookie1);
+  ReqLogUtil.debug(resCookie1);
     res.clearCookie('idToken');
     const resCookie2 = "res.cookie2: " + res.get('Set-Cookie');
-  TslLogUtil.debug(resCookie2);
+  ReqLogUtil.debug(resCookie2);
 
     res.redirect(URL_PREFIX + "login?successfulLogoutToast");
   });

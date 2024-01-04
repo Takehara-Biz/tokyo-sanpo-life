@@ -23,9 +23,8 @@ export class TSLThreadLocal {
 
   private static generateRandomString(charCount: number): string {
     const useChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const strLength = Math.floor(Math.random() * charCount);
     let result = "";
-    for (let i = 0; i < strLength; i++) {
+    for (let i = 0; i < charCount; i++) {
       result += useChar.charAt(Math.floor(Math.random() * useChar.length));
     }
     return result;
