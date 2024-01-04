@@ -12,7 +12,7 @@
       list-style-type: disc;
     }
   </style>
-  <script type="module" src="/javascripts/firebaseAuth.js?ver=20240104154011"></script>
+  <script type="module" src="/javascripts/firebaseAuth.js?ver=20240104164958"></script>
 </head>
 
 <body>
@@ -23,19 +23,13 @@
         <%- include('../../partials/common/page-title', {title: 'ログイン（新規登録）' }); %>
           <div class="p-1">
             <p>ログインすると、散歩情報を投稿できるようになります。</p>
-            <form action="/users/login" method="post">
-              <%- include('../../partials/util/icon-button', {label: "ダミーログイン", typeSubmit: true, googleIconName: "login"}); %>
-            </form>
             <%- include('../../partials/util/icon-button', {label: "Googleでログイン", onClickCode: "loginWithGoogle();", googleIconName: "login"}); %>
-            <!-- <button class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" onclick="loginWithTwitter();">
-              <span class="material-symbols-outlined align-[-6px]">
-                login
-              </span>
-              X(Twitter)でログイン
-            </button> -->
-            <form action="/users/login2" method="post">
+            <form action="/users/login" method="post">
               <input type="hidden" id="idToken" name="idToken" />
-              <%- include('../../partials/util/icon-button', {label: "/login2を呼ぶ。後で非表示にする", id: "submit", typeSubmit: true, onClickCode: "loginWithGoogle();", googleIconName: "login"}); %>
+              <div class="hidden">
+                <!-- javascriptでクリックさせる -->
+              <%- include('../../partials/util/icon-button', {label: "/loginを呼ぶ。このボタンは非表示", id: "submit", typeSubmit: true, onClickCode: "loginWithGoogle();", googleIconName: "login"}); %>
+              </div>
             </form>
 
             <hr />
