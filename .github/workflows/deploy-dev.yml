@@ -33,7 +33,7 @@ jobs:
       #     projectId: tokyo-sanpo-life-dev
       #     channelId: live
       - name: firebase use
-         run: firebase use dev
+        run: firebase use dev
       # ここからがデプロイのステップ
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
