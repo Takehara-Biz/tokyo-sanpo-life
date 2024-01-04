@@ -102,17 +102,21 @@ export const addUsersRouting = ((app: Express): void => {
   app.put(URL_PREFIX + ":id", async function (req, res, next) {
     const identifiedFirebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId;
     ReqLogUtil.debug('identifiedFirebaseUserId: ' + identifiedFirebaseUserId);
-    ReqLogUtil.debug('req.params.firebaseUserId: ' + req.params.firebaseUserId);
-    if(req.params.firebaseUserId != identifiedFirebaseUserId){
+    ReqLogUtil.debug('req.body.firebaseUserId: ' + req.body.firebaseUserId);
+
+    if(req.body.firebaseUserId != identifiedFirebaseUserId){
       throw new Error('no permission!');
     }
 
     const user = await userLogic.findUser(identifiedFirebaseUserId!)!;
+    ReqLogUtil.debug('before ' + user!.userName);
     user!.userName = req.body.userName,
+    ReqLogUtil.debug('after ' + user!.userName);
     user!.selfIntroduction = req.body.selfIntroduction ?? "",
     user!.xProfileLink = req.body.xProfileURL ?? "",
     user!.instagramProfileLink = req.body.instaProfileURL ?? "",
-    userLogic.updateUser(user!);
+    await userLogic.updateUser(user!);
+    res.json({});
   });
 
   app.post(URL_PREFIX + "logout", function (req, res, next) {
@@ -136,8 +140,8 @@ export const addUsersRouting = ((app: Express): void => {
       CtrlUtil.render(res, EJS_401_PAGE_PATH);
       return;
     }
-    userLogic.deleteUser(firebaseUserId);
-    userLogic.logout();
+    await userLogic.deleteUser(firebaseUserId);
+    await userLogic.logout();
     CtrlUtil.render(res, EJS_PREFIX + "my-page", { toast: true });
   });
 });

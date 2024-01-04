@@ -46,16 +46,20 @@
                 const firebaseUserId = document.getElementById('firebaseUserId').value;
                 const userName = document.getElementById('userName').value;
                 const selfIntroduction = document.getElementById('selfIntroduction').value;
-                fetch('/users/<%= user.id %>', {
+                const data = {firebaseUserId: firebaseUserId, userName: userName, selfIntroduction: selfIntroduction};
+                fetch('/users/<%= user.firebaseUserId %>', {
                   method: 'PUT',
-                  body: JSON.stringify({firebaseUserId: firebaseUserId, userName: userName, selfIntroduction: selfIntroduction})
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data)
                 }).then((response) => {
                   console.log('fetch then');
-                  window.location = '/users/my-page';
+                  window.location.href = '/users/my-page'
                 }).catch((error) => {
                   console.log('fetch error');
                   console.error(error);
-                  window.location = '/errors/500';
+                  window.location.href = '/errors/500';
                 })
               }
             </script>

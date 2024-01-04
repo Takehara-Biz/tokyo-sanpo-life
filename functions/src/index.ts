@@ -21,6 +21,7 @@
 const functions = require("firebase-functions");
 const express = require("express");
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
 import { routing } from "./controllers/routes";
 import { firebaseAuthDao } from "./models/auth/firebaseAuthDao";
@@ -36,6 +37,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(bodyParser.json());
 
 app.set("view engine", "ejs");
 app.set("views", "./src/views");
@@ -54,7 +56,7 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
   await TSLThreadLocal.storage.run(
     new TSLThreadLocal(),
     async () => {
-      next();
+      await next();
     },
   );
 });
@@ -68,7 +70,7 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
 
   const reqCookies = "req.cookies=" + JSON.stringify(req.cookies);
   ReqLogUtil.debug(reqCookies.substring(0, 100));
-  next();
+  await next();
   ReqLogUtil.info("[  END] " + req.method + " " + req.url);
 
   const resCookie = "res.cookie=" + res.get('Set-Cookie');
@@ -107,7 +109,7 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
   ReqLogUtil.debug('threadLocal.identifiedFirebaseUserId : ' + TSLThreadLocal.currentContext.identifiedFirebaseUserId);
   ReqLogUtil.debug('threadLocal.loggedInUser : ' + TSLThreadLocal.currentContext.loggedInUser);
 
-  next();
+  await next();
 });
 
 FirebaseAdminManager.initialize();
