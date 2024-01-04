@@ -1,4 +1,4 @@
 node_modules
 public/stylesheets/tw-dest.css
 public/javascripts/*.js
-public/javascripts/doNotGitPush.ts
+!public/javascripts/firebaseAuth.js
