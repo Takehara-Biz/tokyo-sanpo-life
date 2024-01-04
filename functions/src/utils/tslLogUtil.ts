@@ -2,33 +2,33 @@
  * Proxy class for logging.
  */
 export class TslLogUtil {
-  private static dateFormat = new Intl.DateTimeFormat(
-    "ja-JP",
-    {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      // fractionalSecondDigits: 3,
-    }
-  );
+  // private static dateFormat = new Intl.DateTimeFormat(
+  //   "ja-JP",
+  //   {
+  //     year: "numeric",
+  //     month: "2-digit",
+  //     day: "2-digit",
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //     second: "2-digit",
+  //     // fractionalSecondDigits: 3,
+  //   }
+  // );
 
-  /**
-   *
-   * @returns
-   */
-  private static date(): string {
-    return this.dateFormat.format(new Date());
-  }
+  // /**
+  //  * GCPのコンソールで日本の日付が出力されているため、不要っぽい。
+  //  * @returns
+  //  */
+  // private static date(): string {
+  //   return this.dateFormat.format(new Date());
+  // }
 
   /**
    *
    * @param message
    */
   public static error(message: any): void {
-    console.error(this.date() + " [ERROR] " + message);
+    console.error("[ERROR] " + message);
   }
 
   /**
@@ -36,7 +36,7 @@ export class TslLogUtil {
    * @param message
    */
   public static warn(message: any): void {
-    console.warn(this.date() + " [ WARN] " + message);
+    console.warn("[ WARN] " + message);
   }
 
   /**
@@ -44,13 +44,13 @@ export class TslLogUtil {
    * @param message
    */
   public static info(message: any): void {
-    console.info(this.date() + " [ INFO] " + message);
+    console.info("[ INFO] " + message);
   }
   /**
    *
    * @param message
    */
   public static debug(message: any): void {
-    console.debug(this.date() + " [DEBUG] " + message);
+    console.debug("[DEBUG] " + message);
   }
 }

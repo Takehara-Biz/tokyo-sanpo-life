@@ -44,12 +44,11 @@ app.use(express.static("public"));
 // app.use(favicon("./src/kkrn_icon_kirakira_2.svg"));
 
 app.use(function(req: Request, res: Response, next: NextFunction) {
-  //TslLogUtil.debug("[BEGIN] " + req.url + ", req.params=" + JSON.stringify(req.params) + ", req.cookies=" + JSON.stringify(req.cookies) + ", req.body=" + JSON.stringify(req.body));
-  TslLogUtil.info("[BEGIN] " + req.url + ",\nreq.params=" + JSON.stringify(req.params) + ",\nreq.body=" + JSON.stringify(req.body));
-  //TslLogUtil.debug("req.cookies=" + JSON.stringify(req.cookies));
+  TslLogUtil.info("[BEGIN] " + req.method + " " + req.url + ",\nreq.params=" + JSON.stringify(req.params) + ",\nreq.body=" + JSON.stringify(req.body));
+  TslLogUtil.debug("req.cookies=" + JSON.stringify(req.cookies));
   next();
   TslLogUtil.info("[  END] " + req.url);
-  //TslLogUtil.debug("res.cookie=" + res.get('Set-Cookie'));
+  TslLogUtil.debug("res.cookie=" + res.get('Set-Cookie'));
 });
 
 routing(app);
