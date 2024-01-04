@@ -119,11 +119,11 @@ export const addUsersRouting = ((app: Express): void => {
   app.post(URL_PREFIX + "logout", function (req, res, next) {
     userLogic.logout();
 
-    const resCookie1 = "res.cookie=" + res.get('Set-Cookie');
-  TslLogUtil.debug(resCookie1.substring(0, 200));
+    const resCookie1 = "res.cookie1: " + res.get('Set-Cookie');
+  TslLogUtil.debug(resCookie1);
     res.clearCookie('idToken');
-    const resCookie2 = "res.cookie=" + res.get('Set-Cookie');
-  TslLogUtil.debug(resCookie2.substring(0, 200));
+    const resCookie2 = "res.cookie2: " + res.get('Set-Cookie');
+  TslLogUtil.debug(resCookie2);
 
     res.redirect(URL_PREFIX + "login?successfulLogoutToast");
   });

@@ -206,7 +206,7 @@
             </script>
 
             <form action="/users/update-user-icon" method="POST" onSubmit="return confirm('本当に設定してもよろしいですか？')">
-              <%- include('../../partials/util/icon-button', {label: "保存", typeSubmit: true, onSubmitCode: "return confirm('登録してもよろしいですか？');", googleIconName: "person_add"}); %>
+              <%- include('../../partials/util/icon-button', {label: "保存", typeSubmit: true, googleIconName: "person_add"}); %>
               <!-- <button type="submit" class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;"
                 onsubmit="return confirm('登録してもよろしいですか？');">
                 <span class="material-symbols-outlined align-[-6px]">

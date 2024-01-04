@@ -17,44 +17,44 @@ const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const googleAuthProvider = new GoogleAuthProvider();
 
-const loginWithGoogle = (() => {
-  signInWithRedirect(auth, googleAuthProvider);
+const loginWithGoogle = (async () => {
+  console.log('call signInWithRedirect');
+  await signInWithRedirect(auth, googleAuthProvider);
+  console.log('called');
 });
 window.loginWithGoogle = loginWithGoogle;
 export {loginWithGoogle};
 
-const logout = (() => {
-  signOut(auth).then(() => {
-    // Sign-out successful.
-    console.log('Sign-out successful. (signOut then)');
-    return true;
-  }).catch((error) => {
-    // An error happened.
-    console.error('signOut catch error happened.');
-    console.error(error);
+const logout = (async () => {
+  if(confirm('ログアウトしてよろしいですか？')){
+    const result = await signOut(auth).then(() => {
+      // Sign-out successful.
+      console.log('Sign-out successful. (signOut then)');
+      return true;
+    }).catch((error) => {
+      // An error happened.
+      console.error('signOut catch error happened.');
+      console.error(error);
+      return false;
+    });
+    return result;
+  } else {
     return false;
-  });
+  }
 });
 window.logout = logout;
 export {logout};
 
+
 getRedirectResult(auth)
 .then((result) => {
-  console.log('getRedirectResult then result : ' + JSON.stringify(result));
-  
-  // if(result == null){
-  //   console.log('before auth...');
-  //   return;
-  // }
-  // This gives you a Google Access Token. You can use it to access Google APIs.
-  //const credential = GoogleAuthProvider.credentialFromResult(result);
-  //console.log('credential : ' + JSON.stringify(credential));
 
-  // The signed-in user info.
-  //const user = result.user;
-  //console.log('user : ' + JSON.stringify(user));
-  // IdP data available using getAdditionalUserInfo(result)
-  // ...
+  // プライベートブラウザだと、ログアウトした後にログインしようとすると、なぜかうまくいかない。
+  // 引数のresultがnullになってしまう・・。
+  // ログイン・ログアウトのテストでは、プライベートブラウザを避けること。
+
+  console.log('getRedirectResult then result : ' + JSON.stringify(result));
+  console.log('auth.currentUser : ' + auth.currentUser);
 
   /*firebase.auth().*/auth.currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
     // Send token to your backend via HTTPS
