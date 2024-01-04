@@ -21,17 +21,20 @@
 const functions = require("firebase-functions");
 // Expressの読み込み
 const express = require("express");
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 
-import {routing} from "./controllers/routes";
-import {TslLogUtil} from "./utils/tslLogUtil";
-import {Request, Response, NextFunction} from "express";
+import { routing } from "./controllers/routes";
+import { firebaseAuthDao } from "./models/auth/firebaseAuthDao";
+import { TslLogUtil } from "./utils/tslLogUtil";
+import { Request, Response, NextFunction } from "express";
+import { TSLThreadLocal } from "./utils/tslThreadLocal";
+import { userLogic } from "./models/bizlogic/userLogic";
 
 const app = express();
 // const port = 3000
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.set("view engine", "ejs");
@@ -43,13 +46,44 @@ app.use(express.static("public"));
 // const favicon = require("serve-favicon");
 // app.use(favicon("./src/kkrn_icon_kirakira_2.svg"));
 
-app.use(function(req: Request, res: Response, next: NextFunction) {
+/**
+ * for logging
+ */
+app.use(function (req: Request, res: Response, next: NextFunction) {
   TslLogUtil.info("[BEGIN] " + req.method + " " + req.url + ",\nreq.params=" + JSON.stringify(req.params) + ",\nreq.body=" + JSON.stringify(req.body));
   TslLogUtil.debug("req.cookies=" + JSON.stringify(req.cookies));
   next();
   TslLogUtil.info("[  END] " + req.url);
   TslLogUtil.debug("res.cookie=" + res.get('Set-Cookie'));
 });
+
+/**
+ * for auth
+ */
+app.use(async function (req: Request, res: Response, next: NextFunction) {
+  const idToken = req.cookies['idToken'];
+  const threadLocal = new TSLThreadLocal();
+  if (idToken != null) {
+    const uid = await firebaseAuthDao.verifyIdToken(idToken);
+    if (uid != null) {
+      threadLocal.identifiedFirebaseUserId = uid;
+      if (userLogic.alreadyLoggedIn(uid)) {
+        threadLocal.loggedInUser = userLogic.getLoggedInUser(uid);
+      }
+    }
+  }
+
+  TslLogUtil.debug('threadLocal.identifiedFirebaseUserId : ' + threadLocal.identifiedFirebaseUserId);
+  TslLogUtil.debug('threadLocal.loggedInUser : ' + threadLocal.loggedInUser);
+
+  TSLThreadLocal.storage.run(
+    threadLocal,
+    async () => {
+      next();
+    },
+  );
+});
+
 
 routing(app);
 

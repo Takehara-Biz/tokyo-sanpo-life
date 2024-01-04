@@ -1,36 +1,28 @@
 import { TslLogUtil } from "../../utils/tslLogUtil"
+import { TSLThreadLocal } from "../../utils/tslThreadLocal";
 import { IUsersDao } from "../dao/iUsersDao";
 import { MockUsersDao } from "../dao/mockUsersDao";
 import { IUser} from "../serverTslDef";
 
 class UserLogic {
   private usersDao: IUsersDao = new MockUsersDao();
-  private loggedInUser: IUser | undefined;
+  private uidAndLoggedInUser = new Map<string, IUser>();
 
-  public setLoggedInUser(loggedInUser: IUser) {
-    this.loggedInUser = loggedInUser;
+  public setLoggedInUser(uid: string, loggedInUser: IUser) {
+    this.uidAndLoggedInUser.set(uid, loggedInUser);
   }
   public logout(): void {
     TslLogUtil.info('called logout');
-    this.loggedInUser = undefined;
+    const uid = TSLThreadLocal.currentContext.identifiedFirebaseUserId
+    if( uid != undefined){
+      this.uidAndLoggedInUser.delete(uid);
+    }
   }
-  public getLoggedInUser(): IUser | undefined {
-
-    // UserLogicが毎回インスタンスが作り直されるので、ダミーを用意した。必要に応じてコメントを外すと良い。
-    // this.loggedInUser = {
-    //   id: "1",
-    //   userName: DaoUtil.generateRandomString(3, 12),
-    //   userIconBase64: defaultUserIconBase64,
-    //   selfIntroduction: "こんにちは〜。" + DaoUtil.generateRandomString(1, 50),
-    //   twitterProfileLink: "https://www.yahoo.co.jp",
-    //   instagramProfileLink: "https://www.yahoo.co.jp",
-    // };
-
-    TslLogUtil.debug('loggedInUser: ' + this.loggedInUser);
-    return this.loggedInUser;
+  public getLoggedInUser(uid: string): IUser | undefined {
+    return this.uidAndLoggedInUser.get(uid);
   }
-  public alreadyLoggedIn(): boolean {
-    return this.loggedInUser !== undefined;
+  public alreadyLoggedIn(uid: string): boolean {
+    return TSLThreadLocal.currentContext?.loggedInUser != undefined
   }
 
   public findUser(userId: string): IUser | null {

@@ -1,9 +1,10 @@
 import { Express } from "express";
 import { postLogic } from "../models/bizlogic/postLogic";
-import { userLogic } from "../models/bizlogic/userLogic";
 import { IPost, PostCategory } from "../models/serverTslDef";
 import { TslLogUtil } from "../utils/tslLogUtil";
 import { EJS_404_PAGE_PATH, EJS_500_PAGE_PATH } from "./errors";
+import { CtrlUtil } from "./ctrlUtil";
+import { TSLThreadLocal } from "../utils/tslThreadLocal";
 
 /**
  * implements URL related to "posts" pages.
@@ -16,17 +17,20 @@ export const addPostsRouting = ((app: Express): void => {
   app.get(URL_PREFIX + "/new-list", function (req, res, next) {
     const targetPosts = postLogic.findPosts();
     const deletedToast = req.query.deletedToast != undefined;
-    res.render(EJS_PREFIX + "new-list", { user: userLogic.getLoggedInUser(), targetPosts: targetPosts, deletedToast: deletedToast });
+    CtrlUtil.render(res, EJS_PREFIX + "new-list", {
+      targetPosts: targetPosts, deletedToast: deletedToast
+    });
   });
   app.get(URL_PREFIX + "/my-list", function (req, res, next) {
     let myPosts: IPost[] = [];
-    if (userLogic.alreadyLoggedIn()) {
-      myPosts.push(...postLogic.findPostsByUserId(userLogic.getLoggedInUser()!.id));
+    if (TSLThreadLocal.currentContext?.loggedInUser != undefined) {
+      const uid = TSLThreadLocal.currentContext!.loggedInUser!.id
+      myPosts.push(...postLogic.findPostsByUserId(uid));
     }
-    res.render(EJS_PREFIX + "my-list", { user: userLogic.getLoggedInUser(), myPosts: myPosts });
+    CtrlUtil.render(res, EJS_PREFIX + "my-list", { myPosts: myPosts });
   });
   app.get(URL_PREFIX + "/create", function (req, res, next) {
-    res.render(EJS_PREFIX + "create", { user: userLogic.getLoggedInUser(), categories: PostCategory.Categories });
+    CtrlUtil.render(res, EJS_PREFIX + "create", { categories: PostCategory.Categories });
   });
   app.get(URL_PREFIX + "/:id", function (req, res, next) {
     const post = postLogic.findPost(req.params.id);
@@ -39,10 +43,10 @@ export const addPostsRouting = ((app: Express): void => {
     }
 
     if (post !== null) {
-      res.render(EJS_PREFIX + "read", { user: userLogic.getLoggedInUser(), post: post, showBack: showBack });
+      CtrlUtil.render(res, EJS_PREFIX + "read", { post: post, showBack: showBack });
     } else {
       // not found
-      res.render(EJS_404_PAGE_PATH, { user: userLogic.getLoggedInUser() });
+      CtrlUtil.render(res, EJS_404_PAGE_PATH);
     }
   });
 
@@ -72,7 +76,7 @@ export const addPostsRouting = ((app: Express): void => {
     TslLogUtil.debug("aa" + postCategory.getLabel());
     const newPost: IPost = {
       id: "this will be updated in dao class",
-      user: userLogic.getLoggedInUser()!,
+      user: TSLThreadLocal.currentContext!.loggedInUser!,
       imageUrl: "/images/post-sample.jpeg",
       lat: Number(req.body.markerLat),
       lng: Number(req.body.markerLng),
@@ -91,10 +95,10 @@ export const addPostsRouting = ((app: Express): void => {
     // needs authorization
     const post = postLogic.findPost(req.params.id);
     if (post !== null) {
-      res.render(EJS_PREFIX + "update", { user: userLogic.getLoggedInUser(), post: post, showBack: true });
+      CtrlUtil.render(res, EJS_PREFIX + "update", { post: post, showBack: true });
     } else {
       // not found
-      res.render(EJS_404_PAGE_PATH, { user: userLogic.getLoggedInUser() });
+      CtrlUtil.render(res, EJS_404_PAGE_PATH);
     }
   });
   
@@ -104,10 +108,10 @@ export const addPostsRouting = ((app: Express): void => {
   app.get("/map/post/:id", function (req, res, next) {
     const post = postLogic.findPost(req.params.id);
     if (post !== null) {
-      res.render("partials/exclusive/map-post-read", { user: userLogic.getLoggedInUser(), post: post });
+      CtrlUtil.render(res, "partials/exclusive/map-post-read", {post: post});
     } else {
       // not found
-      res.render(EJS_404_PAGE_PATH, { user: userLogic.getLoggedInUser() });
+      CtrlUtil.render(res, EJS_404_PAGE_PATH);
     }
   });
 });

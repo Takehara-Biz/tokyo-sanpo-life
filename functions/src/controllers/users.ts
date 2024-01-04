@@ -5,6 +5,8 @@ import { firebaseAuthDao } from "../models/auth/firebaseAuthDao";
 import { defaultUserIconBase64 } from "../models/dao/defaultUserIconBase64";
 import { EJS_401_PAGE_PATH } from "./errors";
 import { TslLogUtil } from "../utils/tslLogUtil";
+import { CtrlUtil } from "./ctrlUtil";
+import { TSLThreadLocal } from "../utils/tslThreadLocal";
 
 /**
  * implements URL related to user or authentication
@@ -13,13 +15,13 @@ import { TslLogUtil } from "../utils/tslLogUtil";
 export const addUsersRouting = ((app: Express): void => {
 
   const EJS_PREFIX = "pages/users/"
-  const URL_PREFIX = "/users";
+  const URL_PREFIX = "/users/";
 
-  app.get(URL_PREFIX + "/create", async function (req, res, next) {
+  app.get(URL_PREFIX + "create", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
-    res.render(EJS_PREFIX + "create", { user: userLogic.getLoggedInUser(), firebaseUserId: firebaseUserId});
+    CtrlUtil.render(res, EJS_PREFIX + "create", {firebaseUserId: firebaseUserId});
   });
-  app.post(URL_PREFIX + "/create", async function (req, res, next) {
+  app.post(URL_PREFIX + "create", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
     const newUser: IUser = {
       id: firebaseUserId!,
@@ -30,15 +32,15 @@ export const addUsersRouting = ((app: Express): void => {
       instagramProfileLink: req.body.instaProfileURL ?? "",
     };
     userLogic.createUser(newUser);
-    userLogic.setLoggedInUser(newUser);
+    userLogic.setLoggedInUser(TSLThreadLocal.currentContext.identifiedFirebaseUserId!, newUser);
     res.redirect(URL_PREFIX + "my-page");
   });
 
-  app.get(URL_PREFIX + "/login", function (req, res, next) {
+  app.get(URL_PREFIX + "login", function (req, res, next) {
     const successfulLogoutToast = req.query.successfulLogoutToast != undefined;
-    res.render(EJS_PREFIX + "login", { user: userLogic.getLoggedInUser(), successfulLogoutToast: successfulLogoutToast });
+    CtrlUtil.render(res, EJS_PREFIX + "login", { successfulLogoutToast: successfulLogoutToast });
   });
-  app.post(URL_PREFIX + "/login", async function (req, res, next) {
+  app.post(URL_PREFIX + "login", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.body.idToken);
     if (firebaseUserId == null) {
       TslLogUtil.warn('unauthorized!');
@@ -55,37 +57,37 @@ export const addUsersRouting = ((app: Express): void => {
 
     const user = userLogic.findUser(firebaseUserId!);
     if (user !== null) {
-      userLogic.setLoggedInUser(user);
-      res.redirect(URL_PREFIX + "/my-page?toast");
+      userLogic.setLoggedInUser(firebaseUserId, user);
+      res.redirect(URL_PREFIX + "my-page?toast");
     } else {
       // not found, must be registered at first!
-      res.redirect(URL_PREFIX + "/create");
+      res.redirect(URL_PREFIX + "create");
     }
   });
 
-  app.get(URL_PREFIX + "/my-page", function (req, res, next) {
+  app.get(URL_PREFIX + "my-page", function (req, res, next) {
     const toast = req.query.toast != undefined;
-    res.render(EJS_PREFIX + "my-page", { user: userLogic.getLoggedInUser(), toast: toast });
+    CtrlUtil.render(res, EJS_PREFIX + "my-page", { toast: toast });
   });
 
-  app.get(URL_PREFIX + "/update-user-icon", function (req, res, next) {
-    res.render(EJS_PREFIX + "update-user-icon", { user: userLogic.getLoggedInUser() });
+  app.get(URL_PREFIX + "update-user-icon", function (req, res, next) {
+    CtrlUtil.render(res, EJS_PREFIX + "update-user-icon");
   });
 
-  app.post(URL_PREFIX + "/update-user-icon", function (req, res, next) {
-    res.redirect(URL_PREFIX + "/my-page");
+  app.post(URL_PREFIX + "update-user-icon", function (req, res, next) {
+    res.redirect(URL_PREFIX + "my-page");
   });
 
-  app.get(URL_PREFIX + "/update", function (req, res, next) {
-    res.render(URL_PREFIX + "/update", { user: userLogic.getLoggedInUser() });
+  app.get(URL_PREFIX + "update", function (req, res, next) {
+    CtrlUtil.render(res, EJS_PREFIX + "update");
   });
   /**
    * called with Ajax
    */
-  app.put(URL_PREFIX + "/:id", async function (req, res, next) {
+  app.put(URL_PREFIX + ":id", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.body.idToken);
     if(req.params.id != firebaseUserId){
-      res.render(EJS_401_PAGE_PATH, { user: userLogic.getLoggedInUser() });
+      CtrlUtil.render(res, EJS_401_PAGE_PATH);
       return;
     }
 
@@ -95,33 +97,28 @@ export const addUsersRouting = ((app: Express): void => {
     user!.xProfileLink = req.body.xProfileURL ?? "",
     user!.instagramProfileLink = req.body.instaProfileURL ?? "",
     userLogic.updateUser(user!);
-    userLogic.setLoggedInUser(user!);
-    res.render(EJS_PREFIX + "my-page", { user: userLogic.getLoggedInUser(), toast: false });
+    userLogic.setLoggedInUser(firebaseUserId!, user!);
+    firebaseUserId
+    CtrlUtil.render(res, EJS_PREFIX + "my-page", { toast: false });
   });
 
-  app.post(URL_PREFIX + "/logout", function (req, res, next) {
+  app.post(URL_PREFIX + "logout", function (req, res, next) {
     userLogic.logout();
     res.clearCookie('idToken');
-    res.redirect(URL_PREFIX + "/login?successfulLogoutToast");
+    res.redirect(URL_PREFIX + "login?successfulLogoutToast");
   });
 
   /**
    * called with Ajax
    */
-  app.delete(URL_PREFIX + "/:id", async function (req, res, next) {
+  app.delete(URL_PREFIX + ":id", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.body.idToken);
     if(req.params.id != firebaseUserId){
-      res.render(EJS_401_PAGE_PATH, { user: userLogic.getLoggedInUser() });
+      CtrlUtil.render(res, EJS_401_PAGE_PATH);
       return;
     }
-
-    const user = userLogic.findUser(firebaseUserId!);
-    user!.userName = req.body.userName,
-    user!.selfIntroduction = req.body.selfIntroduction ?? "",
-    user!.xProfileLink = req.body.xProfileURL ?? "",
-    user!.instagramProfileLink = req.body.instaProfileURL ?? "",
-    userLogic.updateUser(user!);
-    userLogic.setLoggedInUser(user!);
-    res.render(EJS_PREFIX + "my-page", { user: userLogic.getLoggedInUser(), toast: false });
+    userLogic.deleteUser(firebaseUserId);
+    userLogic.logout();
+    CtrlUtil.render(res, EJS_PREFIX + "my-page", { toast: true });
   });
 });
