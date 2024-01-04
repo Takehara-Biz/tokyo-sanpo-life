@@ -1,6 +1,7 @@
 import { Express } from "express";
 import { TslLogUtil } from "../utils/tslLogUtil";
 import { CtrlUtil } from "./ctrlUtil";
+import { ErrorRequestHandler, Request, Response, NextFunction} from "express";
 
 /**
  * implements URL related to error pages.
@@ -16,7 +17,14 @@ export const addErrorsRouting = ((app: Express): void => {
   });
 
   app.get(URL_PREFIX + "500", function (req, res, next) {
-    CtrlUtil.render(res, EJS_PREFIX + "500");
+    CtrlUtil.render(res, EJS_PREFIX + "500", {errorMessage: "テスト用"});
+  });
+
+  //. 500 エラーが発生した場合、
+  app.use( function( err: ErrorRequestHandler, req: Request, res: Response, next: NextFunction ){
+    TslLogUtil.error('HTTP 500 error occurred! ' + err);
+    res.status( 500 ); //. 500 エラー
+    CtrlUtil.render(res, EJS_PREFIX + "500", {errorMessage: "時間を空けて試すか、お手数ですが、管理者にお問い合わせください。"});
   });
 
   app.all("*", (req, res) => {

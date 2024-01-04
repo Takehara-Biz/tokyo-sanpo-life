@@ -100,20 +100,19 @@ export const addUsersRouting = ((app: Express): void => {
    * called with Ajax
    */
   app.put(URL_PREFIX + ":id", async function (req, res, next) {
-    const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.body.idToken);
-    if(req.params.id != firebaseUserId){
-      CtrlUtil.render(res, EJS_401_PAGE_PATH);
-      return;
+    const identifiedFirebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId;
+    TslLogUtil.debug('identifiedFirebaseUserId: ' + identifiedFirebaseUserId);
+    TslLogUtil.debug('req.params.firebaseUserId: ' + req.params.firebaseUserId);
+    if(req.params.firebaseUserId != identifiedFirebaseUserId){
+      throw new Error('no permission!');
     }
 
-    const user = await userLogic.findUser(firebaseUserId!);
+    const user = await userLogic.findUser(identifiedFirebaseUserId!)!;
     user!.userName = req.body.userName,
     user!.selfIntroduction = req.body.selfIntroduction ?? "",
     user!.xProfileLink = req.body.xProfileURL ?? "",
     user!.instagramProfileLink = req.body.instaProfileURL ?? "",
     userLogic.updateUser(user!);
-    firebaseUserId
-    CtrlUtil.render(res, EJS_PREFIX + "my-page", { toast: false });
   });
 
   app.post(URL_PREFIX + "logout", function (req, res, next) {

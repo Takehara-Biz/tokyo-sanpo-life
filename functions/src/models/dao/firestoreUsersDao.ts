@@ -32,10 +32,10 @@ export class FirestoreUsersDao implements IUsersDao {
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", user.firebaseUserId).get();
     
-    usersSnapshot.forEach((doc) => {
+    usersSnapshot.forEach(async (doc) => {
       // doc.data() is never undefined for query doc snapshots
       console.log(doc.id, " => ", doc.data());
-      doc.ref.update({
+      await doc.ref.update({
         userName: user.userName,
         userIconBase64: user.userIconBase64,
         selfIntroduction: user.selfIntroduction,
