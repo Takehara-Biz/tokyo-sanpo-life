@@ -23,16 +23,20 @@ export const addUsersRouting = ((app: Express): void => {
   });
   app.post(URL_PREFIX + "create", async function (req, res, next) {
     const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
+    const now = new Date();
     const newUser: IUser = {
       firebaseUserId: firebaseUserId!,
+      loggedIn: true,
       userName: req.body.userName,
       userIconBase64: defaultUserIconBase64,
       selfIntroduction: req.body.selfIntroduction ?? "",
       xProfileLink: req.body.xProfileURL ?? "",
       instagramProfileLink: req.body.instaProfileURL ?? "",
+      insertedAt: now,
+      updatedAt: now,
     };
     userLogic.createUser(newUser);
-    userLogic.setLoggedInUser(TSLThreadLocal.currentContext.identifiedFirebaseUserId!, newUser);
+    TSLThreadLocal.currentContext.loggedInUser = newUser;
     res.redirect(URL_PREFIX + "my-page");
   });
 
@@ -64,7 +68,9 @@ export const addUsersRouting = ((app: Express): void => {
     TslLogUtil.debug('ccc');
 
     if (user !== null) {
-      userLogic.setLoggedInUser(firebaseUserId, user);
+      user.loggedIn = true;
+      userLogic.updateUser(user);
+      TSLThreadLocal.currentContext.loggedInUser = user;
       TslLogUtil.debug('redirect to my-page');
       res.redirect(URL_PREFIX + "my-page?toast");
     } else {
@@ -106,14 +112,19 @@ export const addUsersRouting = ((app: Express): void => {
     user!.xProfileLink = req.body.xProfileURL ?? "",
     user!.instagramProfileLink = req.body.instaProfileURL ?? "",
     userLogic.updateUser(user!);
-    userLogic.setLoggedInUser(firebaseUserId!, user!);
     firebaseUserId
     CtrlUtil.render(res, EJS_PREFIX + "my-page", { toast: false });
   });
 
   app.post(URL_PREFIX + "logout", function (req, res, next) {
     userLogic.logout();
+
+    const resCookie1 = "res.cookie=" + res.get('Set-Cookie');
+  TslLogUtil.debug(resCookie1.substring(0, 200));
     res.clearCookie('idToken');
+    const resCookie2 = "res.cookie=" + res.get('Set-Cookie');
+  TslLogUtil.debug(resCookie2.substring(0, 200));
+
     res.redirect(URL_PREFIX + "login?successfulLogoutToast");
   });
 

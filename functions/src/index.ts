@@ -71,12 +71,17 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
     TslLogUtil.debug('request has the "idToken" in the cookie!');
     const uid = await firebaseAuthDao.verifyIdToken(idToken);
     if (uid != null) {
+      const user = await userLogic.findUser(uid);
       threadLocal.identifiedFirebaseUserId = uid;
-      if (userLogic.alreadyLoggedIn(uid)) {
-        TslLogUtil.debug('already logged in user!');
-        threadLocal.loggedInUser = userLogic.getLoggedInUser(uid);
+      if (user != null) {
+        if (user.loggedIn) {
+          TslLogUtil.debug('already logged in user!');
+          threadLocal.loggedInUser = user;
+        } else {
+          TslLogUtil.debug('This user has not log in yet.');
+        }
       } else {
-        TslLogUtil.debug('This user has not log in yet.');
+        TslLogUtil.debug('This user has not created the TSL account yet.');
       }
     } else {
       TslLogUtil.warn('invalid uid...');

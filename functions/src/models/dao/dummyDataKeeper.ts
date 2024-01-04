@@ -25,13 +25,17 @@ class DummyDataKeeper {
 
   private generateRandomUsers(postCount: number): void {
     for (let i = 0; i < postCount; i++) {
+      const now = new Date();
       const user = {
         firebaseUserId: i.toString(),
+        loggedIn: true,
         userName: DummyDataKeeper.generateRandomString(3, 12),
         userIconBase64: defaultUserIconBase64,
         selfIntroduction: "こんにちは〜。" + DummyDataKeeper.generateRandomString(1, 50),
         xProfileLink: "https://www.yahoo.co.jp",
         instagramProfileLink: "https://www.yahoo.co.jp",
+        insertedAt: now,
+        updatedAt: now,
       };
       this.idAndUserMap.set(i.toString(), user);
     }
@@ -42,15 +46,19 @@ class DummyDataKeeper {
       const commentsCount = Math.floor(Math.random() * 9)
       const comments: IPostComment[] = this.createRandomComments(commentsCount);
       const emojiEvaluations: IEmojiEvaluation[] = this.createRandomEmojiEvaluations(0, 10, 1, 50, i.toString());
+      const now = new Date();
       const post = {
         id: i.toString(),
         user: {
           firebaseUserId: i.toString(),
+          loggedIn: true,
           userName: DummyDataKeeper.generateRandomString(3, 12),
           userIconBase64: defaultUserIconBase64,
           selfIntroduction: "",
           xProfileLink: "",
           instagramProfileLink: "",
+          insertedAt: now,
+          updatedAt: now,
         },
         postCategory: this.chooseContentTypeEnumRandomly(),
         imageUrl: "/images/post-sample.jpeg",
@@ -68,15 +76,19 @@ class DummyDataKeeper {
   private createRandomComments(count: number): IPostComment[] {
     const comments: IPostComment[] = [];
     for (let i = 0; i < count; i++) {
+      const now = new Date();
       comments.push({
         id: i.toString(),
         user: {
           firebaseUserId: i.toString(),
+          loggedIn: true,
           userName: DummyDataKeeper.generateRandomString(3, 12),
           userIconBase64: defaultUserIconBase64,
           selfIntroduction: "",
           xProfileLink: "",
           instagramProfileLink: "",
+          insertedAt: now,
+          updatedAt: now,
         },
         comment: DummyDataKeeper.generateRandomString(1, 100),
         commentDate: new Date("2023/12/01"),

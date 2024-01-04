@@ -57,12 +57,16 @@ CategoryIdAndMarkerTypeDefMap.set(PostCategory.Building.getId(), {iconKeyWord: "
 CategoryIdAndMarkerTypeDefMap.set(PostCategory.Other.getId(), {iconKeyWord: "lightbulb", glyphColor: "#ff3300", bgColor: "#ffffcc"});
 
 export interface IUser {
+  /** never changed. desginated by firebase authentication */
   firebaseUserId: string;
+  loggedIn: boolean;
   userName: string;
   userIconBase64: string;
   selfIntroduction: string;
   xProfileLink: string;
   instagramProfileLink: string;
+  insertedAt: Date;
+  updatedAt: Date;
 }
 
 /**
