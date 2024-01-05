@@ -1,5 +1,10 @@
-import { IEmojiEvaluation, IPost, IPostComment, IUser, PostCategory } from "../../serverTslDef";
-import { defaultUserIconBase64 } from "../defaultUserIconBase64";
+import { geohashForLocation } from "geofire-common";
+import { CommentDto } from "../../dto/commentDto";
+import { UserDto } from "../../dto/userDto";
+import { PostCategory } from "../../postCategory";
+import { PostDoc } from "../doc/postDoc";
+import { EmojiEvaluationDoc } from "../doc/emojiEvaluationDoc";
+import { BasicUserIconUtil } from "../basicUserIconBase64";
 
 /**
  * Firestoreの代わりにダミーとしてデータを保持するクラス
@@ -7,9 +12,9 @@ import { defaultUserIconBase64 } from "../defaultUserIconBase64";
 class DummyDataKeeper {
   public readonly postCount = 3;
   public readonly userCount = 3;
-  public idAndPostMap: Map<string, IPost> = new Map<string, IPost>();
+  public idAndPostMap: Map<string, PostDoc> = new Map<string, PostDoc>();
   public idSequence: number = 0;
-  public idAndUserMap: Map<string, IUser> = new Map<string, IUser>();
+  public idAndUserMap: Map<string, UserDto> = new Map<string, UserDto>();
   
   constructor() {
     console.info('[BEGIN] PostsDao constructor');
@@ -29,7 +34,7 @@ class DummyDataKeeper {
         firebaseUserId: i.toString(),
         loggedIn: true,
         userName: DummyDataKeeper.generateRandomString(3, 12),
-        userIconBase64: defaultUserIconBase64,
+        userIconBase64: BasicUserIconUtil.defaultUserIconBase64,
         selfIntroduction: "こんにちは〜。" + DummyDataKeeper.generateRandomString(1, 50),
         xProfileLink: "https://www.yahoo.co.jp",
         instagramProfileLink: "https://www.yahoo.co.jp",
@@ -42,38 +47,32 @@ class DummyDataKeeper {
 
   private generateRandomPosts(postCount: number): void {
     for (let i = 0; i < postCount; i++) {
-      const commentsCount = Math.floor(Math.random() * 9)
-      const comments: IPostComment[] = this.createRandomComments(commentsCount);
-      const emojiEvaluations: IEmojiEvaluation[] = this.createRandomEmojiEvaluations(0, 10, 1, 50, i.toString());
       const now = new Date();
+      const lat = 35.2 + Math.random();
+      const lng = 139.3 + Math.random();
+
       const post = {
-        id: i.toString(),
-        user: {
-          firebaseUserId: i.toString(),
-          loggedIn: true,
-          userName: DummyDataKeeper.generateRandomString(3, 12),
-          userIconBase64: defaultUserIconBase64,
-          selfIntroduction: "",
-          xProfileLink: "",
-          instagramProfileLink: "",
-          insertedAt: now,
-          updatedAt: now,
-        },
-        postCategory: this.chooseContentTypeEnumRandomly(),
+        firestoreDocId: i.toString(),
+        postedFirebaseUserId: i.toString(),
         imageUrl: "/images/post-sample.jpeg",
-        lat: 35.2 + (Math.random()),
-        lng: 139.3 + (Math.random()),
+        lat: lat,
+        lng: lng,
+        /**
+         * for easy search.
+         * https://firebase.google.com/docs/firestore/solutions/geoqueries?hl=ja#solution_geohashes
+         */
+        geohash: geohashForLocation([lat, lng]),
+        categoryId: this.chooseContentTypeEnumRandomly().getId(),
         description: DummyDataKeeper.generateRandomString(1, 100),
-        insertDate: new Date("2023/12/01"),
-        postComments: comments,
-        emojiEvaluations : emojiEvaluations
+        insertedAt: now,
+        updatedAt: now,
       };
       this.idAndPostMap.set(i.toString(), post);
     }
   }
 
-  private createRandomComments(count: number): IPostComment[] {
-    const comments: IPostComment[] = [];
+  public createRandomComments(count: number): CommentDto[] {
+    const comments: CommentDto[] = [];
     for (let i = 0; i < count; i++) {
       const now = new Date();
       comments.push({
@@ -82,7 +81,7 @@ class DummyDataKeeper {
           firebaseUserId: i.toString(),
           loggedIn: true,
           userName: DummyDataKeeper.generateRandomString(3, 12),
-          userIconBase64: defaultUserIconBase64,
+          userIconBase64: BasicUserIconUtil.defaultUserIconBase64,
           selfIntroduction: "",
           xProfileLink: "",
           instagramProfileLink: "",
@@ -96,8 +95,8 @@ class DummyDataKeeper {
     return comments;
   }
 
-  private createRandomEmojiEvaluations(minTypeCount: number, maxTypeCount: number, minTotalCount: number, maxTotalCount: number, postId: string): IEmojiEvaluation[] {
-    const evaluations: IEmojiEvaluation[] = [];
+  public createRandomEmojiEvaluations(minTypeCount: number, maxTypeCount: number, minTotalCount: number, maxTotalCount: number, postId: string): EmojiEvaluationDoc[] {
+    const evaluations: EmojiEvaluationDoc[] = [];
     const typeCount = DummyDataKeeper.generateRandomNumber(minTypeCount, maxTypeCount);
     if(minTotalCount < 1){
       minTotalCount  = 1;

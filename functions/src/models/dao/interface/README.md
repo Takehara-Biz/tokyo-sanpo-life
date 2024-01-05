@@ -1,0 +1,1 @@
+provides interfaces to access to Firestore.

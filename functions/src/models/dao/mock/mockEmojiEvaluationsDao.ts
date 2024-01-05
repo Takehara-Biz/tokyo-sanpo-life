@@ -1,41 +1,21 @@
 import { ReqLogUtil } from "../../../utils/reqLogUtil";
-import { IEmojiEvaluation } from "../../serverTslDef";
 import { dummyDataKeeper } from "./dummyDataKeeper";
-import { IEmojiEvaluationsDao } from "../iEmojiEvaluationsDao";
+import { EmojiEvaluationDoc } from "../doc/emojiEvaluationDoc";
+import { IEmojiEvaluationsDao } from "../interface/iEmojiEvaluationsDao";
 
 export class MockEmojiEvaluationsDao implements IEmojiEvaluationsDao {
-  public list(postId: string): IEmojiEvaluation[] {
+  public list(postId: string): EmojiEvaluationDoc[] {
     ReqLogUtil.debug('postId: ' + postId);
-    const post = dummyDataKeeper.idAndPostMap.get(postId);
-    ReqLogUtil.info('emojiEvaluations length : ' + post!.emojiEvaluations.length);
-    return post!.emojiEvaluations;
+    const emojiEvaluationDocs = dummyDataKeeper.createRandomEmojiEvaluations(1, 10, 0, 10, postId);
+    ReqLogUtil.info('emojiEvaluations length : ' + emojiEvaluationDocs);
+    return emojiEvaluationDocs;
   }
 
   public create(postId: string, unicode: string, evaluatingUserId: string): void{
-    const post = dummyDataKeeper.idAndPostMap.get(postId);
-    for(let emojiEvaluation of post!.emojiEvaluations) {
-      if(emojiEvaluation.evaluatingUserId == evaluatingUserId && emojiEvaluation.unicode == unicode){
-        ReqLogUtil.info("do nothing, but it's OK.");
-        return;
-      }
-    }
-
-    post!.emojiEvaluations.push({evaludatedPostId: postId, unicode: unicode, evaluatingUserId: evaluatingUserId});
-    ReqLogUtil.info("did put!" + unicode);
+    return;
   }
 
   public delete(postId: string, unicode: string, evaluatingUserId: string): void{
-    const post = dummyDataKeeper.idAndPostMap.get(postId);
-    const beforeCount = post!.emojiEvaluations.length;
-    post!.emojiEvaluations = post!.emojiEvaluations.filter((item) => 
-      item.evaluatingUserId != evaluatingUserId &&
-      item.unicode != unicode &&
-      item.evaludatedPostId != postId
-    );
-    if(beforeCount != post!.emojiEvaluations.length){
-      ReqLogUtil.info('deleted!');
-    } else {
-      ReqLogUtil.info("do nothing, but it's OK.");
-    }
+    return;
   }
 }

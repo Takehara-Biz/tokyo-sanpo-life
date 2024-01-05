@@ -86,6 +86,21 @@ getRedirectResult(auth)
     return;
   }
 
+  /**
+   * idTokenの有効期限が切れる前に、自動でidTokenを更新する仕組み。
+   */
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      user.getIdTokenResult().then((idTokenResult) => {
+        const tokenExpirationTime = idTokenResult.expirationTime;
+        const timeToRefresh = tokenExpirationTime - Date.now();
+        setTimeout(() => {
+          user.getIdToken(true);
+        }, timeToRefresh);
+      });
+    }
+  });
+
   /*firebase.auth().*/auth.currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
     // Send token to your backend via HTTPS
     // ...

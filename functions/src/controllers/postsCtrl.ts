@@ -1,10 +1,11 @@
 import { Express } from "express";
 import { postLogic } from "../models/bizlogic/postBizLogic";
-import { IPost, PostCategory } from "../models/serverTslDef";
 import { ReqLogUtil } from "../utils/reqLogUtil";
 import { EJS_404_PAGE_PATH, EJS_500_PAGE_PATH } from "./errorsCtrl";
 import { CtrlUtil } from "./ctrlUtil";
 import { TSLThreadLocal } from "../utils/tslThreadLocal";
+import { PostDto } from "../models/dto/postDto";
+import { PostCategory } from "../models/postCategory";
 
 /**
  * implements URL related to "posts" pages.
@@ -14,18 +15,19 @@ export const addPostsRouting = ((app: Express): void => {
   const EJS_PREFIX = "pages/posts/"
   const URL_PREFIX = "/posts"
 
-  app.get(URL_PREFIX + "/new-list", function (req, res, next) {
-    const targetPosts = postLogic.findPosts();
+  app.get(URL_PREFIX + "/new-list", async function (req, res, next) {
+    const targetPosts = await postLogic.listOrderbyInsertedAtDesc();
     const deletedToast = req.query.deletedToast != undefined;
     CtrlUtil.render(res, EJS_PREFIX + "new-list", {
       targetPosts: targetPosts, deletedToast: deletedToast
     });
   });
-  app.get(URL_PREFIX + "/my-list", function (req, res, next) {
-    let myPosts: IPost[] = [];
+  app.get(URL_PREFIX + "/my-list", async function (req, res, next) {
+    let myPosts: PostDto[] = [];
     if (TSLThreadLocal.currentContext?.loggedInUser != undefined) {
-      const uid = TSLThreadLocal.currentContext!.loggedInUser!.firebaseUserId
-      myPosts.push(...postLogic.findPostsByUserId(uid));
+      const firebaseUserId = TSLThreadLocal.currentContext!.loggedInUser!.firebaseUserId!
+      const savedData = await postLogic.listByUserId(firebaseUserId);
+      myPosts.push(...savedData);
     }
     CtrlUtil.render(res, EJS_PREFIX + "my-list", { myPosts: myPosts });
   });
@@ -33,7 +35,7 @@ export const addPostsRouting = ((app: Express): void => {
     CtrlUtil.render(res, EJS_PREFIX + "create", { categories: PostCategory.Categories });
   });
   app.get(URL_PREFIX + "/:id", function (req, res, next) {
-    const post = postLogic.findPost(req.params.id);
+    const post = postLogic.find(req.params.id);
 
     // when comes from list screen.
     let showBack = true;
@@ -53,7 +55,7 @@ export const addPostsRouting = ((app: Express): void => {
   app.delete(URL_PREFIX + "/:id", function (req, res, next) {
     // needs authorization
     try {
-      postLogic.deletePost(req.params.id!.toString());
+      postLogic.delete(req.params.id!.toString());
     } catch (error) {
       ReqLogUtil.warn('failed to delete the post ' + req.query.id);
       ReqLogUtil.warn(error);
@@ -63,37 +65,31 @@ export const addPostsRouting = ((app: Express): void => {
     res.redirect(EJS_PREFIX + '/new-posts?deletedToast=true');
   });
 
-  app.post(URL_PREFIX, function (req, res, next) {
-    ReqLogUtil.debug("req.body : " + JSON.stringify(req.body));
-    ReqLogUtil.debug("req.body.comment : " + req.body.comment);
-    ReqLogUtil.debug("req.body.postCategory : " + req.body.postCategory);
-    ReqLogUtil.debug("req.body.uploadPhoto : " + req.body.uploadPhoto);
-    ReqLogUtil.debug("req.body.markerLat : " + req.body.markerLat);
-    ReqLogUtil.debug("req.body.markerLng : " + req.body.markerLng);
+  app.post(URL_PREFIX, async function (req, res, next) {
 
     const postCategory = PostCategory.findCategory(Number(req.body.postCategory));
-    ReqLogUtil.debug("aa" + postCategory);
-    ReqLogUtil.debug("aa" + postCategory.getLabel());
-    const newPost: IPost = {
-      id: "this will be updated in dao class",
+
+    const now = new Date();
+    const newPost: PostDto = {
       user: TSLThreadLocal.currentContext!.loggedInUser!,
       imageUrl: "/images/post-sample.jpeg",
       lat: Number(req.body.markerLat),
       lng: Number(req.body.markerLng),
       description: req.body.comment,
       postCategory: postCategory,
-      insertDate: new Date(),
       postComments: [],
       emojiEvaluations: [],
+      postedFirebaseUserId: TSLThreadLocal.currentContext!.identifiedFirebaseUserId!,
+      insertedAt: now,
+      updatedAt: now,
     };
-    postLogic.createPost(newPost);
-    const post = postLogic.findPost(newPost.id);
-    res.redirect("/posts/" + post!.id + "?showBack=false")
+    const postId = await postLogic.create(newPost);
+    res.redirect("/posts/" + postId + "?showBack=false")
   });
 
   app.get(URL_PREFIX + "/update/:id", function (req, res, next) {
     // needs authorization
-    const post = postLogic.findPost(req.params.id);
+    const post = postLogic.find(req.params.id);
     if (post !== null) {
       CtrlUtil.render(res, EJS_PREFIX + "update", { post: post, showBack: true });
     } else {
@@ -106,7 +102,7 @@ export const addPostsRouting = ((app: Express): void => {
    * expects to be called with Ajax.
    */
   app.get("/map/post/:id", function (req, res, next) {
-    const post = postLogic.findPost(req.params.id);
+    const post = postLogic.find(req.params.id);
     if (post !== null) {
       CtrlUtil.render(res, "partials/exclusive/map-post-read", {post: post});
     } else {

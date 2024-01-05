@@ -1,7 +1,7 @@
-import { IEmojiEvaluation } from "../serverTslDef";
+import { EmojiEvaluationDoc } from "../doc/emojiEvaluationDoc";
 
 export interface IEmojiEvaluationsDao {
-  list(postId: string): IEmojiEvaluation[];
+  list(postId: string): EmojiEvaluationDoc[];
   /**
    * even if there is already an evaluation which meets the param, it is OK. just do nothing.
    * @param postId 

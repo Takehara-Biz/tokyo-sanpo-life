@@ -1,5 +1,5 @@
 import { AsyncLocalStorage } from 'async_hooks';
-import { IUser } from '../models/serverTslDef';
+import { UserDto } from '../models/dto/userDto';
 
 /**
  * Manage thread local data.
@@ -10,7 +10,7 @@ import { IUser } from '../models/serverTslDef';
 export class TSLThreadLocal {
   static storage = new AsyncLocalStorage<TSLThreadLocal>();
   public identifiedFirebaseUserId: string | undefined;
-  public loggedInUser: IUser | undefined;
+  public loggedInUser: UserDto | undefined;
   public readonly requestId: string;
   
   constructor(){

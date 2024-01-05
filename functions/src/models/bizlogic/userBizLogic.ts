@@ -1,11 +1,11 @@
 import { ReqLogUtil } from "../../utils/reqLogUtil"
 import { TSLThreadLocal } from "../../utils/tslThreadLocal";
 import { FirestoreUsersDao } from "../dao/firestore/firestoreUsersDao";
-import { IUsersDao } from "../dao/iUsersDao";
-import { IUser} from "../serverTslDef";
+import { IUsersDao } from "../dao/interface/iUsersDao";
+import { UserDto } from "../dto/userDto";
 
 class UserBizLogic {
-  //private usersDao: IUsersDao = new MockUsersDao();
+  //private usersDao: UserDtosDao = new MockUsersDao();
   private usersDao: IUsersDao = new FirestoreUsersDao();
 
   public async logout(): Promise<void> {
@@ -20,13 +20,13 @@ class UserBizLogic {
     }
   }
 
-  public async findUser(userId: string): Promise<IUser | null> {
+  public async findUser(userId: string): Promise<UserDto | null> {
     const result = await this.usersDao.read(userId);
     //TslLogUtil.debug('findUser result : ' + JSON.stringify(result));
     return result;
   }
 
-  public async createUser(user: IUser): Promise<void> {
+  public async createUser(user: UserDto): Promise<void> {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId!;
     user.firebaseUserId = firebaseUserId;
     user.loggedIn = true;
@@ -36,7 +36,7 @@ class UserBizLogic {
     await this.usersDao.create(user);
   }
 
-  public async updateUser(user: IUser): Promise<boolean> {
+  public async updateUser(user: UserDto): Promise<boolean> {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId
     if(user.firebaseUserId != firebaseUserId){
       ReqLogUtil.warn('can not update others account!');

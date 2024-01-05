@@ -1,52 +1,43 @@
 import { ReqLogUtil } from "../../../utils/reqLogUtil";
-import { IPost} from "../../serverTslDef";
+import { PostDoc } from "../doc/postDoc";
+import { IPostsDao } from "../interface/iPostsDao";
 import { dummyDataKeeper } from "./dummyDataKeeper";
-import { IPostsDao } from "../iPostsDao";
 
 export class MockPostsDao implements IPostsDao {
 
-  public async listOrderbyCreatedDateTime(limit: number, offset: number): Promise<IPost[]> {
+  public async listOrderbyInsertedAtDesc(limit: number, offset: number): Promise<PostDoc[]> {
     const list = [...dummyDataKeeper.idAndPostMap.values()].slice(0, limit);
-    for(let index in list){
-      // remove data used in only detail screen...
-      list[index].postComments = [];
-      list[index].emojiEvaluations = []
-    }
-    ReqLogUtil.info('findPosts length : ' + list.length);
+    ReqLogUtil.info('listOrderbyInsertedAtDesc length : ' + list.length);
     return await list;
   }
 
-  public async listByGeoQuery(lat: number, lng: number, distanceKM: number): Promise<IPost[]> {
+  public async listByGeoQuery(lat: number, lng: number, distanceKM: number): Promise<PostDoc[]> {
     const result = [...dummyDataKeeper.idAndPostMap.values()].slice(0, 50);
-    ReqLogUtil.info('findPosts length : ' + result.length);
+    ReqLogUtil.info('listByGeoQuery length : ' + result.length);
     return await result;
   }
 
-  public listByUserId(userId: string): IPost[] {
+  public async listByUserId(userId: string): Promise<PostDoc[]> {
     let list = [...dummyDataKeeper.idAndPostMap.values()]
-    list = list.filter((value: IPost) => value.user.firebaseUserId === userId);
-    for(let index in list){
-      // remove data used in only detail screen...
-      list[index].postComments = [];
-      list[index].emojiEvaluations = []
-    }
-    ReqLogUtil.info('findPosts length : ' + list.length);
-    return list;
+    list = list.filter((value: PostDoc) => value.postedFirebaseUserId === userId);
+    ReqLogUtil.info('listByUserId length : ' + list.length);
+    return await list;
   }
 
-  public read(postId: string): IPost | null {
+  public async read(postId: string): Promise<PostDoc | null> {
     const result = dummyDataKeeper.idAndPostMap.get(postId) ?? null;
-    ReqLogUtil.debug('findPost result : ' + JSON.stringify(result));
-    return result;
+    ReqLogUtil.debug('read result : ' + JSON.stringify(result));
+    return await result;
   }
 
-  public create(post: IPost):void {
-    post.id = dummyDataKeeper.nextval().toString();
-    ReqLogUtil.info('createPost : ' + JSON.stringify(post));
-    dummyDataKeeper.idAndPostMap.set(post.id, post);
+  public async create(post: PostDoc): Promise<string> {
+    post.firestoreDocId = dummyDataKeeper.nextval().toString();
+    ReqLogUtil.info('create : ' + JSON.stringify(post));
+    dummyDataKeeper.idAndPostMap.set(post.firestoreDocId!, post);
+    return await post.firestoreDocId!;
   }
 
-  public delete(id: string):void {
+  public async delete(id: string): Promise<void> {
     const result = dummyDataKeeper.idAndPostMap.delete(id);
     ReqLogUtil.info('deleted post ' + id + ', and the result is ' + result);
   }

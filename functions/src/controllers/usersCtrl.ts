@@ -1,12 +1,12 @@
 import { Express } from "express";
 import { userLogic } from "../models/bizlogic/userBizLogic";
-import { IUser } from "../models/serverTslDef";
 import { firebaseAuthDao } from "../models/auth/firebaseAuthDao";
-import { defaultUserIconBase64 } from "../models/dao/defaultUserIconBase64";
 import { EJS_401_PAGE_PATH } from "./errorsCtrl";
 import { ReqLogUtil } from "../utils/reqLogUtil";
 import { CtrlUtil } from "./ctrlUtil";
 import { TSLThreadLocal } from "../utils/tslThreadLocal";
+import { UserDto } from "../models/dto/userDto";
+import { BasicUserIconUtil } from "../models/dao/basicUserIconBase64";
 
 /**
  * implements URL related to user or authentication
@@ -24,11 +24,11 @@ export const addUsersRouting = ((app: Express): void => {
   app.post(URL_PREFIX + "create", async function (req, res, next) {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId;
     const now = new Date();
-    const newUser: IUser = {
+    const newUser: UserDto = {
       firebaseUserId: firebaseUserId!,
       loggedIn: true,
       userName: req.body.userName,
-      userIconBase64: defaultUserIconBase64,
+      userIconBase64: BasicUserIconUtil.defaultUserIconBase64,
       selfIntroduction: req.body.selfIntroduction ?? "",
       xProfileLink: req.body.xProfileURL ?? "",
       instagramProfileLink: req.body.instaProfileURL ?? "",
