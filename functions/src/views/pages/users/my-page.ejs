@@ -36,7 +36,7 @@
                   </dd>
                 </dl>
                 <%- include('../../partials/util/icon-link-button', {label: "ユーザ情報編集", href: "/users/update", googleIconName: "manage_accounts"}); %>
-                <%- include('../../partials/util/icon-link-button', {label: "ユーザアイコンの変更", googleIconName: "face", href: "/user/update-user-icon"}) %>
+                <%- include('../../partials/util/icon-link-button', {label: "ユーザアイコンの変更", googleIconName: "face", href: "/users/update-user-icon"}) %>
                 
                 <form action="/users/logout" method="post" onsubmit="return logout();">
                   <%- include('../../partials/util/icon-button', {label: "ログアウト", googleIconName: "logout"}); %>

@@ -86,7 +86,7 @@ export const addUsersRouting = ((app: Express): void => {
   });
 
   app.get(URL_PREFIX + "update-user-icon", function (req, res, next) {
-    CtrlUtil.render(res, EJS_PREFIX + "update-user-icon");
+    CtrlUtil.render(res, EJS_PREFIX + "update-user-icon", {showBack: true});
   });
 
   app.post(URL_PREFIX + "update-user-icon", function (req, res, next) {
@@ -94,7 +94,7 @@ export const addUsersRouting = ((app: Express): void => {
   });
 
   app.get(URL_PREFIX + "update", function (req, res, next) {
-    CtrlUtil.render(res, EJS_PREFIX + "update");
+    CtrlUtil.render(res, EJS_PREFIX + "update", {showBack: true});
   });
   /**
    * called with Ajax
