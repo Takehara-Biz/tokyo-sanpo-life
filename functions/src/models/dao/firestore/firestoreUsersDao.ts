@@ -1,7 +1,7 @@
-import { ReqLogUtil } from "../../utils/reqLogUtil";
-import { FirebaseAdminManager } from "../firebase/firebaseAdminManager";
-import { IUser } from "../serverTslDef";
-import { IUsersDao } from "./iUsersDao";
+import { ReqLogUtil } from "../../../utils/reqLogUtil";
+import { FirebaseAdminManager } from "../../firebase/firebaseAdminManager";
+import { IUser } from "../../serverTslDef";
+import { IUsersDao } from "../iUsersDao";
 
 export class FirestoreUsersDao implements IUsersDao {
   private static readonly COLLECTION_NAME = "users";

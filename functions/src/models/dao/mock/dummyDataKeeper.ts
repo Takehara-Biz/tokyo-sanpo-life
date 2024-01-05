@@ -1,5 +1,5 @@
-import { IEmojiEvaluation, IPost, IPostComment, IUser, PostCategory } from "../serverTslDef";
-import { defaultUserIconBase64 } from "./defaultUserIconBase64";
+import { IEmojiEvaluation, IPost, IPostComment, IUser, PostCategory } from "../../serverTslDef";
+import { defaultUserIconBase64 } from "../defaultUserIconBase64";
 
 /**
  * Firestoreの代わりにダミーとしてデータを保持するクラス

@@ -1,10 +1,10 @@
 import { Express } from "express";
-import { postLogic } from "../models/bizlogic/postLogic";
-import { addUsersRouting } from "./users";
-import { addOthersRouting } from "./others";
-import { addErrorsRouting } from "./errors";
+import { postLogic } from "../models/bizlogic/postBizLogic";
+import { addUsersRouting } from "./usersCtrl";
+import { addOthersRouting } from "./othersCtrl";
+import { addErrorsRouting } from "./errorsCtrl";
 import { addPostsRouting } from "./posts";
-import { addPostsEmojiEvalulationsRouting } from "./posts-emoji-evaluations";
+import { addPostsEmojiEvalulationsRouting } from "./postsEmojiEvaluationsCtrl";
 import { CtrlUtil } from "./ctrlUtil";
 
 export const routing = ((app: Express): void => {

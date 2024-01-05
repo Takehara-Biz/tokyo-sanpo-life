@@ -1,10 +1,10 @@
 import { ReqLogUtil } from "../../utils/reqLogUtil"
 import { TSLThreadLocal } from "../../utils/tslThreadLocal";
-import { FirestoreUsersDao } from "../dao/firestoreUsersDao";
+import { FirestoreUsersDao } from "../dao/firestore/firestoreUsersDao";
 import { IUsersDao } from "../dao/iUsersDao";
 import { IUser} from "../serverTslDef";
 
-class UserLogic {
+class UserBizLogic {
   //private usersDao: IUsersDao = new MockUsersDao();
   private usersDao: IUsersDao = new FirestoreUsersDao();
 
@@ -74,4 +74,4 @@ class UserLogic {
     return true;
   }
 }
-export const userLogic = new UserLogic();
+export const userLogic = new UserBizLogic();

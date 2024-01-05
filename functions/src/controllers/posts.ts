@@ -1,8 +1,8 @@
 import { Express } from "express";
-import { postLogic } from "../models/bizlogic/postLogic";
+import { postLogic } from "../models/bizlogic/postBizLogic";
 import { IPost, PostCategory } from "../models/serverTslDef";
 import { ReqLogUtil } from "../utils/reqLogUtil";
-import { EJS_404_PAGE_PATH, EJS_500_PAGE_PATH } from "./errors";
+import { EJS_404_PAGE_PATH, EJS_500_PAGE_PATH } from "./errorsCtrl";
 import { CtrlUtil } from "./ctrlUtil";
 import { TSLThreadLocal } from "../utils/tslThreadLocal";
 

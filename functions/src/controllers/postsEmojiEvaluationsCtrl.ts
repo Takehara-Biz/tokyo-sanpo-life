@@ -1,5 +1,5 @@
 import { Express } from "express";
-import { postLogic } from "../models/bizlogic/postLogic";
+import { postLogic } from "../models/bizlogic/postBizLogic";
 import { firebaseAuthDao } from "../models/auth/firebaseAuthDao";
 
 /**

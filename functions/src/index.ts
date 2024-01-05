@@ -28,7 +28,7 @@ import { firebaseAuthDao } from "./models/auth/firebaseAuthDao";
 import { ReqLogUtil } from "./utils/reqLogUtil";
 import { Request, Response, NextFunction } from "express";
 import { TSLThreadLocal } from "./utils/tslThreadLocal";
-import { userLogic } from "./models/bizlogic/userLogic";
+import { userLogic } from "./models/bizlogic/userBizLogic";
 import { FirebaseAdminManager } from "./models/firebase/firebaseAdminManager";
 
 const app = express();

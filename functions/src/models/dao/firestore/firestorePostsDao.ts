@@ -1,8 +1,8 @@
 import { geohashQueryBounds } from "geofire-common";
-import { ReqLogUtil } from "../../utils/reqLogUtil";
-import { FirebaseAdminManager } from "../firebase/firebaseAdminManager";
-import { IPost } from "../serverTslDef";
-import { IPostsDao } from "./iPostsDao";
+import { ReqLogUtil } from "../../../utils/reqLogUtil";
+import { FirebaseAdminManager } from "../../firebase/firebaseAdminManager";
+import { IPost } from "../../serverTslDef";
+import { IPostsDao } from "../iPostsDao";
 
 export class FirestorePostsDao implements IPostsDao {
   private static readonly COLLECTION_NAME = "posts";

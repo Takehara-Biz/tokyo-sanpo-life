@@ -1,7 +1,7 @@
-import { ReqLogUtil } from "../../utils/reqLogUtil";
-import { IEmojiEvaluation } from "../serverTslDef";
+import { ReqLogUtil } from "../../../utils/reqLogUtil";
+import { IEmojiEvaluation } from "../../serverTslDef";
 import { dummyDataKeeper } from "./dummyDataKeeper";
-import { IEmojiEvaluationsDao } from "./iEmojiEvaluationsDao";
+import { IEmojiEvaluationsDao } from "../iEmojiEvaluationsDao";
 
 export class MockEmojiEvaluationsDao implements IEmojiEvaluationsDao {
   public list(postId: string): IEmojiEvaluation[] {

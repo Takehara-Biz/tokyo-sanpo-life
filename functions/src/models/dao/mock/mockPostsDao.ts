@@ -1,7 +1,7 @@
-import { ReqLogUtil } from "../../utils/reqLogUtil";
-import { IPost} from "../serverTslDef";
+import { ReqLogUtil } from "../../../utils/reqLogUtil";
+import { IPost} from "../../serverTslDef";
 import { dummyDataKeeper } from "./dummyDataKeeper";
-import { IPostsDao } from "./iPostsDao";
+import { IPostsDao } from "../iPostsDao";
 
 export class MockPostsDao implements IPostsDao {
 

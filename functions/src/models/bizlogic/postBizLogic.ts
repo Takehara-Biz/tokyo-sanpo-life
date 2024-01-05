@@ -1,13 +1,13 @@
 import { geohashForLocation } from "geofire-common";
 import { IEmojiEvaluationsDao } from "../dao/iEmojiEvaluationsDao";
 import { IPostsDao } from "../dao/iPostsDao";
-import { MockEmojiEvaluationsDao } from "../dao/mockEmojiEvaluationsDao";
+import { MockEmojiEvaluationsDao } from "../dao/mock/mockEmojiEvaluationsDao";
 import { IPost } from "../serverTslDef";
-import { FirestorePostsDao } from "../dao/firestorePostsDao";
+import { FirestorePostsDao } from "../dao/firestore/firestorePostsDao";
 import { TSLThreadLocal } from "../../utils/tslThreadLocal";
 import { ReqLogUtil } from "../../utils/reqLogUtil";
 
-export class PostLogic {
+export class PostBizLogic {
   //private postsDao: IPostsDao = new MockPostsDao();
   private postsDao: IPostsDao = new FirestorePostsDao();
   private emojiEvaluationsDao: IEmojiEvaluationsDao = new MockEmojiEvaluationsDao();
@@ -94,4 +94,4 @@ export class PostLogic {
     this.emojiEvaluationsDao.delete(postId, unicode, evaluatingUserId);
   }
 }
-export const postLogic = new PostLogic();
+export const postLogic = new PostBizLogic();
