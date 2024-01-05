@@ -15,28 +15,34 @@ const UpdateUserIconPage = {
     const useDefaultIconButton = document.getElementById('useDefaultIconButton')!;
     useDefaultIconButton.addEventListener('click', function (e) {
       // 要素を取得する
-      let img = document.getElementById("defaultIconImg")! as HTMLImageElement;
+      const img = document.getElementById("defaultIconImg")! as HTMLImageElement;
   
       //canvas要素を生成
-      let cvs = document.createElement('canvas');
-      let context = cvs.getContext('2d')!;
+      const cvs = document.createElement('canvas');
+      const context = cvs.getContext('2d')!;
       cvs.width = img.width;
       cvs.height = img.height;
   
       context.drawImage(img, 0, 0);
   
       //　mime_typeを指定してBase64化する
-      let base64String = cvs.toDataURL("image/png");
+      const base64String = cvs.toDataURL("image/png");
+
+      // @ts-ignore
+      TslLogUtil.debug(base64String);
+      // @ts-ignore
+      TslLogUtil.debug("base64length : " + base64String.length);
   
-      console.log(base64String);
-  
-      let preview1 = document.getElementById('preview1')! as HTMLImageElement;
+      const preview1 = document.getElementById('preview1')! as HTMLImageElement;
       // previewにセットする
       preview1.src = base64String;
   
-      let preview2 = document.getElementById('preview2')! as HTMLImageElement;
+      const preview2 = document.getElementById('preview2')! as HTMLImageElement;
       // previewにセットする
       preview2.src = base64String;
+
+      const newUserIconBase64 = document.getElementById("newUserIconBase64")! as HTMLInputElement;
+      newUserIconBase64.value = base64String;
     });
 
 
@@ -91,17 +97,24 @@ const UpdateUserIconPage = {
     const cropButton = document.getElementById('cropButton')!;
     cropButton.addEventListener('click', function () {
       // トリミングパネル内のcanvasを取得
-      let canvas = cropper.getCroppedCanvas()
+      const canvas = cropper.getCroppedCanvas()
       // canvasをbase64に変換
-      let data = canvas.toDataURL();
+      const data = canvas.toDataURL();
+      // @ts-ignore
+      TslLogUtil.debug(data);
+      // @ts-ignore
+      TslLogUtil.debug("base64length : " + data.length);
 
-      let preview1 = document.getElementById('preview1')! as HTMLImageElement;
+      const preview1 = document.getElementById('preview1')! as HTMLImageElement;
       // previewにセットする
       preview1.src = data;
 
-      let preview2 = document.getElementById('preview2')! as HTMLImageElement;
+      const preview2 = document.getElementById('preview2')! as HTMLImageElement;
       // previewにセットする
       preview2.src = data;
+
+      const newUserIconBase64 = document.getElementById("newUserIconBase64")! as HTMLInputElement;
+      newUserIconBase64.value = data;
     });
   },
 

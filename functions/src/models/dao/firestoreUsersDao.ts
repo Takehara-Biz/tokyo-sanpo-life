@@ -32,7 +32,7 @@ export class FirestoreUsersDao implements IUsersDao {
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", user.firebaseUserId).get();
     
-    usersSnapshot.forEach(async (doc) => {
+    await usersSnapshot.forEach(async (doc) => {
       // doc.data() is never undefined for query doc snapshots
       console.log(doc.id, " => ", doc.data());
       await doc.ref.update({
@@ -40,7 +40,8 @@ export class FirestoreUsersDao implements IUsersDao {
         userIconBase64: user.userIconBase64,
         selfIntroduction: user.selfIntroduction,
         xProfileLink: user.xProfileLink,
-        instagramProfileLink: user.instagramProfileLink
+        instagramProfileLink: user.instagramProfileLink,
+        updatedAt: user.updatedAt,
       });
     });
   }

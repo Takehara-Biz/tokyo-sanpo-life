@@ -26,17 +26,41 @@ class UserLogic {
     return result;
   }
 
-  public async createUser(user: IUser): Promise<void> {
+  public async createUser(user: IUser): Promise<boolean> {
+    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId
+    if(user.firebaseUserId != firebaseUserId){
+      ReqLogUtil.warn('can not create others account!');
+      return false;
+    }
     user.loggedIn = true;
     const now = new Date();
     user.insertedAt = now;
     user.updatedAt = now;
-    return await this.usersDao.create(user);
+    await this.usersDao.create(user);
+    return true;
   }
 
-  public async updateUser(user: IUser): Promise<void> {
+  public async updateUser(user: IUser): Promise<boolean> {
+    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId
+    if(user.firebaseUserId != firebaseUserId){
+      ReqLogUtil.warn('can not update others account!');
+      return false;
+    }
     user.updatedAt = new Date();
-    return await this.usersDao.update(user);
+    await this.usersDao.update(user);
+    return true;
+  }
+
+  public async updateUserIconBase64(newUserIconBase64: string): Promise<boolean> {
+    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId!;
+    const user = await this.findUser(firebaseUserId);
+    if(user == null){
+      ReqLogUtil.warn('no such user! ' + firebaseUserId);
+      return false;
+    }
+    user.userIconBase64 = newUserIconBase64;
+    user.updatedAt = new Date();
+    return await this.updateUser(user);
   }
 
   /**
