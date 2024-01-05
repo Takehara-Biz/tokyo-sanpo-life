@@ -12,7 +12,7 @@
       <div class="grow overflow-y-scroll">
         <%- include('../../partials/common/page-title', {title: 'アカウント削除確認' }); %>
         <div class="p-1 pb-10">
-          <p>ご利用ありがとうございました。🙇‍♂️</p>
+          <p>削除処理の前に、本ページの内容をご確認ください。</p>
           <dl>
             <dt>削除対象データ</dt>
             <dd>
@@ -36,15 +36,11 @@
             </dd>
           </dl>
           
-          <button onclick="return deleteUser();" class="btn text-white" style="background-color:#ff0000; height: 48px;">
-            <span class="material-symbols-outlined align-[-6px]">
-              person_remove
-            </span>
-            上記の内容に同意して、アカウントを削除する
-          </button>
+          <p>ご利用ありがとうございました。🙇‍♂️</p>
+          <%- include('../../partials/util/icon-button', {label: "アカウントを削除する", googleIconName: "person_remove", important: true, onClickCode: "deleteUser();"}); %>
           <script>
             function deleteUser(){
-              
+              TslLogUtil.debug('[BEGIN] deleteUser');
             }
           </script>
         </div>

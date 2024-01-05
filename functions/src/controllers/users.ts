@@ -132,7 +132,7 @@ export const addUsersRouting = ((app: Express): void => {
   });
 
   app.get(URL_PREFIX + "confirm-delete", function (req, res, next) {
-    CtrlUtil.render(res, EJS_PREFIX + "confirm-delete");
+    CtrlUtil.render(res, EJS_PREFIX + "confirm-delete", {showBack: true});
   });
 
   /**

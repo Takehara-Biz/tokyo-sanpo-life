@@ -47,18 +47,7 @@
                   <%- include('../../partials/util/icon-button', {label: "ログアウト", googleIconName: "logout"}); %>
                 </form>
 
-                <button class="mt-3 btn text-white w-full h-12" style="background-color:#ff0000; height: 48px;" onclick="return confirm('本当にアカウントを削除してもよろしいですか？');">
-                  <span class="material-symbols-outlined align-[-6px]" data-bs-toggle="dropdown" aria-expanded="false">
-                    person_remove
-                  </span>
-                  アカウント削除に進む
-                </button>
-                <a class="btn text-white" href="/users/confirm-delete" style="background-color:#ff0000; height: 48px;">
-                  <span class="material-symbols-outlined align-[-6px]" data-bs-toggle="dropdown" aria-expanded="false">
-                    person_remove
-                  </span>
-                  アカウント削除に進む
-                </a>
+                <%- include('../../partials/util/icon-link-button', {label: "アカウント削除に進む", googleIconName: "person_remove", href: "/users/confirm-delete", important: true, onClickCode: "return confirm('アカウント削除画面に進みますか？');"}) %>
               </div>
               <% } %>
       </div>
