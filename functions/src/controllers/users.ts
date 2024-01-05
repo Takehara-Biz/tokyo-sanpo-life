@@ -131,6 +131,10 @@ export const addUsersRouting = ((app: Express): void => {
     res.redirect(URL_PREFIX + "login?successfulLogoutToast");
   });
 
+  app.get(URL_PREFIX + "confirm-delete", function (req, res, next) {
+    CtrlUtil.render(res, EJS_PREFIX + "confirm-delete");
+  });
+
   /**
    * called with Ajax
    */

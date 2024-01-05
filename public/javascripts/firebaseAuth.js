@@ -56,6 +56,10 @@ getRedirectResult(auth)
   console.log('getRedirectResult then result : ' + JSON.stringify(result));
   console.log('auth.currentUser : ' + auth.currentUser);
 
+  if(result == null){
+    return;
+  }
+
   /*firebase.auth().*/auth.currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
     // Send token to your backend via HTTPS
     // ...

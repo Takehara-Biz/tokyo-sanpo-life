@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../../partials/common/head'); %>
+</head>
+
+<body>
+  <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
+    <%- include('../../partials/common/header'); %>
+      <!-- Main Body -->
+      <div class="grow overflow-y-scroll">
+        <%- include('../../partials/common/page-title', {title: 'アカウント削除確認' }); %>
+        <div class="p-1 pb-10">
+          <p>ご利用ありがとうございました。🙇‍♂️</p>
+          <dl>
+            <dt>削除対象データ</dt>
+            <dd>
+              本サービス上で入力された、以下の情報を削除します。
+              <ul>
+                <li>ユーザ名</li>
+                <li>ユーザアイコンの画像</li>
+                <li>自己紹介文</li>
+              </ul>
+            </dd>
+          </dl>
+          <dl>
+            <dt>残るデータ</dt>
+            <dd>
+              本サービス上で入力された、以下の情報は削除対象外ですが、投稿者が「退会済みユーザ」に変わります。
+              <ul>
+                <li>散歩情報（投稿）</li>
+                <li>散歩情報（投稿）に対するコメント</li>
+                <li>散歩情報（投稿）に付けた絵文字</li>
+              </ul>
+            </dd>
+          </dl>
+          
+          <button onclick="return deleteUser();" class="btn text-white" style="background-color:#ff0000; height: 48px;">
+            <span class="material-symbols-outlined align-[-6px]">
+              person_remove
+            </span>
+            上記の内容に同意して、アカウントを削除する
+          </button>
+          <script>
+            function deleteUser(){
+              
+            }
+          </script>
+        </div>
+      </div>
+      <%- include('../../partials/common/footer', {currentMenu: null}); %>
+  </div>
+</body>
+
+</html>

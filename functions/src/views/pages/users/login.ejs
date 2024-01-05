@@ -12,7 +12,7 @@
       list-style-type: disc;
     }
   </style>
-  <script type="module" src="/javascripts/firebaseAuth.js?ver=20240105062724"></script>
+  <script type="module" src="/javascripts/firebaseAuth.js?ver=20240105154808"></script>
 </head>
 
 <body>
@@ -28,9 +28,10 @@
               <input type="hidden" id="idToken" name="idToken" />
               <div class="hidden">
                 <!-- javascriptでクリックさせる -->
-              <%- include('../../partials/util/icon-button', {label: "/loginを呼ぶ。このボタンは非表示", id: "submit", typeSubmit: true, onClickCode: "loginWithGoogle();", googleIconName: "login"}); %>
+              <%- include('../../partials/util/icon-button', {label: "/loginを呼ぶ。このボタンは非表示", id: "submit", typeSubmit: true, googleIconName: "login"}); %>
               </div>
             </form>
+            <p>（ログイン後に、この画面に戻ってきますが、そのまましばらくお待ちください。）</p>
             
             <hr />
 
