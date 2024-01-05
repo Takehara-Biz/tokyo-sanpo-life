@@ -39,8 +39,19 @@ class UserLogic {
     return await this.usersDao.update(user);
   }
 
-  public async deleteUser(userId: string): Promise<void> {
-    return await this.usersDao.delete(userId);
+  /**
+   * 
+   * @param reqParamUserId 
+   * @returns true if deleted or do nothing, false if invalid
+   */
+  public async deleteUser(reqParamUserId: string): Promise<boolean> {
+    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId
+    if(reqParamUserId != firebaseUserId){
+      ReqLogUtil.warn('can not delete others account!');
+      return false;
+    }
+    await this.usersDao.delete(reqParamUserId);
+    return true;
   }
 }
 export const userLogic = new UserLogic();

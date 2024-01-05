@@ -139,13 +139,12 @@ export const addUsersRouting = ((app: Express): void => {
    * called with Ajax
    */
   app.delete(URL_PREFIX + ":id", async function (req, res, next) {
-    const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.body.idToken);
-    if(req.params.id != firebaseUserId){
+    if(! await userLogic.deleteUser(req.params.id)){
       CtrlUtil.render(res, EJS_401_PAGE_PATH);
       return;
     }
-    await userLogic.deleteUser(firebaseUserId);
     await userLogic.logout();
-    CtrlUtil.render(res, EJS_PREFIX + "my-page", { toast: true });
+    res.clearCookie('idToken');
+    res.redirect(URL_PREFIX + "login");
   });
 });

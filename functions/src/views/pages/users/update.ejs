@@ -54,11 +54,11 @@
                   },
                   body: JSON.stringify(data)
                 }).then((response) => {
-                  console.log('fetch then');
+                  TslLogUtil.debug('fetch then');
                   window.location.href = '/users/my-page'
                 }).catch((error) => {
-                  console.log('fetch error');
-                  console.error(error);
+                  TslLogUtil.error('fetch error');
+                  TslLogUtil.error(error);
                   window.location.href = '/errors/500';
                 })
               }
