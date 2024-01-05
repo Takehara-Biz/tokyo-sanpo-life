@@ -51,8 +51,8 @@ export type IMarkerTypeDef = {
  * マーカーの種類
  */
 export const CategoryIdAndMarkerTypeDefMap: Map<number, IMarkerTypeDef> = new Map<number, IMarkerTypeDef>();
-CategoryIdAndMarkerTypeDefMap.set(PostCategory.Flower.getId(), {iconKeyWord: "filter_vintage", glyphColor: "#ff0000", bgColor: "#ff99cc"});
 CategoryIdAndMarkerTypeDefMap.set(PostCategory.Landscape.getId(), {iconKeyWord: "landscape", glyphColor: "#33cc00", bgColor: "#ccffcc"});
+CategoryIdAndMarkerTypeDefMap.set(PostCategory.Flower.getId(), {iconKeyWord: "filter_vintage", glyphColor: "#ff0000", bgColor: "#ff99cc"});
 CategoryIdAndMarkerTypeDefMap.set(PostCategory.Cafe.getId(), {iconKeyWord: "local_cafe", glyphColor: "#663300", bgColor: "#ffcc99"});
 CategoryIdAndMarkerTypeDefMap.set(PostCategory.Shrine.getId(), {iconKeyWord: "temple_buddhist", glyphColor: "#6600ff", bgColor: "#cc99ff"});
 CategoryIdAndMarkerTypeDefMap.set(PostCategory.Building.getId(), {iconKeyWord: "location_city", glyphColor: "#ffffff", bgColor: "#666666"});

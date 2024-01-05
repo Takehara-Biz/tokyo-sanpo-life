@@ -59,6 +59,7 @@
                   body: JSON.stringify(data)
                 }).then((response) => {
                   TslLogUtil.debug('fetch then');
+                  
                   setTimeout((() => {
                     // if it's too early, old data can be printed..
                     window.location.href = '/users/my-page'

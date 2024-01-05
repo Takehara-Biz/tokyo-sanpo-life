@@ -5,6 +5,7 @@ import { PostCategory } from "../../postCategory";
 import { PostDoc } from "../doc/postDoc";
 import { EmojiEvaluationDoc } from "../doc/emojiEvaluationDoc";
 import { BasicUserIconUtil } from "../basicUserIconBase64";
+import { Timestamp } from "firebase-admin/firestore";
 
 /**
  * Firestoreの代わりにダミーとしてデータを保持するクラス
@@ -47,7 +48,7 @@ class DummyDataKeeper {
 
   private generateRandomPosts(postCount: number): void {
     for (let i = 0; i < postCount; i++) {
-      const now = new Date();
+      const now = Timestamp.now();
       const lat = 35.2 + Math.random();
       const lng = 139.3 + Math.random();
 

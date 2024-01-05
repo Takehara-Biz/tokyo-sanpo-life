@@ -34,8 +34,8 @@ export const addPostsRouting = ((app: Express): void => {
   app.get(URL_PREFIX + "/create", function (req, res, next) {
     CtrlUtil.render(res, EJS_PREFIX + "create", { categories: PostCategory.Categories });
   });
-  app.get(URL_PREFIX + "/:id", function (req, res, next) {
-    const post = postLogic.find(req.params.id);
+  app.get(URL_PREFIX + "/:id", async function (req, res, next) {
+    const post = await postLogic.find(req.params.id);
 
     // when comes from list screen.
     let showBack = true;

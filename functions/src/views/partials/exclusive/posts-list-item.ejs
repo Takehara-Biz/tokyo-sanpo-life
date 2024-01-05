@@ -1,4 +1,4 @@
-<div onclick="location.href='/posts/<%= post.id %>'" class="w-full p-1 flex items-center border-b">
+<div onclick="location.href='/posts/<%= post.firestoreDocId %>'" class="w-full p-1 flex items-center border-b">
   <div style="max-width: 50%;">
     <img width="100%" src="<%= post.imageUrl %>" style="border: 1px solid; " />
   </div>
@@ -7,7 +7,7 @@
     <p class="truncate"><%= post.description %></p>
     <p><%= post.postCategory.getEmoji() %>&nbsp;<%= post.postCategory.getLabel() %></p>
     <span class="text-sm">
-      <%= post.insertDate.toLocaleString("ja-JP") %>
+      <%= post.insertedAt.toLocaleString("ja-JP") %><br />
     </span>
   </div>
 </div>

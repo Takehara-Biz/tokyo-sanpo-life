@@ -1,3 +1,4 @@
+import { ReqLogUtil } from "../../utils/reqLogUtil";
 import { CommentDoc } from "../dao/doc/commentDoc";
 import { EmojiEvaluationDoc } from "../dao/doc/emojiEvaluationDoc";
 import { PostDoc } from "../dao/doc/postDoc";
@@ -31,20 +32,21 @@ export type PostDto = {
  */
 export class PostConvertor {
   public static convert(postDoc: PostDoc, userDoc: UserDoc, commentDocs: CommentDoc[], emojiEvaluationDocs: EmojiEvaluationDoc[]): PostDto {
-    const postDto = {
+    const postDto : PostDto = {
       firestoreDocId: postDoc.firestoreDocId,
-      user: userDoc,
+      user: userDoc as UserDto,
       postedFirebaseUserId: userDoc.firebaseUserId,
       imageUrl: postDoc.imageUrl,
       lat: postDoc.lat,
       lng: postDoc.lng,
       postCategory: PostCategory.findCategory(postDoc.categoryId),
       description: postDoc.description,
-      postComments: commentDocs,
-      emojiEvaluations: emojiEvaluationDocs,
-      insertedAt: postDoc.insertedAt,
-      updatedAt: postDoc.updatedAt,
+      postComments: commentDocs as CommentDto[],
+      emojiEvaluations: emojiEvaluationDocs as EmojiEvaluationDto[],
+      insertedAt: postDoc.insertedAt.toDate(),
+      updatedAt: postDoc.updatedAt.toDate(),
     }
+    ReqLogUtil.debug('converted result! ' + JSON.stringify(postDto));
     return postDto;
   }
 }

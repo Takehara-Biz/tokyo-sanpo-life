@@ -12,6 +12,7 @@ import { leftUser } from "../dto/userDto";
 import { ICommentsDao } from "../dao/interface/iCommentsDao";
 import { MockCommentsDao } from "../dao/mock/mockCommentsDao";
 import { PostDoc } from "../dao/doc/postDoc";
+import { Timestamp } from "firebase-admin/firestore";
 
 export class PostBizLogic {
   //private postsDao: PostDtosDao = new MockPostsDao();
@@ -85,8 +86,8 @@ export class PostBizLogic {
       geohash: geohashForLocation([postDto.lat, postDto.lng]),
       categoryId: postDto.postCategory.getId(),
       description: postDto.description,
-      insertedAt: postDto.insertedAt,
-      updatedAt: postDto.updatedAt,
+      insertedAt: Timestamp.fromDate(postDto.insertedAt),
+      updatedAt: Timestamp.fromDate(postDto.updatedAt),
     }
     
     return await this.postsDao.create(postDoc);

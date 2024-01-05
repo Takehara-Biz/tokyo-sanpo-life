@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase-admin/firestore";
+
 /**
  * firestore格納用のPostデータを示す。<br />
  * 紐づくデータを持たない。
@@ -15,6 +17,6 @@ export type PostDoc = {
   geohash: string;
   categoryId: number;
   description: string;
-  insertedAt: Date;
-  updatedAt: Date;
+  insertedAt: Timestamp;
+  updatedAt: Timestamp;
 }

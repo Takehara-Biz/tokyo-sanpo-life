@@ -8,6 +8,7 @@ export class FirestoreUsersDao implements IUsersDao {
   private static readonly FIREBASE_USER_ID = "firebaseUserId";
 
   public async list(userIds: string[]): Promise<Map<string, UserDoc>> {
+    ReqLogUtil.debug('list param : ' + userIds);
     const idAndUserDocMap = new Map<string, UserDoc>();
     if(userIds.length === 0){
       return idAndUserDocMap;
@@ -15,12 +16,13 @@ export class FirestoreUsersDao implements IUsersDao {
 
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "in", userIds).get();
-    usersSnapshot.forEach((doc) => {
+    await usersSnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       // ReqLogUtil.debug(doc.id + " => " + doc.data());
-      idAndUserDocMap.set(doc.id, doc.data() as UserDoc);
+      const userDoc = doc.data() as UserDoc;
+      idAndUserDocMap.set(userDoc.firebaseUserId, userDoc);
     });
-    ReqLogUtil.debug('list result : ' + JSON.stringify(idAndUserDocMap));
+    ReqLogUtil.debug('list result : ' + idAndUserDocMap);
     return idAndUserDocMap;
   }
 

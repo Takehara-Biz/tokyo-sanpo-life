@@ -9,52 +9,58 @@ export class FirestorePostsDao implements IPostsDao {
 
   public async listOrderbyInsertedAtDesc(limit: number = 100, offset: number = 0): Promise<PostDoc[]> {
     const postsRef = FirebaseAdminManager.db.collection(FirestorePostsDao.COLLECTION_NAME);
-    const postsSnapshot = await postsRef.orderBy('created_at', 'desc').limit(limit).offset(offset).get();
-    const results: PostDoc[] = [];
+    const postsSnapshot = await postsRef.orderBy('insertedAt', 'desc').limit(limit).offset(offset).get();
+    const postDocs: PostDoc[] = [];
     postsSnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       ReqLogUtil.debug(doc.id + " => " + doc.data());
-      results.push(doc.data() as PostDoc);
+      const postDoc = doc.data() as PostDoc;
+      postDoc.firestoreDocId = doc.id;
+      postDocs.push(postDoc);
     });
-    ReqLogUtil.debug('findPosts result : ' + JSON.stringify(results));
-    return results;
+    ReqLogUtil.debug('listOrderbyInsertedAtDesc result : ' + JSON.stringify(postDocs));
+    return postDocs;
   }
 
   public async listByGeoQuery(lat: number, lng: number, distanceKM: number, limit: number = 100, offset: number = 0): Promise<PostDoc[]> {
     const bounds = geohashQueryBounds([lat, lng], distanceKM * 1000);
     const postsRef = FirebaseAdminManager.db.collection(FirestorePostsDao.COLLECTION_NAME);
-    const results: PostDoc[] = [];
+    const postDocs: PostDoc[] = [];
     for (const b of bounds) {
       const usersSnapshot = await postsRef.orderBy('geohash').startAt(b[0]).endAt(b[1]).orderBy('created_at', 'desc').limit(limit).offset(offset).get();
       usersSnapshot.forEach((doc) => {
         // doc.data() is never undefined for query doc snapshots
         ReqLogUtil.debug(doc.id + " => " + doc.data());
-        results.push(doc.data() as PostDoc);
+        const postDoc = doc.data() as PostDoc;
+        postDoc.firestoreDocId = doc.id;
+        postDocs.push(postDoc);
       });
     }
 
-    ReqLogUtil.info('findPosts length : ' + results.length);
-    return results;
+    ReqLogUtil.info('findPosts length : ' + postDocs.length);
+    return postDocs;
   }
 
   public async listByUserId(userId: string): Promise<PostDoc[]> {
     const postsRef = FirebaseAdminManager.db.collection(FirestorePostsDao.COLLECTION_NAME);
     const postsSnapshot = await postsRef.orderBy('created_at', 'desc').get();
-    const results: PostDoc[] = [];
+    const postDocs: PostDoc[] = [];
     postsSnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       ReqLogUtil.debug(doc.id + " => " + doc.data());
-      results.push(doc.data() as PostDoc);
+      const postDoc = doc.data() as PostDoc;
+      postDoc.firestoreDocId = doc.id;
+      postDocs.push(postDoc);
     });
-    ReqLogUtil.debug('findPosts result : ' + JSON.stringify(results));
-    return results;
+    ReqLogUtil.debug('findPosts result : ' + JSON.stringify(postDocs));
+    return postDocs;
   }
 
   public async read(firestoreDocId: string): Promise<PostDoc | null> {
     const postsRef = FirebaseAdminManager.db.collection(FirestorePostsDao.COLLECTION_NAME);
     const postsDocRef = await postsRef.doc(firestoreDocId);
     let result = null;
-    postsDocRef.get().then((doc) => {
+    await postsDocRef.get().then((doc) => {
       if (doc.exists) {
         // doc.data() is never undefined for query doc snapshots
         ReqLogUtil.debug(doc.id + " => " + doc.data());
@@ -68,7 +74,7 @@ export class FirestorePostsDao implements IPostsDao {
     });
 
     ReqLogUtil.debug('findPosts result : ' + JSON.stringify(result));
-    if(result == null){
+    if (result == null) {
       return null;
     }
 
