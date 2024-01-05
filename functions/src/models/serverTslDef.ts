@@ -83,16 +83,24 @@ export interface IPostComment {
  * 投稿
  */
 export interface IPost {
-  id: string;
+  firestoreDocId: string;
   user: IUser;
+  postedFirebaseUserId: string;
   imageUrl: string;
   lat: number;
   lng: number;
+  /**
+   * for easy search.
+   * https://firebase.google.com/docs/firestore/solutions/geoqueries?hl=ja#solution_geohashes
+   */
+  geohash: string;
   postCategory: PostCategory;
   description: string;
   insertDate: Date;
   postComments: IPostComment[];
   emojiEvaluations: IEmojiEvaluation[];
+  insertedAt: Date;
+  updatedAt: Date;
 }
 
 /**

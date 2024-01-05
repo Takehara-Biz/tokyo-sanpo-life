@@ -1,38 +1,51 @@
+import { geohashForLocation } from "geofire-common";
 import { IEmojiEvaluationsDao } from "../dao/iEmojiEvaluationsDao";
 import { IPostsDao } from "../dao/iPostsDao";
 import { MockEmojiEvaluationsDao } from "../dao/mockEmojiEvaluationsDao";
-import {MockPostsDao} from "../dao/mockPostsDao";
-import {IPost} from "../serverTslDef";
+import { IPost } from "../serverTslDef";
+import { FirestorePostsDao } from "../dao/firestorePostsDao";
+import { TSLThreadLocal } from "../../utils/tslThreadLocal";
+import { ReqLogUtil } from "../../utils/reqLogUtil";
 
 export class PostLogic {
-  private postsDao: IPostsDao = new MockPostsDao();
+  //private postsDao: IPostsDao = new MockPostsDao();
+  private postsDao: IPostsDao = new FirestorePostsDao();
   private emojiEvaluationsDao: IEmojiEvaluationsDao = new MockEmojiEvaluationsDao();
 
-  public findPosts(): IPost[] {
-    const result = this.postsDao.listOrderbyCreatedDateTime(100, 0);
+  public async listOrderbyCreatedDateTime(): Promise<IPost[]> {
+    const result = await this.postsDao.listOrderbyCreatedDateTime(100, 0);
     //TslLogUtil.info('findPosts length : ' + result.length);
     return result;
   }
 
-  public findPostsByUserId(userId: string): IPost[] {
-    const result = this.postsDao.listByUserId(userId);
+  public async listByUserId(userId: string): Promise<IPost[]> {
+    const result = await this.postsDao.listByUserId(userId);
     //TslLogUtil.info('findPostsByUserId length : ' + result.length);
     return result;
   }
 
-  public findPost(id: string): IPost | null {
-    const result = this.postsDao.read(id);
+  public async findPost(id: string): Promise<IPost | null> {
+    const result = await this.postsDao.read(id);
     //TslLogUtil.debug('findPost result : ' + JSON.stringify(result));
     return result;
   }
 
-  public createPost(post: IPost): void {
+  public async createPost(post: IPost): Promise<void> {
+    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId;
+    post.postedFirebaseUserId = firebaseUserId!;
     //TslLogUtil.info('createPost : ' + JSON.stringify(post));
-    return this.postsDao.create(post);
+    post.geohash = geohashForLocation([post.lat, post.lng]);
+    return await this.postsDao.create(post);
   }
 
-  public deletePost(id: string): void {
-    return this.postsDao.delete(id);
+  public async deletePost(reqParamUserId: string): Promise<boolean> {
+    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId;
+    if(reqParamUserId != firebaseUserId){
+      ReqLogUtil.warn('can not delete others account!');
+      return false;
+    }
+    await this.postsDao.delete(reqParamUserId);
+    return true;
   }
 
   /**
@@ -43,11 +56,11 @@ export class PostLogic {
    */
   public findEmojiEvaluations(postId: string, userId: string | null): Map<string, [number, boolean]> {
     const emojiEvaluations = this.emojiEvaluationsDao.list(postId);
-    const unicode_count_userPut : Map<string, [number, boolean]> = new Map<string, [number, boolean]>();
+    const unicode_count_userPut: Map<string, [number, boolean]> = new Map<string, [number, boolean]>();
 
     for (let emojiEvaluation of emojiEvaluations) {
       let userPut = false;
-      if(emojiEvaluation.evaluatingUserId === userId){
+      if (emojiEvaluation.evaluatingUserId === userId) {
         userPut = true;
       }
 
@@ -60,7 +73,7 @@ export class PostLogic {
         // 基本的には、existingの結果を維持する。
         // ただし、これまでfalseで、今回初めてuserPutがtrueが来たら、以降はずっとtrueを維持したい。
         let newUserPut = existingUserPut;
-        if(!existingUserPut && userPut){
+        if (!existingUserPut && userPut) {
           newUserPut = true;
         }
         let newCount_newUserPut: [number, boolean] = [currentCount + 1, newUserPut];
@@ -73,11 +86,11 @@ export class PostLogic {
     return unicode_count_userPut;
   }
 
-  public putEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
+  public putEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void {
     this.emojiEvaluationsDao.create(postId, unicode, evaluatingUserId);
   }
 
-  public removeEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void{
+  public removeEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void {
     this.emojiEvaluationsDao.delete(postId, unicode, evaluatingUserId);
   }
 }

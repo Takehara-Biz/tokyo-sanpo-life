@@ -26,18 +26,14 @@ class UserLogic {
     return result;
   }
 
-  public async createUser(user: IUser): Promise<boolean> {
-    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId
-    if(user.firebaseUserId != firebaseUserId){
-      ReqLogUtil.warn('can not create others account!');
-      return false;
-    }
+  public async createUser(user: IUser): Promise<void> {
+    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId!;
+    user.firebaseUserId = firebaseUserId;
     user.loggedIn = true;
     const now = new Date();
     user.insertedAt = now;
     user.updatedAt = now;
     await this.usersDao.create(user);
-    return true;
   }
 
   public async updateUser(user: IUser): Promise<boolean> {

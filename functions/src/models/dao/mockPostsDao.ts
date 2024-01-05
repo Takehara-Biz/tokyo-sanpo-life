@@ -5,7 +5,7 @@ import { IPostsDao } from "./iPostsDao";
 
 export class MockPostsDao implements IPostsDao {
 
-  public listOrderbyCreatedDateTime(limit: number, offset: number): IPost[] {
+  public async listOrderbyCreatedDateTime(limit: number, offset: number): Promise<IPost[]> {
     const list = [...dummyDataKeeper.idAndPostMap.values()].slice(0, limit);
     for(let index in list){
       // remove data used in only detail screen...
@@ -13,13 +13,13 @@ export class MockPostsDao implements IPostsDao {
       list[index].emojiEvaluations = []
     }
     ReqLogUtil.info('findPosts length : ' + list.length);
-    return list;
+    return await list;
   }
 
-  public listByGeoQuery(lat: number, lng: number, distanceKM: number): IPost[] {
+  public async listByGeoQuery(lat: number, lng: number, distanceKM: number): Promise<IPost[]> {
     const result = [...dummyDataKeeper.idAndPostMap.values()].slice(0, 50);
     ReqLogUtil.info('findPosts length : ' + result.length);
-    return result;
+    return await result;
   }
 
   public listByUserId(userId: string): IPost[] {

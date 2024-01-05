@@ -14,7 +14,7 @@ export class FirestoreUsersDao implements IUsersDao {
     let result = null;
     usersSnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
+      ReqLogUtil.debug(doc.id + " => " + doc.data());
       result = doc.data() as IUser;
     });
     ReqLogUtil.debug('findUser result : ' + JSON.stringify(result));
@@ -51,7 +51,7 @@ export class FirestoreUsersDao implements IUsersDao {
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", userId).get();
     
-    usersSnapshot.forEach(async (doc) => {
+    await usersSnapshot.forEach(async (doc) => {
       // doc.data() is never undefined for query doc snapshots
       console.log(doc.id, " => ", doc.data());
       await doc.ref.delete();
