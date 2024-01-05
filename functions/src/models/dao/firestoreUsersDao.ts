@@ -24,7 +24,7 @@ export class FirestoreUsersDao implements IUsersDao {
   public async create(user: IUser): Promise<void> {
     ReqLogUtil.info('createUser : ' + JSON.stringify(user));
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
-    usersRef.add(user);
+    await usersRef.add(user);
   }
 
   public async update(user: IUser): Promise<void> {
@@ -50,10 +50,10 @@ export class FirestoreUsersDao implements IUsersDao {
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", userId).get();
     
-    usersSnapshot.forEach((doc) => {
+    usersSnapshot.forEach(async (doc) => {
       // doc.data() is never undefined for query doc snapshots
       console.log(doc.id, " => ", doc.data());
-      doc.ref.delete();
+      await doc.ref.delete();
     });
   }
 }

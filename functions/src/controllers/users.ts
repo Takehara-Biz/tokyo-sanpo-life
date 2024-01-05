@@ -22,7 +22,7 @@ export const addUsersRouting = ((app: Express): void => {
     CtrlUtil.render(res, EJS_PREFIX + "create", {firebaseUserId: firebaseUserId});
   });
   app.post(URL_PREFIX + "create", async function (req, res, next) {
-    const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
+    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId;
     const now = new Date();
     const newUser: IUser = {
       firebaseUserId: firebaseUserId!,
@@ -35,7 +35,7 @@ export const addUsersRouting = ((app: Express): void => {
       insertedAt: now,
       updatedAt: now,
     };
-    userLogic.createUser(newUser);
+    await userLogic.createUser(newUser);
     TSLThreadLocal.currentContext.loggedInUser = newUser;
     res.redirect(URL_PREFIX + "my-page");
   });
@@ -69,7 +69,7 @@ export const addUsersRouting = ((app: Express): void => {
 
     if (user !== null) {
       user.loggedIn = true;
-      userLogic.updateUser(user);
+      await userLogic.updateUser(user);
       TSLThreadLocal.currentContext.loggedInUser = user;
       ReqLogUtil.debug('redirect to my-page');
       res.redirect(URL_PREFIX + "my-page?toast");
@@ -143,8 +143,7 @@ export const addUsersRouting = ((app: Express): void => {
       CtrlUtil.render(res, EJS_401_PAGE_PATH);
       return;
     }
-    await userLogic.logout();
     res.clearCookie('idToken');
-    res.redirect(URL_PREFIX + "login");
+    res.json({});
   });
 });

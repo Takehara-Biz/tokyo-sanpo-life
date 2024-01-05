@@ -10,15 +10,10 @@
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
     <%- include('../../partials/common/header'); %>
       <!-- Main Body -->
-      <div class="grow overflow-y-scroll">
+      <div class="grow overflow-y-scroll flex flex-col">
         <%- include('../../partials/common/page-title', {title: 'マイページ' }); %>
           <% if (user === undefined) { %>
-            <div class="grow flex justify-center items-center">
-              <div>
-                <p class="text-center">🥳この機能は、<br />ログインしたら使えるようになります〜。</p>
-                <p class="text-center">ログインまたは新規登録を行うには、<br />右上のユーザアイコンをクリックしてください。</p>
-              </div>
-            </div>
+            <%- include('../../partials/common/urge-login'); %>
             <% } else { %>
               <div class="p-1">
                 <h2>あなたの情報</h2>
@@ -46,8 +41,6 @@
                 <form action="/users/logout" method="post" onsubmit="return logout();">
                   <%- include('../../partials/util/icon-button', {label: "ログアウト", googleIconName: "logout"}); %>
                 </form>
-
-                <%- include('../../partials/util/icon-link-button', {label: "アカウント削除に進む", googleIconName: "person_remove", href: "/users/confirm-delete", important: true, onClickCode: "return confirm('アカウント削除画面に進みますか？');"}) %>
               </div>
               <% } %>
       </div>

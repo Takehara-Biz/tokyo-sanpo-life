@@ -45,9 +45,24 @@ const logout = (async () => {
 window.logout = logout;
 export {logout};
 
+const forceLogOut = (async () => {
+  return await signOut(auth).then(() => {
+    // Sign-out successful.
+    console.log('Sign-out successful. (signOut then)');
+    return true;
+  }).catch((error) => {
+    // An error happened.
+    console.error('signOut catch error happened.');
+    console.error(error);
+    return false;
+  });
+});
+window.forceLogOut = forceLogOut;
+export {forceLogOut};
+
 
 getRedirectResult(auth)
-.then((result) => {
+.then(async (result) => {
 
   // プライベートブラウザだと、ログアウトした後にログインしようとすると、なぜかうまくいかない。
   // 引数のresultがnullになってしまう・・。
@@ -57,6 +72,17 @@ getRedirectResult(auth)
   console.log('auth.currentUser : ' + auth.currentUser);
 
   if(result == null){
+    // if(auth.currentUser != null){
+
+    //   await signOut(auth).then(() => {
+    //     // Sign-out successful.
+    //     console.log('Sign-out successful. (signOut then)');
+    //   }).catch((error) => {
+    //     // An error happened.
+    //     console.error('signOut catch error happened.');
+    //     console.error(error);
+    //   });
+    // }
     return;
   }
 

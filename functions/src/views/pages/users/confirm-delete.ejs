@@ -3,6 +3,7 @@
 
 <head>
   <%- include('../../partials/common/head'); %>
+  <script type="module" src="/javascripts/firebaseAuth.js"></script>
 </head>
 
 <body>
@@ -48,9 +49,10 @@
 
                   fetch('/users/<%= user.firebaseUserId %>', {
                     method: 'DELETE',
-                  }).then((response) => {
+                  }).then(async (response) => {
                     console.log('fetch then');
-                    window.location.href = '/users/my-page'
+                    await forceLogOut();
+                    window.location.href = '/users/login';
                   }).catch((error) => {
                     console.log('fetch error');
                     console.error(error);

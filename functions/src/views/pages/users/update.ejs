@@ -36,6 +36,10 @@
                 rows="3"><%= user.selfIntroduction %></textarea>
             </div>
             <%- include('../../partials/util/icon-button', {label: "決定", onClickCode: "return updateUser();", googleIconName: "person_check"}); %>
+
+            <div class="mt-10">
+              <%- include('../../partials/util/icon-link-button', {label: "アカウント削除に進む", googleIconName: "person_remove", href: "/users/confirm-delete", important: true, onClickCode: "return confirm('アカウント削除画面に進みますか？');"}) %>
+            </div>
           
             <script>
               function updateUser(){
