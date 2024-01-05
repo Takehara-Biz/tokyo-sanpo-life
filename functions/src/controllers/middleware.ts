@@ -57,7 +57,7 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
         ReqLogUtil.debug('This user has not created the TSL account yet.');
       }
     } else {
-      ReqLogUtil.warn('invalid uid... maybe Firebase ID token has expired.');
+      ReqLogUtil.warn('invalid uid... maybe Firebase ID token has been expired.');
     }
   } else {
     ReqLogUtil.debug('request does NOT have the "idToken" in the cookie...');
