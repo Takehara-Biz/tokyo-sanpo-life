@@ -1,5 +1,4 @@
 import { Express } from "express";
-import { postLogic } from "../models/bizlogic/postBizLogic";
 import { TSLThreadLocal } from "../utils/tslThreadLocal";
 import { CtrlUtil } from "./ctrlUtil";
 import { emojiEvalBizLogic } from "../models/bizlogic/emojiEvalBizLogic";
@@ -14,7 +13,7 @@ export const addPostsEmojiEvalsRouting = ((app: Express): void => {
 
   app.get(URL_PREFIX, async function (req, res, next) {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId ?? null;
-    const unicode_count_userPut = await postLogic.findEmojiEvals(req.params.postId, firebaseUserId);
+    const unicode_count_userPut = await emojiEvalBizLogic.findEmojiEvals(req.params.postId, firebaseUserId);
     const alreadyLoggedIn = TSLThreadLocal.currentContext.loggedInUser != undefined;
     CtrlUtil.render(res, "partials/util/emoji-eval-count-section", {unicode_count_userPut: unicode_count_userPut, alreadyLoggedIn: alreadyLoggedIn});
   });

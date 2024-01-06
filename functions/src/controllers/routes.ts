@@ -6,6 +6,7 @@ import { addErrorsRouting } from "./errorsCtrl";
 import { addPostsRouting } from "./postsCtrl";
 import { addPostsEmojiEvalsRouting } from "./postsEmojiEvalsCtrl";
 import { CtrlUtil } from "./ctrlUtil";
+import { addCommentsRouting } from "./commentsCtrl";
 
 export const routing = ((app: Express): void => {
 
@@ -28,6 +29,7 @@ export const routing = ((app: Express): void => {
 
   addUsersRouting(app);
   addPostsRouting(app);
+  addCommentsRouting(app);
   addPostsEmojiEvalsRouting(app);
   addOthersRouting(app);
 

@@ -3,7 +3,7 @@ import { IEmojiEvalsDao } from "../dao/interface/iEmojiEvalsDao";
 import { PostsColDao } from "../dao/firestore/postsColDao";
 import { TSLThreadLocal } from "../../utils/tslThreadLocal";
 import { ReqLogUtil } from "../../utils/reqLogUtil";
-import { PostConvertor, PostDto } from "../dto/postDto";
+import { PostDto } from "../dto/postDto";
 import { IPostsDao } from "../dao/interface/iPostsDao";
 import { IUsersDao } from "../dao/interface/iUsersDao";
 import { UsersColDao } from "../dao/firestore/usersColDao";
@@ -13,6 +13,7 @@ import { PostDoc } from "../dao/doc/postDoc";
 import { Timestamp } from "firebase-admin/firestore";
 import { CommentsColDao } from "../dao/firestore/commentsColDao";
 import { EmojiEvalsSubColDao } from "../dao/firestore/post/emojiEvalsSubColDao";
+import { DocDtoConvertor } from "../dto/docDtoConvertor";
 
 export class PostBizLogic {
   private postsDao: IPostsDao = new PostsColDao();
@@ -51,7 +52,7 @@ export class PostBizLogic {
       }
 
       // omit putting comments and emoji evaluations for list.
-      const dto = PostConvertor.toDto(postDoc, userDoc, [], []);
+      const dto = DocDtoConvertor.toPostDto(postDoc, userDoc, [], []);
       postDtos.push(dto)
     })
 
@@ -74,7 +75,7 @@ export class PostBizLogic {
 
     const commentDocs = await this.commentsDao.listOrderbyInsertedAtAsc(postId);
     const emojiEvalutions = await this.emojiEvalsDao.list(postId);
-    const postDto = PostConvertor.toDto(postDoc, userDoc, commentDocs, emojiEvalutions);
+    const postDto = DocDtoConvertor.toPostDto(postDoc, userDoc, commentDocs, emojiEvalutions);
     return postDto;
   }
 
@@ -136,45 +137,6 @@ export class PostBizLogic {
     }
     await this.postsDao.delete(reqParamPostId);
     return true;
-  }
-
-  /**
-   * 
-   * @param postId 
-   * @param userId null when not logged in.
-   * @returns 
-   */
-  public async findEmojiEvals(postId: string, userId: string | null): Promise<Map<string, [number, boolean]>> {
-    const emojiEvals = await this.emojiEvalsDao.list(postId);
-    const unicode_count_userPut: Map<string, [number, boolean]> = new Map<string, [number, boolean]>();
-
-    for (let emojiEval of emojiEvals) {
-      let userPut = false;
-      if (emojiEval.userFirestoreDocId === userId) {
-        userPut = true;
-      }
-
-      if (unicode_count_userPut.has(emojiEval.unicode)) {
-        let count_userPut = unicode_count_userPut.get(emojiEval.unicode)!;
-        let currentCount = count_userPut[0];
-        let existingUserPut = count_userPut[1];
-
-        // このアルゴリズムの説明。
-        // 基本的には、existingの結果を維持する。
-        // ただし、これまでfalseで、今回初めてuserPutがtrueが来たら、以降はずっとtrueを維持したい。
-        let newUserPut = existingUserPut;
-        if (!existingUserPut && userPut) {
-          newUserPut = true;
-        }
-        let newCount_newUserPut: [number, boolean] = [currentCount + 1, newUserPut];
-        unicode_count_userPut.set(emojiEval.unicode, newCount_newUserPut);
-      } else {
-        unicode_count_userPut.set(emojiEval.unicode, [1, userPut]);
-      }
-    }
-
-    ReqLogUtil.debug('unicode_count_userPut.size : ' + unicode_count_userPut.size);
-    return unicode_count_userPut;
   }
 }
 export const postLogic = new PostBizLogic();

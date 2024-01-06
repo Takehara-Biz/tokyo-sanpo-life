@@ -18,10 +18,10 @@ export const addCommentsRouting = ((app: Express): void => {
       userFirestoreDocId: "fill in biz Logic...",
       comment: req.body.comment,
       insertedAt: now,
-      udpatedAt: now
+      updatedAt: now
     } 
-    const postId = await commentBizLogic.create(newComment);
-    res.redirect("/posts/" + postId + "?showBack=false")
+    await commentBizLogic.create(newComment);
+    res.redirect("/posts/" + req.params.postId + "?showBack=false")
   });
 
   /**

@@ -1,5 +1,3 @@
-import { UserDto } from "./userDto";
-
 /**
  * A comment for a post.
  */
@@ -10,8 +8,17 @@ export type CommentDto = {
   /**
    * コメント一覧表示時に、ユーザ名とユーザアイコンの表示が必要。
    */
-  userDto?: UserDto;
+  commentUserDto?: CommentUserDto;
   comment: string;
   insertedAt: Date;
-  udpatedAt: Date;
+  updatedAt: Date;
+}
+
+/**
+ * Necessary user info related to Comment.
+ */
+export type CommentUserDto = {
+  firebaseUserId: string,
+  userName: string;
+  userIconBase64: string;
 }

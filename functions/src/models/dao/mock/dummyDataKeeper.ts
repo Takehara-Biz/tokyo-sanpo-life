@@ -1,11 +1,11 @@
 import { geohashForLocation } from "geofire-common";
-import { CommentDto } from "../../dto/commentDto";
-import { UserDto } from "../../dto/userDto";
 import { PostCategory } from "../../postCategory";
 import { PostDoc } from "../doc/postDoc";
 import { EmojiEvalDoc } from "../doc/post/emojiEvalsDoc";
 import { BasicUserIconUtil } from "../basicUserIconBase64";
 import { Timestamp } from "firebase-admin/firestore";
+import { CommentDoc } from "../doc/commentDoc";
+import { UserDoc } from "../doc/userDoc";
 
 /**
  * Firestoreの代わりにダミーとしてデータを保持するクラス
@@ -15,7 +15,7 @@ class DummyDataKeeper {
   public readonly userCount = 3;
   public idAndPostMap: Map<string, PostDoc> = new Map<string, PostDoc>();
   public idSequence: number = 0;
-  public idAndUserMap: Map<string, UserDto> = new Map<string, UserDto>();
+  public idAndUserMap: Map<string, UserDoc> = new Map<string, UserDoc>();
   
   constructor() {
     this.generateRandomPosts(this.postCount);
@@ -71,28 +71,17 @@ class DummyDataKeeper {
     }
   }
 
-  public createRandomComments(count: number): CommentDto[] {
-    const comments: CommentDto[] = [];
+  public createRandomComments(count: number): CommentDoc[] {
+    const comments: CommentDoc[] = [];
     for (let i = 0; i < count; i++) {
       const now = new Date();
       comments.push({
         firestoreDocId: i.toString(),
         postFirestoreDocId: i.toString(),
         userFirestoreDocId: i.toString(),
-        userDto: {
-          firebaseUserId: i.toString(),
-          loggedIn: true,
-          userName: DummyDataKeeper.generateRandomString(3, 12),
-          userIconBase64: BasicUserIconUtil.defaultUserIconBase64,
-          selfIntroduction: "",
-          xProfileLink: "",
-          instagramProfileLink: "",
-          insertedAt: now,
-          updatedAt: now,
-        },
         comment: DummyDataKeeper.generateRandomString(1, 100),
-        insertedAt: now,
-        udpatedAt: now
+        insertedAt: Timestamp.fromDate(now),
+        updatedAt: Timestamp.fromDate(now),
       },);
     }
     return comments;

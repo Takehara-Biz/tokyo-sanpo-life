@@ -2,9 +2,9 @@
   <hr />
   <div class="w-full px-4 py-2">
     <div style="display:flex; justify-content:space-between;">
-      <%- include('./user-icon-name-s', {iconUrl: post.user.userIconBase64, userName: post.user.userName}) %>
+      <%- include('./user-icon-name-s', {iconUrl: comment.commentUserDto.userIconBase64, userName: comment.commentUserDto.userName}) %>
       <span style="font-size: small; margin-left:20px;">
-        <%= comment.commentDate.toLocaleString("ja-JP") %>
+        <%= comment.insertedAt.toLocaleString("ja-JP") %>
       </span>
     </div>
     <p class="w-full break-words">

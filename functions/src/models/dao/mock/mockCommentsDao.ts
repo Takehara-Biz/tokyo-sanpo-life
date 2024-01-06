@@ -1,13 +1,11 @@
 import { ReqLogUtil } from "../../../utils/reqLogUtil";
-import { CommentDto } from "../../dto/commentDto";
 import { CommentDoc } from "../doc/commentDoc";
 import { ICommentsDao } from "../interface/iCommentsDao";
 import { dummyDataKeeper } from "./dummyDataKeeper";
 
 export class MockCommentsDao implements ICommentsDao{
-  async read(commentId: string): Promise<CommentDto | null> {
-    const commentsDocs = dummyDataKeeper.createRandomComments(1);
-    return commentsDocs[0];
+  async read(commentId: string): Promise<CommentDoc | null> {
+    return dummyDataKeeper.createRandomComments(1)[0];
   }
   async listOrderbyInsertedAtAsc(postId: string): Promise<CommentDoc[]> {
     ReqLogUtil.debug('postId: ' + postId);

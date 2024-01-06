@@ -28,8 +28,47 @@ export class EmojiEvalBizLogic {
     return true;
   }
 
-  public async read(postId: string, reqParamEmojiEvalId: string): Promise<EmojiEvalDto | null> {
-    const emojiEvalDao = await this.emojiEvalsDao.read(postId, reqParamEmojiEvalId);
+    /**
+   * 
+   * @param postId 
+   * @param userId null when not logged in.
+   * @returns 
+   */
+    public async findEmojiEvals(postId: string, userId: string | null): Promise<Map<string, [number, boolean]>> {
+      const emojiEvals = await this.emojiEvalsDao.list(postId);
+      const unicode_count_userPut: Map<string, [number, boolean]> = new Map<string, [number, boolean]>();
+  
+      for (let emojiEval of emojiEvals) {
+        let userPut = false;
+        if (emojiEval.userFirestoreDocId === userId) {
+          userPut = true;
+        }
+  
+        if (unicode_count_userPut.has(emojiEval.unicode)) {
+          let count_userPut = unicode_count_userPut.get(emojiEval.unicode)!;
+          let currentCount = count_userPut[0];
+          let existingUserPut = count_userPut[1];
+  
+          // このアルゴリズムの説明。
+          // 基本的には、existingの結果を維持する。
+          // ただし、これまでfalseで、今回初めてuserPutがtrueが来たら、以降はずっとtrueを維持したい。
+          let newUserPut = existingUserPut;
+          if (!existingUserPut && userPut) {
+            newUserPut = true;
+          }
+          let newCount_newUserPut: [number, boolean] = [currentCount + 1, newUserPut];
+          unicode_count_userPut.set(emojiEval.unicode, newCount_newUserPut);
+        } else {
+          unicode_count_userPut.set(emojiEval.unicode, [1, userPut]);
+        }
+      }
+  
+      ReqLogUtil.debug('unicode_count_userPut.size : ' + unicode_count_userPut.size);
+      return unicode_count_userPut;
+    }
+
+  public async read(postId: string, userId: string, reqParamEmojiEvalId: string): Promise<EmojiEvalDto | null> {
+    const emojiEvalDao = await this.emojiEvalsDao.read(postId, userId, reqParamEmojiEvalId);
     if(emojiEvalDao == null){
       ReqLogUtil.warn('there is no such emojiEvalId (' + reqParamEmojiEvalId + ')');
     }
