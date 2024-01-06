@@ -89,24 +89,24 @@ export const addPostsRouting = ((app: Express): void => {
     res.redirect("/posts/" + postId + "?showBack=false")
   });
 
-  app.get(URL_PREFIX + "/update/:id", function (req, res, next) {
+  app.get(URL_PREFIX + "/:id/update", async function (req, res, next) {
     // needs authorization
-    const post = postLogic.find(req.params.id);
-    if (post !== null) {
-      CtrlUtil.render(res, EJS_PREFIX + "update", { post: post, showBack: true });
-    } else {
-      // not found
+    const post = await postLogic.find(req.params.id);
+    if(post == null) {
+      ReqLogUtil.warn('there is no such post. post id : ' + req.params.id);
       CtrlUtil.render(res, EJS_404_PAGE_PATH);
     }
+
+    CtrlUtil.render(res, EJS_PREFIX + "update", { post: post, categories: PostCategory.Categories, showBack: true });
   });
-  
+
   /**
    * expects to be called with Ajax.
    */
   app.get("/map/post/:id", function (req, res, next) {
     const post = postLogic.find(req.params.id);
     if (post !== null) {
-      CtrlUtil.render(res, "partials/exclusive/map-post-read", {post: post});
+      CtrlUtil.render(res, "partials/exclusive/map-post-read", { post: post });
     } else {
       // not found
       CtrlUtil.render(res, EJS_404_PAGE_PATH);

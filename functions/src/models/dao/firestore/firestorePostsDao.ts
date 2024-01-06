@@ -62,9 +62,9 @@ export class FirestorePostsDao implements IPostsDao {
     let result = null;
     await postsDocRef.get().then((doc) => {
       if (doc.exists) {
-        // doc.data() is never undefined for query doc snapshots
-        ReqLogUtil.debug(doc.id + " => " + doc.data());
         result = doc.data() as PostDoc;
+        // doc.data() is never undefined for query doc snapshots
+        ReqLogUtil.debug(doc.id + " => " + ReqLogUtil.jsonStr(result));
         result.firestoreDocId = doc.id;
       } else {
         ReqLogUtil.warn('not found...');
@@ -73,7 +73,7 @@ export class FirestorePostsDao implements IPostsDao {
       ReqLogUtil.error('error occurred! ' + error);
     });
 
-    ReqLogUtil.debug('findPosts result : ' + JSON.stringify(result));
+    ReqLogUtil.debug('findPosts result : ' + ReqLogUtil.jsonStr(result));
     if (result == null) {
       return null;
     }

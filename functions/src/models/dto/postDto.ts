@@ -46,7 +46,7 @@ export class PostConvertor {
       insertedAt: postDoc.insertedAt.toDate(),
       updatedAt: postDoc.updatedAt.toDate(),
     }
-    ReqLogUtil.debug('converted result! ' + JSON.stringify(postDto));
+    ReqLogUtil.debug('converted result! ' + ReqLogUtil.jsonStr(postDto));
     return postDto;
   }
 }

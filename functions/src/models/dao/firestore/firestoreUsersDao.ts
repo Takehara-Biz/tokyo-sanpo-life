@@ -30,14 +30,15 @@ export class FirestoreUsersDao implements IUsersDao {
     
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", userId).get();
-    let result = null;
+    let userDoc = null;
     usersSnapshot.forEach((doc) => {
+      userDoc = doc.data() as UserDoc;
       // doc.data() is never undefined for query doc snapshots
-      ReqLogUtil.debug(doc.id + " => " + doc.data());
-      result = doc.data() as UserDoc;
+      ReqLogUtil.debug(doc.id + " => " + ReqLogUtil.jsonStr(userDoc));
+      
     });
-    ReqLogUtil.debug('find result : ' + JSON.stringify(result));
-    return result;
+    ReqLogUtil.debug('find result : ' + ReqLogUtil.jsonStr(userDoc));
+    return userDoc;
   }
 
   public async create(user: UserDoc): Promise<void> {
