@@ -3,7 +3,7 @@ import { CommentDto } from "../../dto/commentDto";
 import { UserDto } from "../../dto/userDto";
 import { PostCategory } from "../../postCategory";
 import { PostDoc } from "../doc/postDoc";
-import { EmojiEvaluationDoc } from "../doc/emojiEvaluationDoc";
+import { EmojiEvalDoc } from "../doc/emojiEvalsDoc";
 import { BasicUserIconUtil } from "../basicUserIconBase64";
 import { Timestamp } from "firebase-admin/firestore";
 
@@ -95,8 +95,8 @@ class DummyDataKeeper {
     return comments;
   }
 
-  public createRandomEmojiEvaluations(minTypeCount: number, maxTypeCount: number, minTotalCount: number, maxTotalCount: number, postId: string): EmojiEvaluationDoc[] {
-    const evaluations: EmojiEvaluationDoc[] = [];
+  public createRandomEmojiEvaluations(minTypeCount: number, maxTypeCount: number, minTotalCount: number, maxTotalCount: number, postId: string): EmojiEvalDoc[] {
+    const evaluations: EmojiEvalDoc[] = [];
     const typeCount = DummyDataKeeper.generateRandomNumber(minTypeCount, maxTypeCount);
     if(minTotalCount < 1){
       minTotalCount  = 1;

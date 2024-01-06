@@ -1,11 +1,11 @@
 import { ReqLogUtil } from "../../utils/reqLogUtil";
 import { CommentDoc } from "../dao/doc/commentDoc";
-import { EmojiEvaluationDoc } from "../dao/doc/emojiEvaluationDoc";
+import { EmojiEvalDoc } from "../dao/doc/emojiEvalsDoc";
 import { PostDoc } from "../dao/doc/postDoc";
 import { UserDoc } from "../dao/doc/userDoc";
 import { PostCategory } from "../postCategory";
 import { CommentDto } from "./commentDto";
-import { EmojiEvaluationDto } from "./emojiEvaluationDto";
+import { EmojiEvalDto } from "./emojiEvalDto";
 import { UserDto } from "./userDto";
 
 /**
@@ -21,7 +21,7 @@ export type PostDto = {
   postCategory: PostCategory;
   description: string;
   postComments: CommentDto[];
-  emojiEvaluations: EmojiEvaluationDto[];
+  emojiEvaluations: EmojiEvalDto[];
   insertedAt: Date;
   updatedAt: Date;
 }
@@ -31,7 +31,7 @@ export type PostDto = {
  * Hence, combine and convert to Dto.
  */
 export class PostConvertor {
-  public static toDto(postDoc: PostDoc, userDoc: UserDoc, commentDocs: CommentDoc[], emojiEvaluationDocs: EmojiEvaluationDoc[]): PostDto {
+  public static toDto(postDoc: PostDoc, userDoc: UserDoc, commentDocs: CommentDoc[], emojiEvaluationDocs: EmojiEvalDoc[]): PostDto {
     const postDto : PostDto = {
       firestoreDocId: postDoc.firestoreDocId,
       user: userDoc as UserDto,
@@ -42,7 +42,7 @@ export class PostConvertor {
       postCategory: PostCategory.findCategory(postDoc.categoryId),
       description: postDoc.description,
       postComments: commentDocs as CommentDto[],
-      emojiEvaluations: emojiEvaluationDocs as EmojiEvaluationDto[],
+      emojiEvaluations: emojiEvaluationDocs as EmojiEvalDto[],
       insertedAt: postDoc.insertedAt.toDate(),
       updatedAt: postDoc.updatedAt.toDate(),
     }

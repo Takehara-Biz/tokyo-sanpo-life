@@ -1,6 +1,6 @@
 import { geohashForLocation } from "geofire-common";
-import { IEmojiEvaluationsDao } from "../dao/interface/iEmojiEvaluationsDao";
-import { MockEmojiEvaluationsDao } from "../dao/mock/mockEmojiEvaluationsDao";
+import { IEmojiEvalsDao } from "../dao/interface/iEmojiEvalsDao";
+import { MockEmojiEvalsDao } from "../dao/mock/mockEmojiEvalsDao";
 import { FirestorePostsDao } from "../dao/firestore/firestorePostsDao";
 import { TSLThreadLocal } from "../../utils/tslThreadLocal";
 import { ReqLogUtil } from "../../utils/reqLogUtil";
@@ -13,13 +13,14 @@ import { ICommentsDao } from "../dao/interface/iCommentsDao";
 import { MockCommentsDao } from "../dao/mock/mockCommentsDao";
 import { PostDoc } from "../dao/doc/postDoc";
 import { Timestamp } from "firebase-admin/firestore";
+import { FirestoreCommentsDao } from "../dao/firestore/firestoreCommentsDao";
+import { FirestoreEmojiEvalsDao } from "../dao/firestore/firestoreEmojiEvalsDao";
 
 export class PostBizLogic {
-  //private postsDao: PostDtosDao = new MockPostsDao();
   private postsDao: IPostsDao = new FirestorePostsDao();
   private usersDao: IUsersDao = new FirestoreUsersDao();
-  private commentsDao: ICommentsDao = new MockCommentsDao();
-  private emojiEvaluationsDao: IEmojiEvaluationsDao = new MockEmojiEvaluationsDao();
+  private commentsDao: ICommentsDao = new FirestoreCommentsDao();
+  private emojiEvalsDao: IEmojiEvalsDao = new FirestoreEmojiEvalsDao();
 
   public async listOrderbyInsertedAtDesc(): Promise<PostDto[]> {
     const postDocs = await this.postsDao.listOrderbyInsertedAtDesc(100, 0);
@@ -73,8 +74,8 @@ export class PostBizLogic {
       userDoc = leftUser;
     }
 
-    const commentDocs = await this.commentsDao.list(postId);
-    const emojiEvalutions = await this.emojiEvaluationsDao.list(postId);
+    const commentDocs = await this.commentsDao.listOrderbyInsertedAtAsc(postId);
+    const emojiEvalutions = await this.emojiEvalsDao.list(postId);
     const postDto = PostConvertor.toDto(postDoc, userDoc, commentDocs, emojiEvalutions);
     return postDto;
   }
@@ -145,18 +146,18 @@ export class PostBizLogic {
    * @param userId null when not logged in.
    * @returns 
    */
-  public findEmojiEvaluations(postId: string, userId: string | null): Map<string, [number, boolean]> {
-    const emojiEvaluations = this.emojiEvaluationsDao.list(postId);
+  public async findEmojiEvals(postId: string, userId: string | null): Promise<Map<string, [number, boolean]>> {
+    const emojiEvals = await this.emojiEvalsDao.list(postId);
     const unicode_count_userPut: Map<string, [number, boolean]> = new Map<string, [number, boolean]>();
 
-    for (let emojiEvaluation of emojiEvaluations) {
+    for (let emojiEval of emojiEvals) {
       let userPut = false;
-      if (emojiEvaluation.evaluatingUserId === userId) {
+      if (emojiEval.userFirestoreDocId === userId) {
         userPut = true;
       }
 
-      if (unicode_count_userPut.has(emojiEvaluation.unicode)) {
-        let count_userPut = unicode_count_userPut.get(emojiEvaluation.unicode)!;
+      if (unicode_count_userPut.has(emojiEval.unicode)) {
+        let count_userPut = unicode_count_userPut.get(emojiEval.unicode)!;
         let currentCount = count_userPut[0];
         let existingUserPut = count_userPut[1];
 
@@ -168,21 +169,13 @@ export class PostBizLogic {
           newUserPut = true;
         }
         let newCount_newUserPut: [number, boolean] = [currentCount + 1, newUserPut];
-        unicode_count_userPut.set(emojiEvaluation.unicode, newCount_newUserPut);
+        unicode_count_userPut.set(emojiEval.unicode, newCount_newUserPut);
       } else {
-        unicode_count_userPut.set(emojiEvaluation.unicode, [1, userPut]);
+        unicode_count_userPut.set(emojiEval.unicode, [1, userPut]);
       }
     }
 
     return unicode_count_userPut;
-  }
-
-  public putEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void {
-    this.emojiEvaluationsDao.create(postId, unicode, evaluatingUserId);
-  }
-
-  public removeEmojiEvaluation(postId: string, unicode: string, evaluatingUserId: string): void {
-    this.emojiEvaluationsDao.delete(postId, unicode, evaluatingUserId);
   }
 }
 export const postLogic = new PostBizLogic();

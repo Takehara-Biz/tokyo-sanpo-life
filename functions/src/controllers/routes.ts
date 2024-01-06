@@ -4,7 +4,7 @@ import { addUsersRouting } from "./usersCtrl";
 import { addOthersRouting } from "./othersCtrl";
 import { addErrorsRouting } from "./errorsCtrl";
 import { addPostsRouting } from "./postsCtrl";
-import { addPostsEmojiEvalulationsRouting } from "./postsEmojiEvaluationsCtrl";
+import { addPostsEmojiEvalsRouting } from "./postsEmojiEvalsCtrl";
 import { CtrlUtil } from "./ctrlUtil";
 
 export const routing = ((app: Express): void => {
@@ -28,7 +28,7 @@ export const routing = ((app: Express): void => {
 
   addUsersRouting(app);
   addPostsRouting(app);
-  addPostsEmojiEvalulationsRouting(app);
+  addPostsEmojiEvalsRouting(app);
   addOthersRouting(app);
 
   // this must be called at last definitely!
