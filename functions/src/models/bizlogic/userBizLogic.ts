@@ -51,11 +51,18 @@ class UserBizLogic {
     return true;
   }
 
-  public async updateUserIconBase64(newUserIconBase64: string): Promise<boolean> {
+  public async updateUserIconBase64(paramUserId: string, newUserIconBase64: string): Promise<boolean> {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId!;
-    const user = await this.findUser(firebaseUserId);
+    if(paramUserId !== firebaseUserId){
+      ReqLogUtil.warn("cannot update other's user icon! ");
+      ReqLogUtil.warn("identifiedFirebaseUserId : " + firebaseUserId);
+      ReqLogUtil.warn("paramUserId " + paramUserId);
+      return false;
+    }
+
+    const user = await this.findUser(paramUserId);
     if(user == null){
-      ReqLogUtil.warn('no such user! ' + firebaseUserId);
+      ReqLogUtil.warn('no such user! ' + paramUserId);
       return false;
     }
     user.userIconBase64 = newUserIconBase64;

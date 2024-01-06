@@ -85,8 +85,11 @@ export const addUsersRouting = ((app: Express): void => {
     CtrlUtil.render(res, EJS_PREFIX + "update-user-icon", {showBack: true});
   });
 
-  app.post(URL_PREFIX + "update-user-icon", async function (req, res, next) {
-    const result = await userLogic.updateUserIconBase64(req.body.newUserIconBase64);
+  /**
+   * called with Ajax
+   */
+  app.put(URL_PREFIX + ":id/icon", async function (req, res, next) {
+    const result = await userLogic.updateUserIconBase64(req.params.id, req.body.newUserIconBase64);
     ReqLogUtil.debug('result : ' + result);
     if(result){
       res.redirect(URL_PREFIX + "my-page");
