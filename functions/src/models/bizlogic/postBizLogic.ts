@@ -173,6 +173,7 @@ export class PostBizLogic {
       }
     }
 
+    ReqLogUtil.debug('unicode_count_userPut.size : ' + unicode_count_userPut.size);
     return unicode_count_userPut;
   }
 }

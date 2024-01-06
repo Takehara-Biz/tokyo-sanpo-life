@@ -3,6 +3,8 @@ import { FirebaseAuthManager, firebaseAuthManager } from "../models/auth/firebas
 import { userLogic } from "../models/bizlogic/userBizLogic";
 import { ReqLogUtil } from "../utils/reqLogUtil";
 import { TSLThreadLocal } from "../utils/tslThreadLocal";
+import { CtrlUtil } from "./ctrlUtil";
+import { EJS_401_PAGE_PATH } from "./errorsCtrl";
 
 export const addMiddleware = ((app: Express): void => {
   /**
@@ -67,6 +69,9 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
       }
     } else {
       ReqLogUtil.warn('invalid uid... maybe Firebase ID token has been expired.');
+      res.clearCookie(FirebaseAuthManager.ID_TOKEN_COOKIE_KEY);
+      CtrlUtil.render(res, EJS_401_PAGE_PATH);
+      return;
     }
   } else {
     ReqLogUtil.debug('request does NOT have the idToken in the cookie...');

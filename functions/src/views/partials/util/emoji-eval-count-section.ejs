@@ -2,10 +2,10 @@
   <% unicode_count_userPut.forEach((count_userPut, unicode) => { %>
     <div class="rounded-full ml-2 mt-3 px-2 py-1" style="border: 1px solid #ff0099; 
       <% if (count_userPut[1]) { %>
-        background-color: '#ff0099'; color: 'white';" 
+        background-color: #ff0099; color: white;" 
         onclick="deleteEmojiEval('<%= unicode %>');"
       <% } else { %>
-        background-color: 'white'; color: '#ff0099';" 
+        background-color: white; color: #ff0099;" 
         onclick="
         <% if (alreadyLoggedIn) { %>
           createEmojiEval('<%= unicode %>');

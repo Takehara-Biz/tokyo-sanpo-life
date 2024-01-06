@@ -14,9 +14,9 @@ export const addPostsEmojiEvalsRouting = ((app: Express): void => {
 
   app.get(URL_PREFIX, async function (req, res, next) {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId ?? null;
-    const unicode_count_userPut = postLogic.findEmojiEvals(req.params.postId, firebaseUserId);
+    const unicode_count_userPut = await postLogic.findEmojiEvals(req.params.postId, firebaseUserId);
     const alreadyLoggedIn = TSLThreadLocal.currentContext.loggedInUser != undefined;
-    CtrlUtil.render(res, "partials/util/emoji-evaluation-count-section", {unicode_count_userPut: unicode_count_userPut, alreadyLoggedIn: alreadyLoggedIn});
+    CtrlUtil.render(res, "partials/util/emoji-eval-count-section", {unicode_count_userPut: unicode_count_userPut, alreadyLoggedIn: alreadyLoggedIn});
   });
 
   /**
@@ -38,8 +38,8 @@ export const addPostsEmojiEvalsRouting = ((app: Express): void => {
   /**
    * call with Ajax
    */
-  app.delete(URL_PREFIX + "/:emojiEvalId", function (req, res, next) {
-    emojiEvalBizLogic.delete(req.params.postId, req.params.emojiEvalId);
+  app.delete(URL_PREFIX + "/:unicode", function (req, res, next) {
+    emojiEvalBizLogic.delete(req.params.postId, req.params.unicode);
     res.redirect("/posts/" + req.params.postId + "/emojiEvals");
   });
 });

@@ -1,7 +1,7 @@
 import { EmojiEvalDoc } from "../doc/post/emojiEvalsDoc";
 
 export interface IEmojiEvalsDao {
-  read(postId: string, firestoreDocId: string): Promise<EmojiEvalDoc | null>
+  read(postId: string, userId:string, unicode: string): Promise<EmojiEvalDoc | null>
   list(postId: string): Promise<EmojiEvalDoc[]>;
   /**
    * even if there is already an evaluation which meets the param, it is OK. just do nothing.
@@ -10,5 +10,5 @@ export interface IEmojiEvalsDao {
   /**
    * even if there is no evaluation which meets the param, it is OK. just do nothing.
    */
-  delete(postId: string, firestoreDocId: string): Promise<void>;
+  delete(postId: string, userId: string, firestoreDocId: string): Promise<void>;
 }

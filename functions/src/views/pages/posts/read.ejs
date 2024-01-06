@@ -7,12 +7,12 @@
     <!-- prettier-ignore -->
     <script>(g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })
         ({ key: googleMapsAPIKey, v: "weekly" });</script>
-    <script src="/javascripts/tslDef.js?ver=20240107041230"></script>
+    <script src="/javascripts/tslDef.js?ver=20240107055246"></script>
     <script>
       var targetPost = JSON.parse('<%- JSON.stringify(post) %>');
     </script>
-    <script src="/javascripts/tslGMapUtil.js?ver=20240107041230"></script>
-    <script src="/javascripts/readPostPage.js?ver=20240107041230"></script>
+    <script src="/javascripts/tslGMapUtil.js?ver=20240107055246"></script>
+    <script src="/javascripts/readPostPage.js?ver=20240107055246"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 </head>
 
@@ -52,66 +52,10 @@
             const designatedEmojiCountJson = {};
             document.querySelector('emoji-picker').addEventListener('emoji-click', e => {
               const emoji = e.detail.unicode
-              console.log(emoji);
+              console.log('put ' + emoji);
               document.getElementById('reactionDropdown').classList.remove('show');
+              createEmojiEval(emoji);
             });
-          </script>
-          <script>
-            addEventListener('load', async function () {
-              console.log('onload!');
-              renderEmojiEvalCountSection();
-            });
-            async function renderEmojiEvalCountSection(){
-              const postIdInput = document.getElementById('postId');
-              const targetUrl = '/posts/' + postIdInput.value + '/emojiEvals';
-              const resultHTML = await fetch(targetUrl, {
-                method: 'GET'
-              }).then(res => {
-                console.info('[BEGIN] fetch then');
-                return res.text();
-              }).catch(error => {
-                alert(error);
-                console.error('fetch Error!!', error);
-                return null;
-              });
-              const targetEvaludatedEmojiDiv = document.getElementById('targetEvaludatedEmojiDiv');
-              if(resultHTML != null) {
-                targetEvaludatedEmojiDiv.innerHTML = resultHTML;
-              } else {
-                targetEvaludatedEmojiDiv.innerHTML = 'サーバ側でエラーが発生しました。';
-              }
-              
-              console.log('updated targetEvaludatedEmojiDiv!');
-            }
-            async function createEmojiEval(unicode){
-              TSLLogUtil.debug('[BEGIN] putEmojiEval');
-              const postIdInput = document.getElementById('postId');
-              const targetUrl = '/posts/' + postIdInput.value + '/emojiEval';
-              await fetch(targetUrl, {
-                method: 'POST',
-                body: '{"unicode" : "' + unicode + '" }',
-              }).then(res => {
-                console.log('put OK!');
-              }).catch(error => {
-                console.error('error occurred!');
-                console.error(error);
-              });
-              renderEmojiEvalCountSection();
-            };
-            async function deleteEmojiEval(unicode){
-              TSLLogUtil.debug('[BEGIN] deleteEmojiEval');
-              const postIdInput = document.getElementById('postId');
-              const targetUrl = '/posts/' + postIdInput.value + '/emojiEvals/' + unicode;
-              await fetch(targetUrl, {
-                method: 'DELETE'
-              }).then(res => {
-                console.log('remove OK!');
-              }).catch(error => {
-                console.error('error occurred!');
-                console.error(error);
-              });
-              renderEmojiEvalCountSection();
-            };
           </script>
         </div>
         <div>
@@ -166,26 +110,6 @@
                   </span>
                 </a>
               </li>
-
-              <script>
-                function deletePost() {
-                  if (!(confirm('本当に削除して良いですか？'))) {
-                    return;
-                  }
-
-                  fetch('/posts/<%= post.firestoreDocId %>', {
-                    method: 'DELETE',
-                  }).then((response) => {
-                    setTimeout((() => {
-                      // if it's too early, old data can be printed..
-                      window.location = '/posts/new-list?deletedToast=true';
-                    }), 500);
-                  }).catch((error) => {
-                    console.error(error);
-                    window.location = '/500';
-                  })
-                }
-              </script>
               <% } %>
             </ul>
           </div>

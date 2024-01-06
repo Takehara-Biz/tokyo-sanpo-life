@@ -5,7 +5,7 @@ import { IEmojiEvalsDao } from "../interface/iEmojiEvalsDao";
 import { EmojiEvalDto } from "../../dto/emojiEvalDto";
 
 export class MockEmojiEvalsDao implements IEmojiEvalsDao {
-  async read(postId: string, firestoreDocId: string): Promise<EmojiEvalDto | null> {
+  async read(postId: string, userId: string, firestoreDocId: string): Promise<EmojiEvalDto | null> {
     const emojiEvalDocs = dummyDataKeeper.createRandomEmojiEvals(1, 10, 1, 1, "1");
     return emojiEvalDocs[0];
   }
@@ -20,7 +20,7 @@ export class MockEmojiEvalsDao implements IEmojiEvalsDao {
     return;
   }
 
-  async delete(postId: string, firestoreDocId: string): Promise<void>{
+  async delete(postId: string, userId:string, unicode: string): Promise<void>{
     return;
   }
 }

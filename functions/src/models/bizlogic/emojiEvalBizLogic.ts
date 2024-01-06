@@ -36,19 +36,19 @@ export class EmojiEvalBizLogic {
     return emojiEvalDao;
   }
 
-  public async delete(postId: string, reqParamEmojiEvalId: string): Promise<boolean> {
+  public async delete(postId: string, unicode: string): Promise<boolean> {
     if(TSLThreadLocal.currentContext.loggedInUser == undefined){
       ReqLogUtil.warn('must log in at first!');
       return false;
     }
-    
-    const emojiEvalDto = await this.emojiEvalsDao.read(postId, reqParamEmojiEvalId);
+
+    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId!;
+    const emojiEvalDto = await this.emojiEvalsDao.read(postId, firebaseUserId, unicode);
     if(emojiEvalDto == null){
-      ReqLogUtil.warn('there is no such emojiEvalId (' + reqParamEmojiEvalId + ')');
+      ReqLogUtil.warn('there is no such emojiEval.');
       return false;
     }
 
-    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId;
     if(emojiEvalDto!.userFirestoreDocId !== firebaseUserId) {
       ReqLogUtil.warn("cannot delete other's emojiEval!");
       ReqLogUtil.warn("identifiedFirebaseUserId : " + firebaseUserId);
@@ -56,7 +56,7 @@ export class EmojiEvalBizLogic {
       return false;
     }
 
-    await this.emojiEvalsDao.delete(postId, reqParamEmojiEvalId);
+    await this.emojiEvalsDao.delete(postId, firebaseUserId, unicode);
     return true;
   }
 }
