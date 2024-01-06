@@ -2,12 +2,13 @@
  * Postに対する、絵文字評価
  */
 export type EmojiEvaluationDto = {
-
-  evaludatedPostId: string;
+  firestoreDocId?: string;
+  postFirestoreDocId: string;
+  userFirestoreDocId: string;
   /**
    * the type of emoji
    */
   unicode: string;
-
-  evaluatingUserId: string;
+  insertedAt: Date;
+  updatedAt: Date;
 }

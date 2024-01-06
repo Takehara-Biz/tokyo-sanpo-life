@@ -7,7 +7,7 @@ import { CommentDto } from "../../dto/commentDto";
 export class FirestoreCommentsDao implements ICommentsDao {
   private static readonly COLLECTION_NAME = "comments";
 
-  async read(commentId: string): Promise<CommentDto | null> {
+  async read(commentId: string): Promise<CommentDoc | null> {
     const commentsRef = FirebaseAdminManager.db.collection(FirestoreCommentsDao.COLLECTION_NAME);
     const commentsDocRef = await commentsRef.doc(commentId);
     let result = null;
