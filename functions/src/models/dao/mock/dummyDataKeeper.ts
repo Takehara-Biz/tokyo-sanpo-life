@@ -18,7 +18,6 @@ class DummyDataKeeper {
   public idAndUserMap: Map<string, UserDto> = new Map<string, UserDto>();
   
   constructor() {
-    console.info('[BEGIN] PostsDao constructor');
     this.generateRandomPosts(this.postCount);
     this.idSequence = this.postCount - 1;
     this.generateRandomUsers(this.userCount);

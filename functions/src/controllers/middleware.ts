@@ -9,44 +9,49 @@ export const addMiddleware = ((app: Express): void => {
  * for local thread
  */
 app.use(async function (req: Request, res: Response, next: NextFunction) {
-  console.debug('for local thread');
+  ReqLogUtil.debug('[BEGIN (AOP) Set up the local thread for this https request');
   await TSLThreadLocal.storage.run(
     new TSLThreadLocal(),
     async () => {
       await next();
     },
   );
+  ReqLogUtil.debug('[  END (AOP) Set up the local thread for this https request');
 });
 
 /**
  * for logging
  */
 app.use(async function (req: Request, res: Response, next: NextFunction) {
-  console.debug('for logging');
-  ReqLogUtil.info("[BEGIN] " + req.method + " " + req.url + ",\nreq.params=" + JSON.stringify(req.params) + ",\nreq.body=" + JSON.stringify(req.body));
+  ReqLogUtil.info("[BEGIN] (AOP) Logging : " + req.method + " " + req.url + ",\nreq.params=" + JSON.stringify(req.params) + ",\nreq.body=" + JSON.stringify(req.body));
 
   const reqCookies = "req.cookies=" + JSON.stringify(req.cookies);
   ReqLogUtil.debug(reqCookies.substring(0, 100));
+
   await next();
-  ReqLogUtil.info("[  END] " + req.method + " " + req.url);
 
   const resCookie = "res.cookie=" + res.get('Set-Cookie');
   ReqLogUtil.debug(resCookie.substring(0, 100));
+
+  ReqLogUtil.debug('[  END] (AOP) Logging : ' +  + req.method + " " + req.url);
 });
 
 /**
  * for auth
  */
 app.use(async function (req: Request, res: Response, next: NextFunction) {
-  console.debug('for auth');
+  ReqLogUtil.debug('[BEGIN] (AOP) Auth');
   const idToken = req.cookies['idToken'];
   if (idToken != null) {
-    ReqLogUtil.debug('request has the "idToken" in the cookie!');
-    const uid = await firebaseAuthDao.verifyIdToken(idToken);
-    if (uid != null) {
-      const user = await userLogic.findUser(uid);
-      TSLThreadLocal.currentContext.identifiedFirebaseUserId = uid;
+    ReqLogUtil.debug('request has the "idToken" in the cookie! : ' + idToken.substring(0, 50));
+    const firebaseUserId = await firebaseAuthDao.verifyIdToken(idToken);
+    if (firebaseUserId != null) {
+      ReqLogUtil.debug('identified firebase auth uid : ' + firebaseUserId);
+      TSLThreadLocal.currentContext.identifiedFirebaseUserId = firebaseUserId;
+
+      const user = await userLogic.findUser(firebaseUserId);
       if (user != null) {
+        ReqLogUtil.debug('The uid is already registered in the TSL!. The user name is ' + user.userName);
         if (user.loggedIn) {
           ReqLogUtil.debug('already logged in user!');
           TSLThreadLocal.currentContext.loggedInUser = user;
@@ -54,7 +59,7 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
           ReqLogUtil.debug('This user has not log in yet.');
         }
       } else {
-        ReqLogUtil.debug('This user has not created the TSL account yet.');
+        ReqLogUtil.debug('This firebase auth user has NOT created the TSL account yet.');
       }
     } else {
       ReqLogUtil.warn('invalid uid... maybe Firebase ID token has been expired.');
@@ -67,5 +72,7 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
   ReqLogUtil.debug('threadLocal.loggedInUser : ' + TSLThreadLocal.currentContext.loggedInUser);
 
   await next();
+
+  ReqLogUtil.debug('[  END] (AOP) Auth');
 });
 });

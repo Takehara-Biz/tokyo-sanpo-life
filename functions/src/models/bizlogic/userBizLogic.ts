@@ -22,7 +22,6 @@ class UserBizLogic {
 
   public async findUser(userId: string): Promise<UserDto | null> {
     const result = await this.usersDao.read(userId);
-    //TslLogUtil.debug('findUser result : ' + JSON.stringify(result));
     return result;
   }
 
@@ -40,6 +39,8 @@ class UserBizLogic {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId
     if(user.firebaseUserId != firebaseUserId){
       ReqLogUtil.warn('can not update others account!');
+      ReqLogUtil.warn('identified firebaseUserId : ' + firebaseUserId);
+      ReqLogUtil.warn('firebasedUserId kept in firestore : ' + user.firebaseUserId);
       return false;
     }
     user.updatedAt = new Date();

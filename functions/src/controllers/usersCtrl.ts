@@ -58,14 +58,10 @@ export const addUsersRouting = ((app: Express): void => {
     //res.cookie('token', req.body.token, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
     res.cookie('idToken', req.body.idToken, { maxAge: oneDayMilliSeconds, httpOnly: true, path: "/" });
     ReqLogUtil.debug('set idToken into res cookie!');
-
     const resCookie = "res.cookie=" + res.get('Set-Cookie');
-    ReqLogUtil.debug(resCookie.substring(0, 200));
+    ReqLogUtil.debug(resCookie.substring(0, 100));
 
-
-    ReqLogUtil.debug('aaa');
     const user = await userLogic.findUser(firebaseUserId!);
-    ReqLogUtil.debug('ccc');
 
     if (user !== null) {
       user.loggedIn = true;
