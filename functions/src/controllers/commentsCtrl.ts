@@ -27,14 +27,8 @@ export const addCommentsRouting = ((app: Express): void => {
   /**
    * called with Ajax
    */
-  app.delete(URL_PREFIX + "/:commentId", function (req, res, next) {
-    try {
-      postLogic.delete(req.params.commentId!.toString());
-    } catch (error) {
-      ReqLogUtil.warn('failed to delete the post ' + req.params.commentId);
-      ReqLogUtil.warn(error);
-      throw new Error('no permission!');
-    }
+  app.delete(URL_PREFIX + "/:commentId", async function (req, res, next) {
+    await postLogic.delete(req.params.commentId!);
     res.json({});
   });
 });
