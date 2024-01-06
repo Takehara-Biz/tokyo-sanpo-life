@@ -7,7 +7,7 @@ export class FirestoreUsersDao implements IUsersDao {
   private static readonly COLLECTION_NAME = "users";
   private static readonly FIREBASE_USER_ID = "firebaseUserId";
 
-  public async list(userIds: string[]): Promise<Map<string, UserDoc>> {
+  async list(userIds: string[]): Promise<Map<string, UserDoc>> {
     ReqLogUtil.debug('list param : ' + userIds);
     const idAndUserDocMap = new Map<string, UserDoc>();
     if(userIds.length === 0){
@@ -26,7 +26,7 @@ export class FirestoreUsersDao implements IUsersDao {
     return idAndUserDocMap;
   }
 
-  public async read(userId: string): Promise<UserDoc | null> {
+  async read(userId: string): Promise<UserDoc | null> {
     
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", userId).get();
@@ -41,13 +41,13 @@ export class FirestoreUsersDao implements IUsersDao {
     return userDoc;
   }
 
-  public async create(user: UserDoc): Promise<void> {
+  async create(user: UserDoc): Promise<void> {
     ReqLogUtil.info('create : ' + ReqLogUtil.jsonStr(user));
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     await usersRef.add(user);
   }
 
-  public async update(user: UserDoc): Promise<void> {
+  async update(user: UserDoc): Promise<void> {
     ReqLogUtil.info('update : ' + ReqLogUtil.jsonStr(user));
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", user.firebaseUserId).get();
@@ -66,7 +66,7 @@ export class FirestoreUsersDao implements IUsersDao {
     });
   }
 
-  public async delete(userId: string): Promise<void> {
+  async delete(userId: string): Promise<void> {
     ReqLogUtil.info('delete user id : ' + userId);
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", userId).get();

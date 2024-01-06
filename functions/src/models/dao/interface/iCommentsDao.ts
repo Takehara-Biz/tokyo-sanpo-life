@@ -1,7 +1,9 @@
-import { CommentDto } from "../../dto/commentDto";
+import { CommentDoc } from "../doc/commentDoc";
 
 export interface ICommentsDao {
-  list(postId: string): Promise<CommentDto[]>;
-  create(postComment: CommentDto): Promise<void>;
-  delete(commentId: string): Promise<void>;
+  create(commentDoc: CommentDoc): Promise<void>;
+  read(commentId: string): Promise<CommentDoc | null>;
+  listOrderbyInsertedAtAsc(postId: string): Promise<CommentDoc[]>;
+  countTotalComments(postId: string): Promise<number>;
+  delete(commentFirestoreDocId: string): Promise<void>;
 }

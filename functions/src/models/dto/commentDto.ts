@@ -1,11 +1,11 @@
-import { UserDto } from "./userDto";
-
 /**
- * Postに対するコメント
+ * A comment for a post.
  */
 export type CommentDto = {
-  id: string,
-  user: UserDto;
+  firestoreDocId?: string;
+  postFirestoreDocId: string;
+  userFirestoreDocId: string;
   comment: string;
-  commentDate: Date;
+  insertedAt: Date;
+  udpatedAt: Date;
 }

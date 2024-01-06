@@ -17,17 +17,17 @@
 //     return promise;
 //   }
 
-//   public create(user: IUser): void {
+//   create(user: IUser): void {
 //     ReqLogUtil.info('createUser : ' + JSON.stringify(user));
 //     dummyDataKeeper.idAndUserMap.set(user.firebaseUserId, user);
 //   }
 
-//   public update(user: IUser): void {
+//   update(user: IUser): void {
 //     ReqLogUtil.info('updateUser : ' + JSON.stringify(user));
 //     dummyDataKeeper.idAndUserMap.set(user.firebaseUserId, user);
 //   }
 
-//   public delete(userId: string): void {
+//   delete(userId: string): void {
 //     ReqLogUtil.info('deleteUser : ' + JSON.stringify(userId));
 //     dummyDataKeeper.idAndUserMap.delete(userId);
 //   }
