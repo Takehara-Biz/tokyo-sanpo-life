@@ -14,12 +14,12 @@ export const routing = ((app: Express): void => {
     CtrlUtil.render(res, "pages/how-to-use");
   });
 
-  app.get("/map", function (req, res, next) {
+  app.get("/map", async function (req, res, next) {
     
     // TODO このコードは違う。
     // mapのページを初期表示するのと、mapの表示状態に応じて、マーカー一覧をダウンロードするHTTPのAPIは分けるべき。
     // マーカー一覧をダウンロードする方は、ajaxで呼び出される想定。
-    const targetPosts = postLogic.listOrderbyInsertedAtDesc();
+    const targetPosts = await postLogic.listOrderbyInsertedAtDesc();
     CtrlUtil.render(res, "pages/map", {targetPosts: targetPosts});
   });
 

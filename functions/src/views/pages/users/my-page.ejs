@@ -16,9 +16,8 @@
             <%- include('../../partials/common/urge-login'); %>
             <% } else { %>
               <div class="p-1">
-                <h2>あなたの情報</h2>
                 <dl>
-                  <dt>ID</dt>
+                  <dt>ユーザID</dt>
                   <dd>
                     <%- include('../../partials/util/printable-user-id', {id: user.firebaseUserId}) %>
                   </dd>
@@ -26,7 +25,7 @@
                 <dl>
                   <dt>アイコンとユーザ名</dt>
                   <dd>
-                    <%- include('../../partials/util/user-icon-name-s', {iconUrl: user.userIconBase64, userName: user.userName}) %>
+                    <%- include('../../partials/util/user-icon-name-s', {imageSrc: user.userIconBase64, userName: user.userName}) %>
                   </dd>
                 </dl>
                 <dl>

@@ -8,7 +8,7 @@
           <%= comment.insertedAt.toLocaleString("ja-JP") %>
         </p>
         <% if (comment.userFirestoreDocId === userId) { %>
-          <span class="material-symbols-outlined" onclick="return confirm('このコメントを削除しますか？');">
+          <span class="material-symbols-outlined text-accent" onclick="return alert('未実装です')">
             delete
           </span>
         <% } %>
