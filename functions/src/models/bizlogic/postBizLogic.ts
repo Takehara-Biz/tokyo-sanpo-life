@@ -150,7 +150,6 @@ export class PostBizLogic {
       ReqLogUtil.warn('there is no such post. post id : ' + reqParamPostId);
       return false;
     }
-
     if (postDoc.postedFirebaseUserId != firebaseUserId) {
       ReqLogUtil.warn('can not delete the post created by another user!');
       return false;

@@ -1,5 +1,6 @@
 <div>
-  <% if (user !==undefined) { %>
+  <%# コメントは30件まで。それ以上なら、新規登録不可。 %>
+  <% if (user !== undefined && commentsLength <= 30) { %>
     <form action="/posts/<%= postId %>/comments" method="POST" onsubmit="return confirm('コメントを送信してよろしいですか？');">
       <textarea name="comment" required class="form-control" id="exampleFormControlTextarea1" maxlength="100"
         rows="3" placeholder="あなたのコメント"></textarea>

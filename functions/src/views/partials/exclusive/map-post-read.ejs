@@ -2,7 +2,7 @@
   <div id="bodyContent" class="flex justify-between">
     <img src='<%= post.imageUrl %>' width='50%' />
     <div class="w-1/2 p-2">
-      <%- include('../util/user-icon-name-s', {iconUrl: post.user.iconUrl, userName: post.user.userName}) %>
+      <%- include('../util/user-icon-name-s', {imageSrc: post.user.iconUrl, userName: post.user.userName}) %>
       <p class="text-sm">
         <%= post.insertDate.toLocaleString("ja-JP") %>
       </p>
@@ -14,9 +14,9 @@
     </p>
     <div>
       <p class="m-2 text-center text-sm">コメント</p>
-      <%- include('../util/comments-list'); %>
+      <%- include('../util/comments-list', {userId: user.firebaseUserId}); %>
     </div>
     <hr />
-    <%- include('../util/add-comment-section'); %>
+    <%- include('../util/add-comment-section', {postId: post.firestoreDocId, commentsLength: post.postComments.length}); %>
   </div>
 </div>
