@@ -11,68 +11,78 @@
       <!-- Main Body -->
       <div class="grow overflow-y-scroll">
         <%- include('../../partials/common/page-title', {title: 'ユーザ情報編集' }); %>
-        <div class="p-1 pb-10">
-          <% const warningList = [
-              "後からいつでも変更・削除できます。",
-              "個人を特定できる情報は書かないこと。",
-              "公序良俗に反する記載は行わないこと。",
-              "著作権・肖像権に注意すること。",
-            ]; %>
-            <%- include('../../partials/util/warning-accordion', {title: "登録前の注意事項", warningList: warningList}); %>
+          <div class="p-1 pb-10">
+            <% const warningList=[ "後からいつでも変更・削除できます。" , "個人を特定できる情報は書かないこと。" , "公序良俗に反する記載は行わないこと。" , "著作権・肖像権に注意すること。"
+              , ]; %>
+              <%- include('../../partials/util/warning-accordion', {title: "登録前の注意事項" , warningList: warningList}); %>
 
-          
-            <div class="mt-3">
-              <label for="firebaseUserId" class="form-label">ユーザID（固定・変更不可）</label>
-              <div><%- include('../../partials/util/printable-user-id', {id: user.firebaseUserId}) %></div>
-              <input id="firebaseUserId" type="hidden" value="<%= user.firebaseUserId %>" />
-            </div>
-            <div class="mt-3">
-              <label for="userName" class="form-label">ユーザ名（必須）</label>
-              <input type="text" id="userName" value="<%= user.userName %>" required maxlength="20" class="form-control" />
-            </div>
-            <div class="mt-3">
-              <label for="selfIntroTextarea" class="form-label">自己紹介</label>
-              <textarea id="selfIntroduction" name="comment" required class="form-control" maxlength="200"
-                rows="3"><%= user.selfIntroduction %></textarea>
-            </div>
-            <%- include('../../partials/util/icon-button', {label: "決定", onClickCode: "return updateUser();", googleIconName: "person_check"}); %>
+                <form action="" onsubmit="return updateUser(event);">
+                  <div class="mt-3">
+                    <label for="firebaseUserId" class="form-label">ユーザID（固定・変更不可）</label>
+                    <div><%- include('../../partials/util/printable-user-id', {id: user.firebaseUserId}) %></div>
+                    <input name="firebaseUserId" type="hidden" value="<%= user.firebaseUserId %>" />
+                  </div>
+                  <div class="mt-3">
+                    <label for="userName" class="form-label">ユーザ名（必須）</label>
+                    <input type="text" name="userName" value="<%= user.userName %>" required maxlength="20"
+                      class="form-control" />
+                  </div>
+                  <div class="mt-3">
+                    <label for="selfIntroTextarea" class="form-label">自己紹介</label>
+                    <textarea name="selfIntroduction" required class="form-control" maxlength="200"
+                      rows="3"><%= user.selfIntroduction %></textarea>
+                  </div>
+                  <%- include('../../partials/util/icon-button', {label: "決定" , typeSubmit: true,
+                    googleIconName: "person_check" }); %>
+                </form>
+                <div class="mt-10">
+                  <%- include('../../partials/util/icon-link-button', {label: "アカウント削除に進む" ,
+                    googleIconName: "person_remove" , href: "/users/confirm-delete" , important: true,
+                    onClickCode: "return confirm('アカウント削除画面に進みますか？');" }) %>
+                </div>
 
-            <div class="mt-10">
-              <%- include('../../partials/util/icon-link-button', {label: "アカウント削除に進む", googleIconName: "person_remove", href: "/users/confirm-delete", important: true, onClickCode: "return confirm('アカウント削除画面に進みますか？');"}) %>
-            </div>
-          
-            <script>
-              function updateUser(){
-                if (!(confirm('本当に変更して良いですか？'))) {
-                  return;
-                }
+                <script>
+                  function updateUser(event) {
+                    event.preventDefault();
+                    const form = document.querySelector('form');
+                    if (form.checkValidity()) {
+                      if (!(confirm('本当に変更して良いですか？'))) {
+                        return;
+                      }
 
-                const firebaseUserId = document.getElementById('firebaseUserId').value;
-                const userName = document.getElementById('userName').value;
-                const selfIntroduction = document.getElementById('selfIntroduction').value;
-                const data = {firebaseUserId: firebaseUserId, userName: userName, selfIntroduction: selfIntroduction};
-                fetch('/users/<%= user.firebaseUserId %>', {
-                  method: 'PUT',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify(data)
-                }).then((response) => {
-                  TslLogUtil.debug('fetch then');
-                  
-                  setTimeout((() => {
-                    // if it's too early, old data can be printed..
-                    window.location.href = '/users/my-page'
-                  }), 500);
-                  
-                }).catch((error) => {
-                  TslLogUtil.error('fetch error');
-                  TslLogUtil.error(error);
-                  window.location.href = '/errors/500';
-                })
-              }
-            </script>
-        </div>
+                      // const firebaseUserId = document.getElementById('firebaseUserId').value;
+                      // const userName = document.getElementById('userName').value;
+                      // const selfIntroduction = document.getElementById('selfIntroduction').value;
+                      // const data = { firebaseUserId: firebaseUserId, userName: userName, selfIntroduction: selfIntroduction };
+                      const formData = new FormData(form);
+                      const object = {};
+                      formData.forEach((value, key) => object[key] = value);
+                      const json = JSON.stringify(object);
+                      fetch('/users/<%= user.firebaseUserId %>', {
+                        method: 'PUT',
+                        headers: {
+                          'Content-Type': 'application/json'
+                        },
+                        body: json
+                      }).then((response) => {
+                        TslLogUtil.debug('fetch then');
+
+                        setTimeout((() => {
+                          // if it's too early, old data can be printed..
+                          window.location.href = '/users/my-page'
+                        }), 500);
+
+                      }).catch((error) => {
+                        TslLogUtil.error('fetch error');
+                        TslLogUtil.error(error);
+                        window.location.href = '/errors/500';
+                      });
+                    } else {
+                      form.reportValidity();
+                    }
+                  }
+                </script>
+          </div>
       </div>
       <%- include('../../partials/common/footer', {currentMenu: null}); %>
   </div>
