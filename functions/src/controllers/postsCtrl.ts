@@ -15,6 +15,32 @@ export const addPostsRouting = ((app: Express): void => {
   const EJS_PREFIX = "pages/posts/"
   const URL_PREFIX = "/posts"
 
+  app.get(URL_PREFIX + "/create", function (req, res, next) {
+    CtrlUtil.render(res, EJS_PREFIX + "create", { categories: PostCategory.Categories });
+  });
+  app.post(URL_PREFIX, async function (req, res, next) {
+
+    const postCategory = PostCategory.findCategory(Number(req.body.postCategory));
+
+    const now = new Date();
+    const newPost: PostDto = {
+      user: TSLThreadLocal.currentContext!.loggedInUser!,
+      photoBase64: req.body.postPhotoBase64,
+      lat: Number(req.body.lat),
+      lng: Number(req.body.lng),
+      description: req.body.description,
+      postCategory: postCategory,
+      postComments: [],
+      emojiEvaluations: [],
+      postedFirebaseUserId: TSLThreadLocal.currentContext!.identifiedFirebaseUserId!,
+      insertedAt: now,
+      updatedAt: now,
+    };
+    const postId = await postLogic.create(newPost);
+    res.redirect("/posts/" + postId + "?showBack=false")
+  });
+
+
   app.get(URL_PREFIX + "/new-list", async function (req, res, next) {
     const targetPosts = await postLogic.listOrderbyInsertedAtDesc();
     const deletedToast = req.query.deletedToast != undefined;
@@ -30,9 +56,6 @@ export const addPostsRouting = ((app: Express): void => {
       myPosts.push(...savedData);
     }
     CtrlUtil.render(res, EJS_PREFIX + "my-list", { myPosts: myPosts });
-  });
-  app.get(URL_PREFIX + "/create", function (req, res, next) {
-    CtrlUtil.render(res, EJS_PREFIX + "create", { categories: PostCategory.Categories });
   });
   app.get(URL_PREFIX + "/:id", async function (req, res, next) {
     const post = await postLogic.find(req.params.id);
@@ -51,6 +74,52 @@ export const addPostsRouting = ((app: Express): void => {
       CtrlUtil.render(res, EJS_404_PAGE_PATH);
     }
   });
+  /**
+   * expects to be called with Ajax.
+   */
+  app.get("/map/post/:id", function (req, res, next) {
+    const post = postLogic.find(req.params.id);
+    if (post !== null) {
+      CtrlUtil.render(res, "partials/exclusive/map-post-read", { post: post });
+    } else {
+      // not found
+      CtrlUtil.render(res, EJS_404_PAGE_PATH);
+    }
+  });
+
+
+  app.get(URL_PREFIX + "/:id/update", async function (req, res, next) {
+    // needs authorization
+    const post = await postLogic.find(req.params.id);
+    if (post == null) {
+      ReqLogUtil.warn('there is no such post. post id : ' + req.params.id);
+      CtrlUtil.render(res, EJS_404_PAGE_PATH);
+    }
+
+    CtrlUtil.render(res, EJS_PREFIX + "update", { post: post, categories: PostCategory.Categories, showBack: true });
+  });
+  /**
+   * called with Ajax
+   */
+  app.put(URL_PREFIX + "/:id", async function (req, res, next) {
+    const postDto = await postLogic.find(req.body.firestoreDocId);
+    if(postDto == null){
+      throw new Error('failed updating');
+    }
+
+    const postCategory = PostCategory.findCategory(Number(req.body.postCategory));
+    postDto!.lat = Number(req.body.lat);
+    postDto!.lng = Number(req.body.lng);
+    postDto!.postCategory = postCategory;
+    postDto!.description = req.body.description;
+    ReqLogUtil.debug('newPostDto: ' + ReqLogUtil.jsonStr(postDto));
+    const result = await postLogic.update(postDto);
+    if(!result){
+      throw new Error('failed updating');
+    }
+    res.json({});
+  });
+
 
   /**
    * called with Ajax
@@ -65,51 +134,5 @@ export const addPostsRouting = ((app: Express): void => {
       throw new Error('no permission!');
     }
     res.json({});
-  });
-
-  app.post(URL_PREFIX, async function (req, res, next) {
-
-    const postCategory = PostCategory.findCategory(Number(req.body.postCategory));
-
-    const now = new Date();
-    const newPost: PostDto = {
-      user: TSLThreadLocal.currentContext!.loggedInUser!,
-      photoBase64: req.body.postPhotoBase64,
-      lat: Number(req.body.markerLat),
-      lng: Number(req.body.markerLng),
-      description: req.body.comment,
-      postCategory: postCategory,
-      postComments: [],
-      emojiEvaluations: [],
-      postedFirebaseUserId: TSLThreadLocal.currentContext!.identifiedFirebaseUserId!,
-      insertedAt: now,
-      updatedAt: now,
-    };
-    const postId = await postLogic.create(newPost);
-    res.redirect("/posts/" + postId + "?showBack=false")
-  });
-
-  app.get(URL_PREFIX + "/:id/update", async function (req, res, next) {
-    // needs authorization
-    const post = await postLogic.find(req.params.id);
-    if(post == null) {
-      ReqLogUtil.warn('there is no such post. post id : ' + req.params.id);
-      CtrlUtil.render(res, EJS_404_PAGE_PATH);
-    }
-
-    CtrlUtil.render(res, EJS_PREFIX + "update", { post: post, categories: PostCategory.Categories, showBack: true });
-  });
-
-  /**
-   * expects to be called with Ajax.
-   */
-  app.get("/map/post/:id", function (req, res, next) {
-    const post = postLogic.find(req.params.id);
-    if (post !== null) {
-      CtrlUtil.render(res, "partials/exclusive/map-post-read", { post: post });
-    } else {
-      // not found
-      CtrlUtil.render(res, EJS_404_PAGE_PATH);
-    }
   });
 });

@@ -49,11 +49,7 @@
                       if (!(confirm('本当に変更して良いですか？'))) {
                         return;
                       }
-
-                      // const firebaseUserId = document.getElementById('firebaseUserId').value;
-                      // const userName = document.getElementById('userName').value;
-                      // const selfIntroduction = document.getElementById('selfIntroduction').value;
-                      // const data = { firebaseUserId: firebaseUserId, userName: userName, selfIntroduction: selfIntroduction };
+                      
                       const formData = new FormData(form);
                       const object = {};
                       formData.forEach((value, key) => object[key] = value);

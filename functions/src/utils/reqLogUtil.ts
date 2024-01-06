@@ -57,7 +57,7 @@ export class ReqLogUtil {
   }
 
   public static jsonStr(obj: any): string {
-    return JSON.stringify(obj, ReqLogUtil.replacer);
+    return JSON.stringify(obj, ReqLogUtil.replacer, 1);
   }
 
   /**

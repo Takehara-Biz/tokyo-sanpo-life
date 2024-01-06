@@ -4,7 +4,6 @@ import { IPostsDao } from "../interface/iPostsDao";
 import { dummyDataKeeper } from "./dummyDataKeeper";
 
 export class MockPostsDao implements IPostsDao {
-
   public async listOrderbyInsertedAtDesc(limit: number, offset: number): Promise<PostDoc[]> {
     const list = [...dummyDataKeeper.idAndPostMap.values()].slice(0, limit);
     ReqLogUtil.info('listOrderbyInsertedAtDesc length : ' + list.length);
@@ -35,6 +34,10 @@ export class MockPostsDao implements IPostsDao {
     ReqLogUtil.info('create : ' + JSON.stringify(post));
     dummyDataKeeper.idAndPostMap.set(post.firestoreDocId!, post);
     return await post.firestoreDocId!;
+  }
+
+  public async update(post: PostDoc): Promise<void> {
+    dummyDataKeeper.idAndPostMap.set(post.firestoreDocId!, post);
   }
 
   public async delete(id: string): Promise<void> {

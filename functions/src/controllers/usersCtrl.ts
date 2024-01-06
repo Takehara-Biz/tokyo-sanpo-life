@@ -102,22 +102,19 @@ export const addUsersRouting = ((app: Express): void => {
    * called with Ajax
    */
   app.put(URL_PREFIX + ":id", async function (req, res, next) {
-    const identifiedFirebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId;
-    ReqLogUtil.debug('identifiedFirebaseUserId: ' + identifiedFirebaseUserId);
-    ReqLogUtil.debug('req.body.firebaseUserId: ' + req.body.firebaseUserId);
-
-    if(req.body.firebaseUserId != identifiedFirebaseUserId){
-      throw new Error('no permission!');
+    const user = await userLogic.findUser(req.body.firebaseUserId!);
+    if(user == null){
+      throw new Error('failed updating');
     }
 
-    const user = await userLogic.findUser(identifiedFirebaseUserId!)!;
-    ReqLogUtil.debug('before ' + user!.userName);
     user!.userName = req.body.userName,
-    ReqLogUtil.debug('after ' + user!.userName);
-    user!.selfIntroduction = req.body.selfIntroduction ?? "",
-    user!.xProfileLink = req.body.xProfileURL ?? "",
-    user!.instagramProfileLink = req.body.instaProfileURL ?? "",
-    await userLogic.updateUser(user!);
+    user!.selfIntroduction = req.body.selfIntroduction ?? "";
+    user!.xProfileLink = req.body.xProfileURL ?? "";
+    user!.instagramProfileLink = req.body.instaProfileURL ?? "";
+    const result = await userLogic.updateUser(user!);
+    if(!result){
+      throw new Error('failed updating');
+    }
     res.json({});
   });
 

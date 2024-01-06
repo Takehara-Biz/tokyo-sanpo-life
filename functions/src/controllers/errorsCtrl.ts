@@ -28,7 +28,7 @@ export const addErrorsRouting = ((app: Express): void => {
   });
 
   app.all("*", (req, res) => {
-    ReqLogUtil.warn(req.url);
+    ReqLogUtil.warn('non-registered url ' + req.url);
     CtrlUtil.render(res, EJS_PREFIX + "404");
   });
 });

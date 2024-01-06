@@ -52,7 +52,7 @@ export class PostBizLogic {
       }
 
       // omit putting comments and emoji evaluations for list.
-      const dto = PostConvertor.convert(postDoc, userDoc, [], []);
+      const dto = PostConvertor.toDto(postDoc, userDoc, [], []);
       postDtos.push(dto)
     })
 
@@ -62,17 +62,20 @@ export class PostBizLogic {
   public async find(postId: string): Promise<PostDto | null> {
     const postDoc = await this.postsDao.read(postId);
     if(postDoc == null){
+      ReqLogUtil.warn('there is no such post. post id : ' + postId);
       return null;
     }
 
     let userDoc = await this.usersDao.read(postDoc!.postedFirebaseUserId);
     if (userDoc == undefined) {
+      ReqLogUtil.info(`there is no user (id:${postDoc!.postedFirebaseUserId}) who wrote the post. perhaps, already left(quit)`);
+
       userDoc = leftUser;
     }
 
     const commentDocs = await this.commentsDao.list(postId);
     const emojiEvalutions = await this.emojiEvaluationsDao.list(postId);
-    const postDto = PostConvertor.convert(postDoc, userDoc, commentDocs, emojiEvalutions);
+    const postDto = PostConvertor.toDto(postDoc, userDoc, commentDocs, emojiEvalutions);
     return postDto;
   }
 
@@ -91,6 +94,33 @@ export class PostBizLogic {
     }
     
     return await this.postsDao.create(postDoc);
+  }
+
+  public async update(postDto: PostDto): Promise<boolean> {
+    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId!;
+    if(firebaseUserId != postDto.postedFirebaseUserId){
+      ReqLogUtil.warn('can not update others post!');
+      ReqLogUtil.warn('identified firebaseUserId : ' + firebaseUserId);
+      ReqLogUtil.warn('postedFirebaseUserId in firestore : ' + postDto.postedFirebaseUserId);
+      return false;
+    }
+
+    const newPostDoc: PostDoc = {
+      // only some properties will be update!
+      firestoreDocId: postDto.firestoreDocId!, //never updated!
+      postedFirebaseUserId: postDto.postedFirebaseUserId, //never updated!
+      photoBase64: postDto.photoBase64, //never updated!
+      lat: postDto.lat,
+      lng: postDto.lng,
+      geohash: geohashForLocation([postDto.lat, postDto.lng]),
+      categoryId: postDto.postCategory.getId(),
+      description: postDto.description,
+      insertedAt: Timestamp.fromDate(postDto.insertedAt), // never changed!
+      updatedAt: Timestamp.now(),
+    }
+    
+    await this.postsDao.update(newPostDoc);
+    return true;
   }
 
   public async delete(reqParamPostId: string): Promise<boolean> {

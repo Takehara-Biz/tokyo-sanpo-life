@@ -22,6 +22,9 @@ class UserBizLogic {
 
   public async findUser(userId: string): Promise<UserDto | null> {
     const result = await this.usersDao.read(userId);
+    if(result == null){
+      ReqLogUtil.warn('there is no such user. user id : ' + userId);
+    }
     return result;
   }
 
@@ -40,7 +43,7 @@ class UserBizLogic {
     if(user.firebaseUserId != firebaseUserId){
       ReqLogUtil.warn('can not update others account!');
       ReqLogUtil.warn('identified firebaseUserId : ' + firebaseUserId);
-      ReqLogUtil.warn('firebasedUserId kept in firestore : ' + user.firebaseUserId);
+      ReqLogUtil.warn('firebasedUserId in firestore : ' + user.firebaseUserId);
       return false;
     }
     user.updatedAt = new Date();

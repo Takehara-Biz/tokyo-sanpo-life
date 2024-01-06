@@ -16,5 +16,6 @@ export interface IPostsDao {
    * @returns document Ref Id of firestore.
    */
   create(post: PostDoc): Promise<string>;
+  update(post: PostDoc): Promise<void>;
   delete(id: string): Promise<void>;
 }

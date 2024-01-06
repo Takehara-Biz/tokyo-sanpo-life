@@ -1,4 +1,4 @@
-const RenderPostOnGMap = {
+const UpdatePostPage = {
 
   async initMap(post: IPost): Promise<void> {
     console.debug('lat ' + post.lat + ", lng " + post.lng);
@@ -54,9 +54,9 @@ const RenderPostOnGMap = {
       marker.map = map;
       marker.content = pinElement.element;
       
-      let markerLat = document.getElementById("markerLat");
+      let markerLat = document.getElementById("lat");
       markerLat!.setAttribute("value", lat);
-      let markerLng = document.getElementById("markerLng");
+      let markerLng = document.getElementById("lng");
       markerLng!.setAttribute("value", lng);
       map.setCenter(event.latLng);
     });
@@ -66,5 +66,57 @@ const RenderPostOnGMap = {
 
 // come from ejs
 // @ts-ignore
-window.onload = (() => RenderPostOnGMap.initMap(targetPost));
+window.onload = (() => UpdatePostPage.initMap(targetPost));
 
+
+function validateMap() {
+  const latValue = (document.getElementById("lat")! as HTMLInputElement).value;
+  const lngValue = (document.getElementById("lng")! as HTMLInputElement).value;
+  console.log(latValue + " " + lngValue);
+  if (latValue == null || lngValue == null) {
+    // marker has not been set yet.
+    alert('地図にマーカーをセットしてください。')
+    return false;
+  }
+  return true;
+}
+
+function updatePost(event) {
+  if (!validateMap()) {
+    return;
+  }
+
+  event.preventDefault();
+  const form = document.querySelector('form')!;
+  if (form.checkValidity()) {
+    if (!(confirm('本当に変更して良いですか？'))) {
+      return;
+    }
+
+    const formData = new FormData(form);
+    const object = {};
+    formData.forEach((value, key) => object[key] = value);
+    const json = JSON.stringify(object);
+    fetch('/posts/' + formData.get('firestoreDocId'), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: json
+    }).then((response) => {
+      TslLogUtil.debug('fetch then');
+
+      setTimeout((() => {
+        // if it's too early, old data can be printed..
+        window.location.href = '/posts/my-list'
+      }), 500);
+
+    }).catch((error) => {
+      TslLogUtil.error('fetch error');
+      TslLogUtil.error(error);
+      window.location.href = '/errors/500';
+    });
+  } else {
+    form.reportValidity();
+  }
+}

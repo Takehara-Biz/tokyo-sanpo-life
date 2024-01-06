@@ -31,7 +31,7 @@ export type PostDto = {
  * Hence, combine and convert to Dto.
  */
 export class PostConvertor {
-  public static convert(postDoc: PostDoc, userDoc: UserDoc, commentDocs: CommentDoc[], emojiEvaluationDocs: EmojiEvaluationDoc[]): PostDto {
+  public static toDto(postDoc: PostDoc, userDoc: UserDoc, commentDocs: CommentDoc[], emojiEvaluationDocs: EmojiEvaluationDoc[]): PostDto {
     const postDto : PostDto = {
       firestoreDocId: postDoc.firestoreDocId,
       user: userDoc as UserDto,

@@ -22,7 +22,7 @@ export class FirestoreUsersDao implements IUsersDao {
       const userDoc = doc.data() as UserDoc;
       idAndUserDocMap.set(userDoc.firebaseUserId, userDoc);
     });
-    ReqLogUtil.debug('list result : ' + idAndUserDocMap);
+    ReqLogUtil.debug('list result : ' + ReqLogUtil.jsonStr(idAndUserDocMap));
     return idAndUserDocMap;
   }
 
@@ -42,19 +42,19 @@ export class FirestoreUsersDao implements IUsersDao {
   }
 
   public async create(user: UserDoc): Promise<void> {
-    ReqLogUtil.info('create : ' + JSON.stringify(user));
+    ReqLogUtil.info('create : ' + ReqLogUtil.jsonStr(user));
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     await usersRef.add(user);
   }
 
   public async update(user: UserDoc): Promise<void> {
-    ReqLogUtil.info('update : ' + JSON.stringify(user));
+    ReqLogUtil.info('update : ' + ReqLogUtil.jsonStr(user));
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", user.firebaseUserId).get();
     
     await usersSnapshot.forEach(async (doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
+      console.log(doc.id, " => ", ReqLogUtil.jsonStr(doc.data()));
       await doc.ref.update({
         userName: user.userName,
         userIconBase64: user.userIconBase64,
@@ -67,13 +67,13 @@ export class FirestoreUsersDao implements IUsersDao {
   }
 
   public async delete(userId: string): Promise<void> {
-    ReqLogUtil.info('delete : ' + JSON.stringify(userId));
+    ReqLogUtil.info('delete user id : ' + userId);
     const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
     const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", userId).get();
     
     await usersSnapshot.forEach(async (doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
+      console.log(doc.id, " => ", ReqLogUtil.jsonStr(doc.data()));
       await doc.ref.delete();
     });
   }

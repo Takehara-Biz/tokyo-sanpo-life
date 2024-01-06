@@ -52,9 +52,9 @@ const RenderEmptyGMap = {
       newMarker.map = map;
       newMarker.content = pinElement.element;
       
-      let markerLat = document.getElementById("markerLat");
+      let markerLat = document.getElementById("lat");
       markerLat!.setAttribute("value", lat);
-      let markerLng = document.getElementById("markerLng");
+      let markerLng = document.getElementById("lng");
       markerLng!.setAttribute("value", lng);
       map.setCenter(event.latLng);
     });
