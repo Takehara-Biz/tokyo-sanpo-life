@@ -1,6 +1,6 @@
 import { Express } from "express";
 import { userLogic } from "../models/bizlogic/userBizLogic";
-import { firebaseAuthDao } from "../models/auth/firebaseAuthDao";
+import { FirebaseAuthManager, firebaseAuthManager } from "../models/auth/firebaseAuthManager";
 import { EJS_401_PAGE_PATH } from "./errorsCtrl";
 import { ReqLogUtil } from "../utils/reqLogUtil";
 import { CtrlUtil } from "./ctrlUtil";
@@ -18,7 +18,7 @@ export const addUsersRouting = ((app: Express): void => {
   const URL_PREFIX = "/users/";
 
   app.get(URL_PREFIX + "create", async function (req, res, next) {
-    const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
+    const firebaseUserId = await firebaseAuthManager.verifyIdToken(req.cookies.__session);
     CtrlUtil.render(res, EJS_PREFIX + "create", {firebaseUserId: firebaseUserId});
   });
   app.post(URL_PREFIX + "create", async function (req, res, next) {
@@ -45,7 +45,7 @@ export const addUsersRouting = ((app: Express): void => {
     CtrlUtil.render(res, EJS_PREFIX + "login", { successfulLogoutToast: successfulLogoutToast });
   });
   app.post(URL_PREFIX + "login", async function (req, res, next) {
-    const firebaseUserId = await firebaseAuthDao.verifyIdToken(req.body.idToken);
+    const firebaseUserId = await firebaseAuthManager.verifyIdToken(req.body.idToken);
     if (firebaseUserId == null) {
       ReqLogUtil.warn('unauthorized!');
       //res.render(EJS_401_PAGE_PATH, { user: userLogic.getLoggedInUser() });
@@ -56,7 +56,7 @@ export const addUsersRouting = ((app: Express): void => {
     const oneDayMilliSeconds = 24 * 60 * 60 * 1000;
     //res.cookie('uid', req.body.uid, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
     //res.cookie('token', req.body.token, {maxAge: oneDayMilliSeconds, httpOnly: true, path: "/"});
-    res.cookie('idToken', req.body.idToken, { maxAge: oneDayMilliSeconds, httpOnly: true, path: "/" });
+    res.cookie(FirebaseAuthManager.ID_TOKEN_COOKIE_KEY, req.body.idToken, { maxAge: oneDayMilliSeconds, httpOnly: true, path: "/" });
     ReqLogUtil.debug('set idToken into res cookie!');
     const resCookie = "res.cookie=" + res.get('Set-Cookie');
     ReqLogUtil.debug(resCookie.substring(0, 100));
@@ -126,7 +126,7 @@ export const addUsersRouting = ((app: Express): void => {
 
     const resCookie1 = "res.cookie1: " + res.get('Set-Cookie');
   ReqLogUtil.debug(resCookie1);
-    res.clearCookie('idToken');
+    res.clearCookie(FirebaseAuthManager.ID_TOKEN_COOKIE_KEY);
     const resCookie2 = "res.cookie2: " + res.get('Set-Cookie');
   ReqLogUtil.debug(resCookie2);
 
@@ -145,7 +145,7 @@ export const addUsersRouting = ((app: Express): void => {
       CtrlUtil.render(res, EJS_401_PAGE_PATH);
       return;
     }
-    res.clearCookie('idToken');
+    res.clearCookie(FirebaseAuthManager.ID_TOKEN_COOKIE_KEY);
     res.json({});
   });
 });

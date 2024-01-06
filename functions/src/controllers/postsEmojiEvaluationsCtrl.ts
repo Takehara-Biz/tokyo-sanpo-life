@@ -1,6 +1,7 @@
 import { Express } from "express";
 import { postLogic } from "../models/bizlogic/postBizLogic";
-import { firebaseAuthDao } from "../models/auth/firebaseAuthDao";
+import { TSLThreadLocal } from "../utils/tslThreadLocal";
+import { CtrlUtil } from "./ctrlUtil";
 
 /**
  * implements URL related to "posts/:id/emojiEvaluations" pages.
@@ -10,16 +11,10 @@ export const addPostsEmojiEvalulationsRouting = ((app: Express): void => {
   const URL_PREFIX = "/posts/:id/emojiEvaluations"
 
   app.get(URL_PREFIX, async function (req, res, next) {
-    const idToken: string | undefined = req.cookies.idToken;
-    console.log("idToken : " + idToken);
-    let firebaseUserId: string | null = null;
-    let alreadyLoggedIn = firebaseAuthDao.alreadyLoggedIn(idToken);
-    console.log("alreadyLoggedIn : " + alreadyLoggedIn);
-    if(alreadyLoggedIn){
-      firebaseUserId = await firebaseAuthDao.verifyIdToken(req.cookies.idToken);
-    }
+    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId ?? null;
     const unicode_count_userPut = postLogic.findEmojiEvaluations(req.params.id as string, firebaseUserId);
-    res.render("partials/util/emoji-evaluation-count-section", {unicode_count_userPut: unicode_count_userPut, alreadyLoggedIn: alreadyLoggedIn});
+    const alreadyLoggedIn = TSLThreadLocal.currentContext.loggedInUser != undefined;
+    CtrlUtil.render(res, "partials/util/emoji-evaluation-count-section", {unicode_count_userPut: unicode_count_userPut, alreadyLoggedIn: alreadyLoggedIn});
   });
 
   // パラメータの絵文字を付与する

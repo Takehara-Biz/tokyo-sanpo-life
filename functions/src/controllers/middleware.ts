@@ -1,5 +1,5 @@
 import { Express, Request, Response, NextFunction } from "express";
-import { firebaseAuthDao } from "../models/auth/firebaseAuthDao";
+import { FirebaseAuthManager, firebaseAuthManager } from "../models/auth/firebaseAuthManager";
 import { userLogic } from "../models/bizlogic/userBizLogic";
 import { ReqLogUtil } from "../utils/reqLogUtil";
 import { TSLThreadLocal } from "../utils/tslThreadLocal";
@@ -9,14 +9,15 @@ export const addMiddleware = ((app: Express): void => {
  * for local thread
  */
 app.use(async function (req: Request, res: Response, next: NextFunction) {
-  ReqLogUtil.debug('[BEGIN (AOP) Set up the local thread for this https request');
+  // For here logging, ReqLogUtil cannot be used yet, due to before set up the thread local.
+  console.debug('[BEGIN (AOP) Set up the local thread for this https request');
   await TSLThreadLocal.storage.run(
     new TSLThreadLocal(),
     async () => {
       await next();
     },
   );
-  ReqLogUtil.debug('[  END (AOP) Set up the local thread for this https request');
+  console.debug('[  END (AOP) Set up the local thread for this https request');
 });
 
 /**
@@ -33,7 +34,7 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
   const resCookie = "res.cookie=" + res.get('Set-Cookie');
   ReqLogUtil.debug(resCookie.substring(0, 100));
 
-  ReqLogUtil.debug('[  END] (AOP) Logging : ' +  + req.method + " " + req.url);
+  ReqLogUtil.debug("[  END] (AOP) Logging : " + req.method + " " + req.url);
 });
 
 /**
@@ -41,10 +42,10 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
  */
 app.use(async function (req: Request, res: Response, next: NextFunction) {
   ReqLogUtil.debug('[BEGIN] (AOP) Auth');
-  const idToken = req.cookies['idToken'];
+  const idToken = req.cookies[FirebaseAuthManager.ID_TOKEN_COOKIE_KEY];
   if (idToken != null) {
-    ReqLogUtil.debug('request has the "idToken" in the cookie! : ' + idToken.substring(0, 50));
-    const firebaseUserId = await firebaseAuthDao.verifyIdToken(idToken);
+    ReqLogUtil.debug('request has the idToken in the cookie! : ' + idToken.substring(0, 50));
+    const firebaseUserId = await firebaseAuthManager.verifyIdToken(idToken);
     if (firebaseUserId != null) {
       ReqLogUtil.debug('identified firebase auth uid : ' + firebaseUserId);
       TSLThreadLocal.currentContext.identifiedFirebaseUserId = firebaseUserId;
@@ -65,7 +66,7 @@ app.use(async function (req: Request, res: Response, next: NextFunction) {
       ReqLogUtil.warn('invalid uid... maybe Firebase ID token has been expired.');
     }
   } else {
-    ReqLogUtil.debug('request does NOT have the "idToken" in the cookie...');
+    ReqLogUtil.debug('request does NOT have the idToken in the cookie...');
   }
 
   ReqLogUtil.debug('threadLocal.identifiedFirebaseUserId : ' + TSLThreadLocal.currentContext.identifiedFirebaseUserId);
