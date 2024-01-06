@@ -74,6 +74,19 @@ export class PostBizLogic {
       userDoc = leftUser;
     }
 
+    const commentDtos = await this.prepareCommentDtosForPost(postId);
+    const emojiEvalutions = await this.emojiEvalsDao.list(postId);
+    const postDto = DocDtoConvertor.toPostDto(postDoc, userDoc, commentDtos, emojiEvalutions);
+    return postDto;
+  }
+
+  /**
+   * When rendering a post, it requires comments list with each user info.
+   * This method prepares those.
+   * @param postId 
+   * @returns 
+   */
+  private async prepareCommentDtosForPost(postId: string){
     const commentDocs = await this.commentsDao.listOrderbyInsertedAtAsc(postId);
     const commentDuplicatedUserIds = commentDocs.map((commentDoc => commentDoc.userFirestoreDocId));
     const commentUserIds = Array.from(new Set(commentDuplicatedUserIds));
@@ -83,10 +96,7 @@ export class PostBizLogic {
       userIdAndUserMap.set(userDoc.firebaseUserId, userDoc);
     });
     const commentDtos = commentDocs.map((commentDoc) => DocDtoConvertor.toCommentDto(commentDoc, userIdAndUserMap.get(commentDoc.userFirestoreDocId)!));
-
-    const emojiEvalutions = await this.emojiEvalsDao.list(postId);
-    const postDto = DocDtoConvertor.toPostDto(postDoc, userDoc, commentDtos, emojiEvalutions);
-    return postDto;
+    return commentDtos;
   }
 
   public async create(postDto: PostDto): Promise<string> {
