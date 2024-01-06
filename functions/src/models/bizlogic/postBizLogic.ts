@@ -14,6 +14,7 @@ import { Timestamp } from "firebase-admin/firestore";
 import { CommentsColDao } from "../dao/firestore/commentsColDao";
 import { EmojiEvalsSubColDao } from "../dao/firestore/post/emojiEvalsSubColDao";
 import { DocDtoConvertor } from "../dto/docDtoConvertor";
+import { UserDoc } from "../dao/doc/userDoc";
 
 export class PostBizLogic {
   private postsDao: IPostsDao = new PostsColDao();
@@ -61,7 +62,7 @@ export class PostBizLogic {
 
   public async find(postId: string): Promise<PostDto | null> {
     const postDoc = await this.postsDao.read(postId);
-    if(postDoc == null){
+    if (postDoc == null) {
       ReqLogUtil.warn('there is no such post. post id : ' + postId);
       return null;
     }
@@ -74,8 +75,17 @@ export class PostBizLogic {
     }
 
     const commentDocs = await this.commentsDao.listOrderbyInsertedAtAsc(postId);
+    const commentDuplicatedUserIds = commentDocs.map((commentDoc => commentDoc.userFirestoreDocId));
+    const commentUserIds = Array.from(new Set(commentDuplicatedUserIds));
+    const userDocs = await this.usersDao.list(commentUserIds);
+    const userIdAndUserMap = new Map<string, UserDoc>();
+    userDocs.forEach((userDoc) => {
+      userIdAndUserMap.set(userDoc.firebaseUserId, userDoc);
+    });
+    const commentDtos = commentDocs.map((commentDoc) => DocDtoConvertor.toCommentDto(commentDoc, userIdAndUserMap.get(commentDoc.userFirestoreDocId)!));
+
     const emojiEvalutions = await this.emojiEvalsDao.list(postId);
-    const postDto = DocDtoConvertor.toPostDto(postDoc, userDoc, commentDocs, emojiEvalutions);
+    const postDto = DocDtoConvertor.toPostDto(postDoc, userDoc, commentDtos, emojiEvalutions);
     return postDto;
   }
 
@@ -92,13 +102,13 @@ export class PostBizLogic {
       insertedAt: Timestamp.fromDate(postDto.insertedAt),
       updatedAt: Timestamp.fromDate(postDto.updatedAt),
     }
-    
+
     return await this.postsDao.create(postDoc);
   }
 
   public async update(postDto: PostDto): Promise<boolean> {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId!;
-    if(firebaseUserId != postDto.postedFirebaseUserId){
+    if (firebaseUserId != postDto.postedFirebaseUserId) {
       ReqLogUtil.warn('can not update others post!');
       ReqLogUtil.warn('identified firebaseUserId : ' + firebaseUserId);
       ReqLogUtil.warn('postedFirebaseUserId in firestore : ' + postDto.postedFirebaseUserId);
@@ -118,7 +128,7 @@ export class PostBizLogic {
       insertedAt: Timestamp.fromDate(postDto.insertedAt), // never changed!
       updatedAt: Timestamp.now(),
     }
-    
+
     await this.postsDao.update(newPostDoc);
     return true;
   }
@@ -126,7 +136,7 @@ export class PostBizLogic {
   public async delete(reqParamPostId: string): Promise<boolean> {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId;
     const postDoc = await this.postsDao.read(reqParamPostId);
-    if(postDoc == null){
+    if (postDoc == null) {
       ReqLogUtil.warn('there is no such post. post id : ' + reqParamPostId);
       return false;
     }

@@ -1,0 +1,45 @@
+<span class="material-symbols-outlined" data-bs-toggle="dropdown" aria-expanded="false">
+  more_horiz
+</span>
+<ul class="dropdown-menu">
+  <li>
+    <a class="dropdown-item" href="https://www.google.com/maps/search/?api=1&query=<%= post.lat %>%2C<%= post.lng %>" onclick="window.open(this.href); return false;">
+      <span class="text-accent">
+        <span class="material-symbols-outlined align-[-6px]">
+          location_on
+        </span>
+        GoogleMapで開く
+      </span>
+    </a>
+  </li>
+<% if (user !== undefined && user.id === post.user.id) { %>
+  <!-- ログイン済み、かつ、投稿したユーザなら、編集と削除が可能。 -->
+  <li>
+    <hr class="dropdown-divider">
+  </li>
+  <li>
+    <a class="dropdown-item" href="/posts/<%= post.firestoreDocId %>/update">
+      <span class="text-accent">
+        <span class="material-symbols-outlined align-[-6px]">
+          edit
+        </span>
+        編集
+      </span>
+    </a>
+  </li>
+  <li>
+    <hr class="dropdown-divider">
+  </li>
+  <li>
+    <a class="dropdown-item bg-acccent text-white" style="background-color: #ff0000;"
+      href="javascript:void(0)" onclick="return deletePost();">
+      <span class="bg-red text-white" style="background-color: #ff0000;">
+        <span class="material-symbols-outlined align-[-6px]">
+          delete
+        </span>
+        削除
+      </span>
+    </a>
+  </li>
+  <% } %>
+</ul>

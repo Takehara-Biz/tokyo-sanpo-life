@@ -14,8 +14,7 @@ import { UserDto } from "./userDto";
  * Hence, combine and convert to Dto.
  */
 export class DocDtoConvertor {
-  public static toPostDto(postDoc: PostDoc, userDoc: UserDoc, commentDocs: CommentDoc[], emojiEvalDocs: EmojiEvalDoc[]): PostDto {
-    const commentDtos = commentDocs.map(commentDoc => DocDtoConvertor.toCommentDto(commentDoc, userDoc));
+  public static toPostDto(postDoc: PostDoc, userDoc: UserDoc, commentDtos: CommentDto[], emojiEvalDocs: EmojiEvalDoc[]): PostDto {
     const postDto : PostDto = {
       firestoreDocId: postDoc.firestoreDocId,
       user: userDoc as UserDto,
