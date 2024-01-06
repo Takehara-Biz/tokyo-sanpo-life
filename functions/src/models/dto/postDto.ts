@@ -1,6 +1,6 @@
 import { ReqLogUtil } from "../../utils/reqLogUtil";
 import { CommentDoc } from "../dao/doc/commentDoc";
-import { EmojiEvalDoc } from "../dao/doc/emojiEvalsDoc";
+import { EmojiEvalDoc } from "../dao/doc/post/emojiEvalsDoc";
 import { PostDoc } from "../dao/doc/postDoc";
 import { UserDoc } from "../dao/doc/userDoc";
 import { PostCategory } from "../postCategory";
@@ -21,7 +21,7 @@ export type PostDto = {
   postCategory: PostCategory;
   description: string;
   postComments: CommentDto[];
-  emojiEvaluations: EmojiEvalDto[];
+  emojiEvals: EmojiEvalDto[];
   insertedAt: Date;
   updatedAt: Date;
 }
@@ -31,7 +31,7 @@ export type PostDto = {
  * Hence, combine and convert to Dto.
  */
 export class PostConvertor {
-  public static toDto(postDoc: PostDoc, userDoc: UserDoc, commentDocs: CommentDoc[], emojiEvaluationDocs: EmojiEvalDoc[]): PostDto {
+  public static toDto(postDoc: PostDoc, userDoc: UserDoc, commentDocs: CommentDoc[], emojiEvalDocs: EmojiEvalDoc[]): PostDto {
     const postDto : PostDto = {
       firestoreDocId: postDoc.firestoreDocId,
       user: userDoc as UserDto,
@@ -42,7 +42,7 @@ export class PostConvertor {
       postCategory: PostCategory.findCategory(postDoc.categoryId),
       description: postDoc.description,
       postComments: commentDocs as CommentDto[],
-      emojiEvaluations: emojiEvaluationDocs as EmojiEvalDto[],
+      emojiEvals: emojiEvalDocs as EmojiEvalDto[],
       insertedAt: postDoc.insertedAt.toDate(),
       updatedAt: postDoc.updatedAt.toDate(),
     }

@@ -3,7 +3,6 @@
  */
 export type EmojiEvalDto = {
   firestoreDocId?: string;
-  postFirestoreDocId: string;
   userFirestoreDocId: string;
   /**
    * the type of emoji

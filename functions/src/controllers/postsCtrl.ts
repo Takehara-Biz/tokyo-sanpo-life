@@ -31,7 +31,7 @@ export const addPostsRouting = ((app: Express): void => {
       description: req.body.description,
       postCategory: postCategory,
       postComments: [],
-      emojiEvaluations: [],
+      emojiEvals: [],
       postedFirebaseUserId: TSLThreadLocal.currentContext!.identifiedFirebaseUserId!,
       insertedAt: now,
       updatedAt: now,

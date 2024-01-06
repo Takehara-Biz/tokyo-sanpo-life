@@ -1,14 +1,14 @@
-import { FirestorePostsDao } from "../dao/firestore/firestorePostsDao";
+import { PostsColDao } from "../dao/firestore/postsColDao";
 import { TSLThreadLocal } from "../../utils/tslThreadLocal";
 import { ReqLogUtil } from "../../utils/reqLogUtil";
 import { IPostsDao } from "../dao/interface/iPostsDao";
 import { ICommentsDao } from "../dao/interface/iCommentsDao";
 import { CommentDto } from "../dto/commentDto";
-import { FirestoreCommentsDao } from "../dao/firestore/firestoreCommentsDao";
+import { CommentsColDao } from "../dao/firestore/commentsColDao";
 
 export class CommentBizLogic {
-  private commentsDao: ICommentsDao = new FirestoreCommentsDao();
-  private postsDao: IPostsDao = new FirestorePostsDao();
+  private commentsDao: ICommentsDao = new CommentsColDao();
+  private postsDao: IPostsDao = new PostsColDao();
   private static readonly MAX_COMMENTS_COUNT_PER_POST = 30;
 
   public async create(commentDto: CommentDto): Promise<boolean> {
@@ -27,6 +27,8 @@ export class CommentBizLogic {
       return false;
     }
 
+    const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId;
+    commentDto.userFirestoreDocId = firebaseUserId!;
     commentDto.insertedAt = new Date();
     commentDto.udpatedAt = new Date();
 

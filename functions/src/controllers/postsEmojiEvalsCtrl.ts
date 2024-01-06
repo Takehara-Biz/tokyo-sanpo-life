@@ -10,11 +10,11 @@ import { EmojiEvalDto } from "../models/dto/emojiEvalDto";
  * @param app 
  */
 export const addPostsEmojiEvalsRouting = ((app: Express): void => {
-  const URL_PREFIX = "/posts/:id/emojiEvals"
+  const URL_PREFIX = "/posts/:postId/emojiEvals"
 
   app.get(URL_PREFIX, async function (req, res, next) {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId ?? null;
-    const unicode_count_userPut = postLogic.findEmojiEvals(req.params.id as string, firebaseUserId);
+    const unicode_count_userPut = postLogic.findEmojiEvals(req.params.postId, firebaseUserId);
     const alreadyLoggedIn = TSLThreadLocal.currentContext.loggedInUser != undefined;
     CtrlUtil.render(res, "partials/util/emoji-evaluation-count-section", {unicode_count_userPut: unicode_count_userPut, alreadyLoggedIn: alreadyLoggedIn});
   });
@@ -24,24 +24,22 @@ export const addPostsEmojiEvalsRouting = ((app: Express): void => {
    */
   app.post(URL_PREFIX, function (req, res, next) {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId ?? null;
-    const postId = req.params.id;
     const now = new Date();
-    const emojiEval : EmojiEvalDto = {
-      postFirestoreDocId: postId,
+    const emojiEvalDto : EmojiEvalDto = {
       userFirestoreDocId: firebaseUserId!,
       unicode: req.body.unicode,
       insertedAt: now,
       updatedAt: now,
     }
-    emojiEvalBizLogic.create(emojiEval);
+    emojiEvalBizLogic.create(req.params.postId, emojiEvalDto);
     res.json({});
   });
 
   /**
    * call with Ajax
    */
-  app.delete(URL_PREFIX + "/:emojiEvalFirestoreDocId", function (req, res, next) {
-    emojiEvalBizLogic.delete(req.params.emojiEvalFirestoreDocId);
-    res.redirect("/posts/" + req.params.id + "/emojiEvals");
+  app.delete(URL_PREFIX + "/:emojiEvalId", function (req, res, next) {
+    emojiEvalBizLogic.delete(req.params.postId, req.params.emojiEvalId);
+    res.redirect("/posts/" + req.params.postId + "/emojiEvals");
   });
 });

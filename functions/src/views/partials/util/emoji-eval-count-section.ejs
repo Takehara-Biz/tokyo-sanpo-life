@@ -3,12 +3,12 @@
     <div class="rounded-full ml-2 mt-3 px-2 py-1" style="border: 1px solid #ff0099; 
       <% if (count_userPut[1]) { %>
         background-color: '#ff0099'; color: 'white';" 
-        onclick="removeEmojiEvaluation('<%= unicode %>');"
+        onclick="deleteEmojiEval('<%= unicode %>');"
       <% } else { %>
         background-color: 'white'; color: '#ff0099';" 
         onclick="
         <% if (alreadyLoggedIn) { %>
-          putEmojiEvaluation('<%= unicode %>');
+          createEmojiEval('<%= unicode %>');
         <% } else { %>
           alert('ログインすると、絵文字で評価できるようになります☺️');
         <% } %>"

@@ -1,26 +1,24 @@
 import { geohashForLocation } from "geofire-common";
 import { IEmojiEvalsDao } from "../dao/interface/iEmojiEvalsDao";
-import { MockEmojiEvalsDao } from "../dao/mock/mockEmojiEvalsDao";
-import { FirestorePostsDao } from "../dao/firestore/firestorePostsDao";
+import { PostsColDao } from "../dao/firestore/postsColDao";
 import { TSLThreadLocal } from "../../utils/tslThreadLocal";
 import { ReqLogUtil } from "../../utils/reqLogUtil";
 import { PostConvertor, PostDto } from "../dto/postDto";
 import { IPostsDao } from "../dao/interface/iPostsDao";
 import { IUsersDao } from "../dao/interface/iUsersDao";
-import { FirestoreUsersDao } from "../dao/firestore/firestoreUsersDao";
+import { UsersColDao } from "../dao/firestore/usersColDao";
 import { leftUser } from "../dto/userDto";
 import { ICommentsDao } from "../dao/interface/iCommentsDao";
-import { MockCommentsDao } from "../dao/mock/mockCommentsDao";
 import { PostDoc } from "../dao/doc/postDoc";
 import { Timestamp } from "firebase-admin/firestore";
-import { FirestoreCommentsDao } from "../dao/firestore/firestoreCommentsDao";
-import { FirestoreEmojiEvalsDao } from "../dao/firestore/firestoreEmojiEvalsDao";
+import { CommentsColDao } from "../dao/firestore/commentsColDao";
+import { EmojiEvalsSubColDao } from "../dao/firestore/post/emojiEvalsSubColDao";
 
 export class PostBizLogic {
-  private postsDao: IPostsDao = new FirestorePostsDao();
-  private usersDao: IUsersDao = new FirestoreUsersDao();
-  private commentsDao: ICommentsDao = new FirestoreCommentsDao();
-  private emojiEvalsDao: IEmojiEvalsDao = new FirestoreEmojiEvalsDao();
+  private postsDao: IPostsDao = new PostsColDao();
+  private usersDao: IUsersDao = new UsersColDao();
+  private commentsDao: ICommentsDao = new CommentsColDao();
+  private emojiEvalsDao: IEmojiEvalsDao = new EmojiEvalsSubColDao();
 
   public async listOrderbyInsertedAtDesc(): Promise<PostDto[]> {
     const postDocs = await this.postsDao.listOrderbyInsertedAtDesc(100, 0);

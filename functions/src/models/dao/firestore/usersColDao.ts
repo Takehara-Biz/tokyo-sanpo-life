@@ -3,8 +3,8 @@ import { FirebaseAdminManager } from "../../firebase/firebaseAdminManager";
 import { UserDoc } from "../doc/userDoc";
 import { IUsersDao } from "../interface/iUsersDao";
 
-export class FirestoreUsersDao implements IUsersDao {
-  private static readonly COLLECTION_NAME = "users";
+export class UsersColDao implements IUsersDao {
+  private static readonly COL_NAME = "users";
   private static readonly FIREBASE_USER_ID = "firebaseUserId";
 
   async list(userIds: string[]): Promise<Map<string, UserDoc>> {
@@ -14,8 +14,8 @@ export class FirestoreUsersDao implements IUsersDao {
       return idAndUserDocMap;
     }
 
-    const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
-    const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "in", userIds).get();
+    const usersRef = FirebaseAdminManager.db.collection(UsersColDao.COL_NAME);
+    const usersSnapshot = await usersRef.where(UsersColDao.FIREBASE_USER_ID, "in", userIds).get();
     await usersSnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       // ReqLogUtil.debug(doc.id + " => " + doc.data());
@@ -28,8 +28,8 @@ export class FirestoreUsersDao implements IUsersDao {
 
   async read(userId: string): Promise<UserDoc | null> {
     
-    const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
-    const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", userId).get();
+    const usersRef = FirebaseAdminManager.db.collection(UsersColDao.COL_NAME);
+    const usersSnapshot = await usersRef.where(UsersColDao.FIREBASE_USER_ID, "==", userId).get();
     let userDoc = null;
     usersSnapshot.forEach((doc) => {
       userDoc = doc.data() as UserDoc;
@@ -43,14 +43,14 @@ export class FirestoreUsersDao implements IUsersDao {
 
   async create(user: UserDoc): Promise<void> {
     ReqLogUtil.info('create : ' + ReqLogUtil.jsonStr(user));
-    const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
+    const usersRef = FirebaseAdminManager.db.collection(UsersColDao.COL_NAME);
     await usersRef.add(user);
   }
 
   async update(user: UserDoc): Promise<void> {
     ReqLogUtil.info('update : ' + ReqLogUtil.jsonStr(user));
-    const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
-    const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", user.firebaseUserId).get();
+    const usersRef = FirebaseAdminManager.db.collection(UsersColDao.COL_NAME);
+    const usersSnapshot = await usersRef.where(UsersColDao.FIREBASE_USER_ID, "==", user.firebaseUserId).get();
     
     await usersSnapshot.forEach(async (doc) => {
       // doc.data() is never undefined for query doc snapshots
@@ -68,8 +68,8 @@ export class FirestoreUsersDao implements IUsersDao {
 
   async delete(userId: string): Promise<void> {
     ReqLogUtil.info('delete user id : ' + userId);
-    const usersRef = FirebaseAdminManager.db.collection(FirestoreUsersDao.COLLECTION_NAME);
-    const usersSnapshot = await usersRef.where(FirestoreUsersDao.FIREBASE_USER_ID, "==", userId).get();
+    const usersRef = FirebaseAdminManager.db.collection(UsersColDao.COL_NAME);
+    const usersSnapshot = await usersRef.where(UsersColDao.FIREBASE_USER_ID, "==", userId).get();
     
     await usersSnapshot.forEach(async (doc) => {
       // doc.data() is never undefined for query doc snapshots

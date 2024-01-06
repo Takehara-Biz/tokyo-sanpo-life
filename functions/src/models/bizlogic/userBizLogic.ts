@@ -1,12 +1,12 @@
 import { ReqLogUtil } from "../../utils/reqLogUtil"
 import { TSLThreadLocal } from "../../utils/tslThreadLocal";
-import { FirestoreUsersDao } from "../dao/firestore/firestoreUsersDao";
+import { UsersColDao } from "../dao/firestore/usersColDao";
 import { IUsersDao } from "../dao/interface/iUsersDao";
 import { UserDto } from "../dto/userDto";
 
 class UserBizLogic {
   //private usersDao: UserDtosDao = new MockUsersDao();
-  private usersDao: IUsersDao = new FirestoreUsersDao();
+  private usersDao: IUsersDao = new UsersColDao();
 
   public async logout(): Promise<void> {
     ReqLogUtil.info('called logout');

@@ -3,7 +3,7 @@ import { CommentDto } from "../../dto/commentDto";
 import { UserDto } from "../../dto/userDto";
 import { PostCategory } from "../../postCategory";
 import { PostDoc } from "../doc/postDoc";
-import { EmojiEvalDoc } from "../doc/emojiEvalsDoc";
+import { EmojiEvalDoc } from "../doc/post/emojiEvalsDoc";
 import { BasicUserIconUtil } from "../basicUserIconBase64";
 import { Timestamp } from "firebase-admin/firestore";
 
@@ -76,8 +76,10 @@ class DummyDataKeeper {
     for (let i = 0; i < count; i++) {
       const now = new Date();
       comments.push({
-        id: i.toString(),
-        user: {
+        firestoreDocId: i.toString(),
+        postFirestoreDocId: i.toString(),
+        userFirestoreDocId: i.toString(),
+        userDto: {
           firebaseUserId: i.toString(),
           loggedIn: true,
           userName: DummyDataKeeper.generateRandomString(3, 12),
@@ -89,13 +91,14 @@ class DummyDataKeeper {
           updatedAt: now,
         },
         comment: DummyDataKeeper.generateRandomString(1, 100),
-        commentDate: new Date("2023/12/01"),
+        insertedAt: now,
+        udpatedAt: now
       },);
     }
     return comments;
   }
 
-  public createRandomEmojiEvaluations(minTypeCount: number, maxTypeCount: number, minTotalCount: number, maxTotalCount: number, postId: string): EmojiEvalDoc[] {
+  public createRandomEmojiEvals(minTypeCount: number, maxTypeCount: number, minTotalCount: number, maxTotalCount: number, postId: string): EmojiEvalDoc[] {
     const evaluations: EmojiEvalDoc[] = [];
     const typeCount = DummyDataKeeper.generateRandomNumber(minTypeCount, maxTypeCount);
     if(minTotalCount < 1){
@@ -107,10 +110,12 @@ class DummyDataKeeper {
     for (let i = 0; i < uniqueEmojis.length; i++) {
       const totalCount = DummyDataKeeper.generateRandomNumber(minTotalCount, maxTotalCount);
       for(let j = 0; j < totalCount; j++){
+        const now = new Date();
         evaluations.push({
-          evaludatedPostId: postId,
           unicode: uniqueEmojis[i],
-          evaluatingUserId: j.toString(),
+          userFirestoreDocId: j.toString(),
+          insertedAt: now,
+          updatedAt: now
         },);
       }
     }

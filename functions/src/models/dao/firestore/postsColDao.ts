@@ -4,11 +4,11 @@ import { FirebaseAdminManager } from "../../firebase/firebaseAdminManager";
 import { IPostsDao } from "../interface/iPostsDao";
 import { PostDoc } from "../doc/postDoc";
 
-export class FirestorePostsDao implements IPostsDao {
-  private static readonly COLLECTION_NAME = "posts";
+export class PostsColDao implements IPostsDao {
+  public static readonly COL_NAME = "posts";
 
   async listOrderbyInsertedAtDesc(limit: number = 100, offset: number = 0): Promise<PostDoc[]> {
-    const postsRef = FirebaseAdminManager.db.collection(FirestorePostsDao.COLLECTION_NAME);
+    const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
     const postsSnapshot = await postsRef.orderBy('insertedAt', 'desc').limit(limit).offset(offset).get();
     const postDocs: PostDoc[] = [];
     postsSnapshot.forEach((doc) => {
@@ -24,7 +24,7 @@ export class FirestorePostsDao implements IPostsDao {
 
   async listByGeoQuery(lat: number, lng: number, distanceKM: number, limit: number = 100, offset: number = 0): Promise<PostDoc[]> {
     const bounds = geohashQueryBounds([lat, lng], distanceKM * 1000);
-    const postsRef = FirebaseAdminManager.db.collection(FirestorePostsDao.COLLECTION_NAME);
+    const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
     const postDocs: PostDoc[] = [];
     for (const b of bounds) {
       const usersSnapshot = await postsRef.orderBy('geohash').startAt(b[0]).endAt(b[1]).orderBy('created_at', 'desc').limit(limit).offset(offset).get();
@@ -42,7 +42,7 @@ export class FirestorePostsDao implements IPostsDao {
   }
 
   async listByUserId(userId: string): Promise<PostDoc[]> {
-    const postsRef = FirebaseAdminManager.db.collection(FirestorePostsDao.COLLECTION_NAME);
+    const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
     const postsSnapshot = await postsRef.orderBy('insertedAt', 'desc').get();
     const postDocs: PostDoc[] = [];
     postsSnapshot.forEach((doc) => {
@@ -57,7 +57,7 @@ export class FirestorePostsDao implements IPostsDao {
   }
 
   async read(firestoreDocId: string): Promise<PostDoc | null> {
-    const postsRef = FirebaseAdminManager.db.collection(FirestorePostsDao.COLLECTION_NAME);
+    const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
     const postsDocRef = await postsRef.doc(firestoreDocId);
     let result = null;
     await postsDocRef.get().then((doc) => {
@@ -85,14 +85,14 @@ export class FirestorePostsDao implements IPostsDao {
 
   async create(postDoc: PostDoc): Promise<string> {
     ReqLogUtil.info('createPost : ' + ReqLogUtil.jsonStr(postDoc));
-    const postsRef = FirebaseAdminManager.db.collection(FirestorePostsDao.COLLECTION_NAME);
+    const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
     const docRef = await postsRef.add(postDoc);
     return docRef.id
   }
 
   async update(newPostDoc: PostDoc): Promise<void> {
     ReqLogUtil.info('updatePost : ' + ReqLogUtil.jsonStr(newPostDoc));
-    const postsRef = FirebaseAdminManager.db.collection(FirestorePostsDao.COLLECTION_NAME);
+    const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
     const postsDocRef = await postsRef.doc(newPostDoc.firestoreDocId!);
     let result = null;
     await postsDocRef.get().then((doc) => {
@@ -124,7 +124,7 @@ export class FirestorePostsDao implements IPostsDao {
 
   async delete(firestoreDocId: string): Promise<void> {
     ReqLogUtil.info('deletePost post id : ' + firestoreDocId);
-    const postsRef = FirebaseAdminManager.db.collection(FirestorePostsDao.COLLECTION_NAME);
+    const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
     const postsDocRef = await postsRef.doc(firestoreDocId);
     postsDocRef.get().then((doc) => {
       if (doc.exists) {
