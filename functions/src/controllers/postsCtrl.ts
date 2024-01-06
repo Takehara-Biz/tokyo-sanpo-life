@@ -1,7 +1,7 @@
 import { Express } from "express";
 import { postLogic } from "../models/bizlogic/postBizLogic";
 import { ReqLogUtil } from "../utils/reqLogUtil";
-import { EJS_404_PAGE_PATH, EJS_500_PAGE_PATH } from "./errorsCtrl";
+import { EJS_404_PAGE_PATH } from "./errorsCtrl";
 import { CtrlUtil } from "./ctrlUtil";
 import { TSLThreadLocal } from "../utils/tslThreadLocal";
 import { PostDto } from "../models/dto/postDto";
@@ -40,7 +40,7 @@ export const addPostsRouting = ((app: Express): void => {
     // when comes from list screen.
     let showBack = true;
     // when comes after created a post.
-    if (req.params.showBack === "false") {
+    if (req.query.showBack === "false") {
       showBack = false;
     }
 
@@ -52,17 +52,19 @@ export const addPostsRouting = ((app: Express): void => {
     }
   });
 
+  /**
+   * called with Ajax
+   */
   app.delete(URL_PREFIX + "/:id", function (req, res, next) {
     // needs authorization
     try {
       postLogic.delete(req.params.id!.toString());
     } catch (error) {
-      ReqLogUtil.warn('failed to delete the post ' + req.query.id);
+      ReqLogUtil.warn('failed to delete the post ' + req.params.id);
       ReqLogUtil.warn(error);
-      res.render(EJS_500_PAGE_PATH);
-      return;
+      throw new Error('no permission!');
     }
-    res.redirect(EJS_PREFIX + '/new-posts?deletedToast=true');
+    res.json({});
   });
 
   app.post(URL_PREFIX, async function (req, res, next) {
@@ -72,7 +74,7 @@ export const addPostsRouting = ((app: Express): void => {
     const now = new Date();
     const newPost: PostDto = {
       user: TSLThreadLocal.currentContext!.loggedInUser!,
-      imageUrl: "/images/post-sample.jpeg",
+      photoBase64: req.body.postPhotoBase64,
       lat: Number(req.body.markerLat),
       lng: Number(req.body.markerLng),
       description: req.body.comment,

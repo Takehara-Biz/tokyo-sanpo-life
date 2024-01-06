@@ -7,7 +7,7 @@ import { Timestamp } from "firebase-admin/firestore";
 export type PostDoc = {
   firestoreDocId?: string;
   postedFirebaseUserId: string;
-  imageUrl: string;
+  photoBase64: string;
   lat: number;
   lng: number;
   /**

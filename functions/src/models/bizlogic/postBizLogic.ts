@@ -80,7 +80,7 @@ export class PostBizLogic {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId!;
     const postDoc: PostDoc = {
       postedFirebaseUserId: firebaseUserId,
-      imageUrl: postDto.imageUrl,
+      photoBase64: postDto.photoBase64,
       lat: postDto.lat,
       lng: postDto.lng,
       geohash: geohashForLocation([postDto.lat, postDto.lng]),
@@ -93,13 +93,19 @@ export class PostBizLogic {
     return await this.postsDao.create(postDoc);
   }
 
-  public async delete(reqParamUserId: string): Promise<boolean> {
+  public async delete(reqParamPostId: string): Promise<boolean> {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId;
-    if (reqParamUserId != firebaseUserId) {
-      ReqLogUtil.warn('can not delete others account!');
+    const postDoc = await this.postsDao.read(reqParamPostId);
+    if(postDoc == null){
+      ReqLogUtil.warn('there is no such post. post id : ' + reqParamPostId);
       return false;
     }
-    await this.postsDao.delete(reqParamUserId);
+
+    if (postDoc.postedFirebaseUserId != firebaseUserId) {
+      ReqLogUtil.warn('can not delete the post created by another user!');
+      return false;
+    }
+    await this.postsDao.delete(reqParamPostId);
     return true;
   }
 

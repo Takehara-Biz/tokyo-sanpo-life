@@ -15,7 +15,7 @@ export type PostDto = {
   firestoreDocId?: string;
   user: UserDto;
   postedFirebaseUserId: string;
-  imageUrl: string;
+  photoBase64: string;
   lat: number;
   lng: number;
   postCategory: PostCategory;
@@ -36,7 +36,7 @@ export class PostConvertor {
       firestoreDocId: postDoc.firestoreDocId,
       user: userDoc as UserDto,
       postedFirebaseUserId: userDoc.firebaseUserId,
-      imageUrl: postDoc.imageUrl,
+      photoBase64: postDoc.photoBase64,
       lat: postDoc.lat,
       lng: postDoc.lng,
       postCategory: PostCategory.findCategory(postDoc.categoryId),

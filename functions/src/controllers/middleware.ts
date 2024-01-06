@@ -10,21 +10,24 @@ export const addMiddleware = ((app: Express): void => {
  */
 app.use(async function (req: Request, res: Response, next: NextFunction) {
   // For here logging, ReqLogUtil cannot be used yet, due to before set up the thread local.
-  console.debug('[BEGIN (AOP) Set up the local thread for this https request');
+  console.debug('\n\n[BEGIN] (AOP) Set up the local thread for this https request');
   await TSLThreadLocal.storage.run(
     new TSLThreadLocal(),
     async () => {
       await next();
     },
   );
-  console.debug('[  END (AOP) Set up the local thread for this https request');
+  console.debug('[  END] (AOP) Set up the local thread for this https request');
 });
 
 /**
  * for logging
  */
 app.use(async function (req: Request, res: Response, next: NextFunction) {
-  ReqLogUtil.info("[BEGIN] (AOP) Logging : " + req.method + " " + req.url + ",\nreq.params=" + JSON.stringify(req.params) + ",\nreq.body=" + JSON.stringify(req.body));
+  ReqLogUtil.info("[BEGIN] (AOP) Logging : " + req.method + " " + req.url + 
+  ",\nreq.query=" + JSON.stringify(req.query) + 
+  ",\nreq.params=" + JSON.stringify(req.params) + 
+  ",\nreq.body=" + JSON.stringify(req.body));
 
   const reqCookies = "req.cookies=" + JSON.stringify(req.cookies);
   ReqLogUtil.debug(reqCookies.substring(0, 100));

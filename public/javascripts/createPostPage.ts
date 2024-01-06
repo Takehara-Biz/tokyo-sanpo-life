@@ -82,3 +82,104 @@ const RenderEmptyGMap = {
 // come from ejs
 // @ts-ignore
 window.onload = (() => RenderEmptyGMap.initMap());
+
+
+// The below code is adjust upload photo (reduce image file size and resize and base64 ...)
+
+// const uploadPhoto = document.getElementById('uploadPhoto')!;
+// uploadPhoto.addEventListener('change', (event) => {
+//   // @ts-ignore
+//   const file = event.target!.files[0];
+//   const reader = new FileReader();
+//   reader.readAsDataURL(file);
+//   reader.onload = (event) => {
+//     const img = new Image();
+//     img.src = event.target!.result as string;
+//     img.onload = () => {
+//       const canvas = document.createElement('canvas');
+//       let width = img.width;
+//       let height = img.height;
+//       if (width > height) {
+//         if (width > 400) {
+//           height *= 400 / width;
+//           width = 400;
+//         }
+//       } else {
+//         if (height > 300) {
+//           width *= 300 / height;
+//           height = 300;
+//         }
+//       }
+      
+//       canvas.width = 400;
+//       canvas.height = 300;
+
+//       const ctx = canvas.getContext('2d')!;
+//       ctx.fillStyle = 'black';
+//       ctx.fillRect(0, 0, canvas.width, canvas.height);
+//       ctx.drawImage(img, (400 - width) / 2, (300 - height) / 2, width, height);
+
+//       // 0.5は画質の高さを示す。0.0 ~ 1.0で、数字が大きいほど高画質。
+//       // 0.5だと、127KB(700px x 467px)のJPEG画像が、17.2KB(400px x 300px)になる。
+//       const base64String = canvas.toDataURL('image/jpeg', 0.5);
+//       console.log(base64String);
+
+//       let printPhotoDiv = document.getElementById('printPhoto')!;
+//       printPhotoDiv.innerHTML = '';
+//       //printPhotoDiv.style = 'height:100%;'
+//       const img1 = new Image();
+//       img1.src = base64String;
+//       printPhotoDiv.appendChild(img1);
+//     };
+//   };
+// });
+
+function adjustUploadPhoto(event) {
+  // @ts-ignore
+  const file = event.target!.files[0];
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = (event) => {
+    const img = new Image();
+    img.src = event.target!.result as string;
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+      if (width > height) {
+        if (width > 400) {
+          height *= 400 / width;
+          width = 400;
+        }
+      } else {
+        if (height > 300) {
+          width *= 300 / height;
+          height = 300;
+        }
+      }
+      
+      canvas.width = 400;
+      canvas.height = 300;
+
+      const ctx = canvas.getContext('2d')!;
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, (400 - width) / 2, (300 - height) / 2, width, height);
+
+      // 0.5は画質の高さを示す。0.0 ~ 1.0で、数字が大きいほど高画質。
+      // 0.5だと、127KB(700px x 467px)のJPEG画像が、17.2KB(400px x 300px)になる。
+      const base64String = canvas.toDataURL('image/jpeg', 0.5);
+      console.log(base64String);
+
+      let printPhotoDiv = document.getElementById('printPhoto')!;
+      printPhotoDiv.innerHTML = '';
+      printPhotoDiv.setAttribute('style', 'height:100%;');
+      const img1 = new Image();
+      img1.src = base64String;
+      printPhotoDiv.appendChild(img1);
+
+      let postPhotoBase64Input = document.getElementById('postPhotoBase64')! as HTMLInputElement;
+      postPhotoBase64Input.value = base64String;
+    };
+  };
+}

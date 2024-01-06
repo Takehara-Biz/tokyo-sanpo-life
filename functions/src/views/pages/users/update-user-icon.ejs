@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css"
     integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="/javascripts/updateUserIconPage.js?ver=20240106192643"></script>
+  <script src="/javascripts/updateUserIconPage.js?ver=20240106213415"></script>
   <style>
     /* 下記は円形にするなら必須です。 */
     .cropper-view-box,
@@ -88,7 +88,7 @@
             <%- include('../../partials/util/icon-button', {label: "初期設定に戻す", id: "useDefaultIconButton", googleIconName: "reset_image"}); %>
             <img id="defaultIconImg" src="/images/user-icon/kkrn_icon_user_9.svg" class="hidden" />
             <form action="/users/update-user-icon" method="POST" onSubmit="return confirm('登録してもよろしいですか？')">
-              <input id="newUserIconBase64" name="newUserIconBase64" type="text" />
+              <input id="newUserIconBase64" name="newUserIconBase64" type="hidden" />
               <%- include('../../partials/util/icon-button', {label: "保存", typeSubmit: true, googleIconName: "person_add"}); %>
             </form>
           </div>

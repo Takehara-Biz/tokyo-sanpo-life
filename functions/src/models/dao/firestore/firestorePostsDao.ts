@@ -37,13 +37,13 @@ export class FirestorePostsDao implements IPostsDao {
       });
     }
 
-    ReqLogUtil.info('findPosts length : ' + postDocs.length);
+    ReqLogUtil.info('listByGeoQuery length : ' + postDocs.length);
     return postDocs;
   }
 
   public async listByUserId(userId: string): Promise<PostDoc[]> {
     const postsRef = FirebaseAdminManager.db.collection(FirestorePostsDao.COLLECTION_NAME);
-    const postsSnapshot = await postsRef.orderBy('created_at', 'desc').get();
+    const postsSnapshot = await postsRef.orderBy('insertedAt', 'desc').get();
     const postDocs: PostDoc[] = [];
     postsSnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
@@ -52,7 +52,7 @@ export class FirestorePostsDao implements IPostsDao {
       postDoc.firestoreDocId = doc.id;
       postDocs.push(postDoc);
     });
-    ReqLogUtil.debug('findPosts result : ' + JSON.stringify(postDocs));
+    ReqLogUtil.debug('listByUserId result : ' + JSON.stringify(postDocs));
     return postDocs;
   }
 
