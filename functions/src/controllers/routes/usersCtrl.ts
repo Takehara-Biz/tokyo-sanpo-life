@@ -55,11 +55,7 @@ export const addUsersRouting = ((app: Express): void => {
   app.put(URL_PREFIX + ":id/icon", async function (req, res, next) {
     const result = await userLogic.updateUserIconBase64(req.params.id, req.body.newUserIconBase64);
     ReqLogUtil.debug('result : ' + result);
-    if(result){
-      res.redirect(URL_PREFIX + "my-page");
-    } else {
-      res.redirect('/errors/403');
-    }
+    res.json({});
   });
 
   app.get(URL_PREFIX + "update", function (req, res, next) {

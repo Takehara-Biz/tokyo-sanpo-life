@@ -8,8 +8,7 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 export const firebaseConfig = {
   apiKey: "AIzaSyCM17cUkdRUoRDcn9y09z_bma0igDW9g6Y",
-  //authDomain: "tokyo-sanpo-life-dev.firebaseapp.com",
-  authDomain: "tokyo-sanpo-life-dev.web.app",
+  authDomain: "tokyo-sanpo-life-dev.firebaseapp.com",
   projectId: "tokyo-sanpo-life-dev",
   storageBucket: "tokyo-sanpo-life-dev.appspot.com",
   messagingSenderId: "159581969806",

@@ -87,10 +87,10 @@ const UpdateUserIconPage = {
           imageSmoothingEnabled: false,
           imageSmoothingQuality: 'high',
         });
-        const roundedCanvas = this.getRoundedCanvas(canvas);
+        const roundedCanvas = UpdateUserIconPage.getRoundedCanvas(canvas);
 
         // @ts-ignore
-        roundedImage.src = roundedCanvas.toDataURL();
+        //roundedImage.src = roundedCanvas.toDataURL();
       },
     });
 
@@ -98,8 +98,10 @@ const UpdateUserIconPage = {
     cropButton.addEventListener('click', function () {
       // トリミングパネル内のcanvasを取得
       const canvas = cropper.getCroppedCanvas()
+
+      // 0.5は画質の高さを示す。0.0 ~ 1.0で、数字が大きいほど高画質。
       // canvasをbase64に変換
-      const data = canvas.toDataURL();
+      const data = canvas.toDataURL("image/jpeg", 0.5);
       // @ts-ignore
       TslLogUtil.debug(data);
       // @ts-ignore
