@@ -98,7 +98,14 @@ export class PostBizLogic {
     userDocs.forEach((userDoc) => {
       userIdAndUserMap.set(userDoc.firebaseUserId, userDoc);
     });
-    const commentDtos = commentDocs.map((commentDoc) => DocDtoConvertor.toCommentDto(commentDoc, userIdAndUserMap.get(commentDoc.userFirestoreDocId)!));
+    const commentDtos = commentDocs.map((commentDoc) => {
+      let userDto = userIdAndUserMap.get(commentDoc.userFirestoreDocId);
+      if(userDto === undefined) {
+        // ユーザが退会済みの場合
+        userDto = leftUser;
+      }
+      return DocDtoConvertor.toCommentDto(commentDoc, userDto);
+    });
     return commentDtos;
   }
 
