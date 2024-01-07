@@ -10,7 +10,7 @@ export type PostDto = {
   firestoreDocId?: string;
   user: UserDto;
   postedFirebaseUserId: string;
-  photoBase64: string;
+  photoUrl: string;
   lat: number;
   lng: number;
   postCategory: PostCategory;

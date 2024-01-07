@@ -19,7 +19,7 @@ export class DocDtoConvertor {
       firestoreDocId: postDoc.firestoreDocId,
       user: userDoc as UserDto,
       postedFirebaseUserId: userDoc.firebaseUserId,
-      photoBase64: postDoc.photoBase64,
+      photoUrl: postDoc.photoUrl!,
       lat: postDoc.lat,
       lng: postDoc.lng,
       postCategory: PostCategory.findCategory(postDoc.categoryId),

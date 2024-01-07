@@ -24,7 +24,7 @@ export const addPostsRouting = ((app: Express): void => {
     const now = new Date();
     const newPost: PostDto = {
       user: TSLThreadLocal.currentContext!.loggedInUser!,
-      photoBase64: req.body.postPhotoBase64,
+      photoUrl: "put a correct value soon...",
       lat: Number(req.body.lat),
       lng: Number(req.body.lng),
       description: req.body.description,
@@ -35,7 +35,7 @@ export const addPostsRouting = ((app: Express): void => {
       insertedAt: now,
       updatedAt: now,
     };
-    const postId = await postLogic.create(newPost);
+    const postId = await postLogic.create(newPost, req.body.postPhotoBase64);
     res.redirect("/posts/" + postId + "?showBack=false")
   });
 
@@ -76,8 +76,8 @@ export const addPostsRouting = ((app: Express): void => {
   /**
    * expects to be called with Ajax.
    */
-  app.get("/map/post/:id", function (req, res, next) {
-    const post = postLogic.find(req.params.id);
+  app.get("/map/post/:id", async function (req, res, next) {
+    const post = await postLogic.find(req.params.id);
     if (post !== null) {
       CtrlUtil.render(res, "partials/exclusive/map-post-read", { post: post });
     } else {

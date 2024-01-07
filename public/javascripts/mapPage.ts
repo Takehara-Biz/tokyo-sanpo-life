@@ -45,7 +45,7 @@ const RenderPostsOnGMap = {
     });
   },
 
-  async initMap(posts : IPost[]): Promise<void> {
+  async initMap(posts : PostDto[]): Promise<void> {
     // The location of Tokyo Station
     position = { lat: 35.6812405, lng: 139.7645499 };
 
@@ -104,7 +104,7 @@ const RenderPostsOnGMap = {
 
     let markers: google.maps.marker.AdvancedMarkerElement[] = [];
 
-    posts.map(async (post: IPost) => {
+    posts.map(async (post: PostDto) => {
 
       position = { lat: post.lat, lng: post.lng };
       //console.log(JSON.stringify(post.postCategory));
@@ -115,7 +115,7 @@ const RenderPostsOnGMap = {
       marker.addListener('click', async function () {
         const info = document.getElementById('info');
         info!.style.display = 'block';
-        let contentString = await (await fetch('/map/post/' + post.id)).text();
+        let contentString = await (await fetch('/map/post/' + post.firestoreDocId!)).text();
         info!.innerHTML = contentString;
         map.panTo({ lat: marker.position!.lat as number, lng: marker.position!.lng as number });
       });

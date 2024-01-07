@@ -24,7 +24,7 @@ export const addErrorsRouting = ((app: Express): void => {
   app.use( function( err: ErrorRequestHandler, req: Request, res: Response, next: NextFunction ){
     ReqLogUtil.error('HTTP 500 error occurred! ' + err);
     res.status( 500 ); //. 500 エラー
-    CtrlUtil.render(res, EJS_PREFIX + "500", {errorMessage: "時間を空けて試すか、お手数ですが、管理者にお問い合わせください。"});
+    CtrlUtil.render(res, EJS_PREFIX + "500", {errorMessage: "何度試してもうまくいかない時は、お手数ですが、Xで管理者にDMを送って欲しいです。スクリーンショットがあるとありがたいです。"});
   });
 
   app.all("*", (req, res) => {

@@ -17,5 +17,5 @@ export interface IPostsDao {
    */
   create(post: PostDoc): Promise<string>;
   update(post: PostDoc): Promise<void>;
-  delete(id: string): Promise<void>;
+  delete(id: string): Promise<boolean>;
 }
