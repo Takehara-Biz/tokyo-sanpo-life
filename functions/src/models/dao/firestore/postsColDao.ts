@@ -43,7 +43,7 @@ export class PostsColDao implements IPostsDao {
 
   async listByUserId(userId: string): Promise<PostDoc[]> {
     const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
-    const postsSnapshot = await postsRef.orderBy('insertedAt', 'desc').get();
+    const postsSnapshot = await postsRef.where('postedFirebaseUserId', '==', userId).orderBy('insertedAt', 'desc').get();
     const postDocs: PostDoc[] = [];
     postsSnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
