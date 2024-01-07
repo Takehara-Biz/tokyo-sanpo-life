@@ -13,6 +13,36 @@
     <p class="w-full break-words">
       <%= post.description %>
     </p>
+    <div>
+      <!-- リアクションアイコン -->
+      <div class="w-full dropdown text-right">
+        <% if (user !== undefined) { %>
+        <span class="material-symbols-outlined text-accent" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+          aria-expanded="false">
+          add_reaction
+        </span>
+        <div id="reactionDropdown" class="dropdown-menu">
+          <emoji-picker style="max-width:90%; --num-columns: 8;"></emoji-picker>
+        </div>
+        <% } %>
+      </div>
+      <div id="targetEvaludatedEmojiDiv"></div>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+      <script type="module">
+        const designatedEmojiCountJson = {};
+        document.querySelector('emoji-picker').addEventListener('emoji-click', e => {
+          const emoji = e.detail.unicode
+          console.log('put ' + emoji);
+          document.getElementById('reactionDropdown').classList.remove('show');
+          createEmojiEval(emoji);
+        });
+      </script>
+    </div>
+    <div class="w-full dropdown text-right">
+      <%- include('../../partials/exclusive/post-three-dots', {post: post}); %>
+    </div>
+    <% const xShareHref = "https://twitter.com/intent/tweet?url=https://tokyo-sanpo-life.web.app/post/" + post.firestoreDocId + "&text=" + post.description + "&hashtags=東京散歩ライフ" %>
+        <%- include('../../partials/util/icon-link-button', {label: "Xでシェアする", href: xShareHref, googleIconName: "share"}); %>
     <%- include('../util/comments-list', {userId: user?.firebaseUserId}); %>
     <hr />
     <%- include('../util/add-comment-section', {postId: post.firestoreDocId, commentsLength: post.postComments.length}); %>

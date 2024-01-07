@@ -1,11 +1,11 @@
 import { Express } from "express";
-import { postLogic } from "../models/bizlogic/postBizLogic";
-import { ReqLogUtil } from "../utils/reqLogUtil";
+import { postLogic } from "../../models/bizlogic/postBizLogic";
+import { ReqLogUtil } from "../../utils/reqLogUtil";
 import { EJS_404_PAGE_PATH } from "./errorsCtrl";
-import { CtrlUtil } from "./ctrlUtil";
-import { TSLThreadLocal } from "../utils/tslThreadLocal";
-import { PostDto } from "../models/dto/postDto";
-import { PostCategory } from "../models/postCategory";
+import { CtrlUtil } from "../ctrlUtil";
+import { TSLThreadLocal } from "../../utils/tslThreadLocal";
+import { PostDto } from "../../models/dto/postDto";
+import { PostCategory } from "../../models/postCategory";
 
 /**
  * implements URL related to "posts" pages.

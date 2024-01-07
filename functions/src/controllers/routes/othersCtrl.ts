@@ -1,5 +1,5 @@
 import { Express } from "express";
-import { CtrlUtil } from "./ctrlUtil";
+import { CtrlUtil } from "../ctrlUtil";
 
 /**
  * implements URL related to "others" pages.

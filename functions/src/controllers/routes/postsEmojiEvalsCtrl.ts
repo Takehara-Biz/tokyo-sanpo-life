@@ -1,8 +1,8 @@
 import { Express } from "express";
-import { TSLThreadLocal } from "../utils/tslThreadLocal";
-import { CtrlUtil } from "./ctrlUtil";
-import { emojiEvalBizLogic } from "../models/bizlogic/emojiEvalBizLogic";
-import { EmojiEvalDto } from "../models/dto/emojiEvalDto";
+import { TSLThreadLocal } from "../../utils/tslThreadLocal";
+import { CtrlUtil } from "../ctrlUtil";
+import { emojiEvalBizLogic } from "../../models/bizlogic/emojiEvalBizLogic";
+import { EmojiEvalDto } from "../../models/dto/emojiEvalDto";
 
 /**
  * implements URL related to "posts/:id/emojiEvals" pages.

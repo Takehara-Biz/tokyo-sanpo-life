@@ -1,6 +1,6 @@
 import { Express } from "express";
-import { ReqLogUtil } from "../utils/reqLogUtil";
-import { CtrlUtil } from "./ctrlUtil";
+import { ReqLogUtil } from "../../utils/reqLogUtil";
+import { CtrlUtil } from "../ctrlUtil";
 import { ErrorRequestHandler, Request, Response, NextFunction} from "express";
 
 /**

@@ -1,12 +1,13 @@
 import { Express } from "express";
 import { postLogic } from "../models/bizlogic/postBizLogic";
-import { addUsersRouting } from "./usersCtrl";
-import { addOthersRouting } from "./othersCtrl";
-import { addErrorsRouting } from "./errorsCtrl";
-import { addPostsRouting } from "./postsCtrl";
-import { addPostsEmojiEvalsRouting } from "./postsEmojiEvalsCtrl";
+import { addUsersRouting } from "./routes/usersCtrl";
+import { addOthersRouting } from "./routes/othersCtrl";
+import { addErrorsRouting } from "./routes/errorsCtrl";
+import { addPostsRouting } from "./routes/postsCtrl";
+import { addPostsEmojiEvalsRouting } from "./routes/postsEmojiEvalsCtrl";
 import { CtrlUtil } from "./ctrlUtil";
-import { addCommentsRouting } from "./commentsCtrl";
+import { addCommentsRouting } from "./routes/commentsCtrl";
+import { addAuthRouting } from "./routes/authCtrl";
 
 export const routing = ((app: Express): void => {
 
@@ -28,6 +29,7 @@ export const routing = ((app: Express): void => {
   });
 
   addUsersRouting(app);
+  addAuthRouting(app);
   addPostsRouting(app);
   addCommentsRouting(app);
   addPostsEmojiEvalsRouting(app);

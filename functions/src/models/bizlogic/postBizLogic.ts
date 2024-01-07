@@ -120,9 +120,7 @@ export class PostBizLogic {
     ReqLogUtil.debug('(1/3) created Post');
     const publicUrl = await this.photoDao.upload(postId, imageBase64);
     ReqLogUtil.debug('(2/3) uploaded Photo');
-    postDoc.firestoreDocId = postId;
-    postDoc.photoUrl = publicUrl;
-    await this.postsDao.update(postDoc);
+    await this.postsDao.updateForPhoto(postId, publicUrl);
     ReqLogUtil.debug('(3/3) updated Post');
 
     ReqLogUtil.debug('[  END] create Post');

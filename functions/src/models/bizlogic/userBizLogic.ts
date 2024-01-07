@@ -40,7 +40,7 @@ class UserBizLogic {
 
   public async updateUser(user: UserDto): Promise<boolean> {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId
-    if(user.firebaseUserId != firebaseUserId){
+    if(firebaseUserId != undefined && user.firebaseUserId != firebaseUserId){
       ReqLogUtil.warn('can not update others account!');
       ReqLogUtil.warn('identified firebaseUserId : ' + firebaseUserId);
       ReqLogUtil.warn('firebasedUserId in firestore : ' + user.firebaseUserId);

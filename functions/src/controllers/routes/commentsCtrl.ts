@@ -1,6 +1,6 @@
 import { Express } from "express";
-import { CommentDto } from "../models/dto/commentDto";
-import { commentBizLogic } from "../models/bizlogic/commentBizLogic";
+import { CommentDto } from "../../models/dto/commentDto";
+import { commentBizLogic } from "../../models/bizlogic/commentBizLogic";
 
 /**
  * implements URL related to "comments" pages.

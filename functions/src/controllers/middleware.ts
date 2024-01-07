@@ -4,7 +4,7 @@ import { userLogic } from "../models/bizlogic/userBizLogic";
 import { ReqLogUtil } from "../utils/reqLogUtil";
 import { TSLThreadLocal } from "../utils/tslThreadLocal";
 import { CtrlUtil } from "./ctrlUtil";
-import { EJS_401_PAGE_PATH } from "./errorsCtrl";
+import { EJS_401_PAGE_PATH } from "./routes/errorsCtrl";
 
 export const addMiddleware = ((app: Express): void => {
   /**

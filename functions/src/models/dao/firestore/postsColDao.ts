@@ -122,6 +122,23 @@ export class PostsColDao implements IPostsDao {
     });
   }
 
+  async updateForPhoto(firestoreDocId: string, photoUrl: string): Promise<void> {
+    ReqLogUtil.info('updateForPhoto : ');
+    const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
+    const postsDocRef = await postsRef.doc(firestoreDocId!);
+    await postsDocRef.get().then((doc) => {
+      if (doc.exists) {
+        doc.ref.update({
+          photoUrl: photoUrl
+        });
+      } else {
+        ReqLogUtil.error('something wrong!! failed adding photoUrl info!!');
+      }
+    }).catch((error) => {
+      ReqLogUtil.error('error occurred! ' + error);
+    });
+  }
+
   async delete(firestoreDocId: string): Promise<boolean> {
     ReqLogUtil.info('deletePost post id : ' + firestoreDocId);
     const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);

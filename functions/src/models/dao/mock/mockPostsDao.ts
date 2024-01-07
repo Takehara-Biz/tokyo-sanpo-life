@@ -4,6 +4,9 @@ import { IPostsDao } from "../interface/iPostsDao";
 import { dummyDataKeeper } from "./dummyDataKeeper";
 
 export class MockPostsDao implements IPostsDao {
+  async updateForPhoto(firestoreDocId: string, photoUrl: string): Promise<void> {
+    return;
+  }
   async listOrderbyInsertedAtDesc(limit: number, offset: number): Promise<PostDoc[]> {
     const list = [...dummyDataKeeper.idAndPostMap.values()].slice(0, limit);
     ReqLogUtil.info('listOrderbyInsertedAtDesc length : ' + list.length);

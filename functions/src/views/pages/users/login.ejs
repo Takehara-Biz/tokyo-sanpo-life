@@ -12,7 +12,7 @@
       list-style-type: disc;
     }
   </style>
-  <script type="module" src="/javascripts/firebaseAuth.js?ver=20240107213244"></script>
+  <script type="module" src="/javascripts/firebaseAuth.js?ver=20240107224720"></script>
 </head>
 
 <body>
@@ -31,7 +31,7 @@
               <%- include('../../partials/util/icon-button', {label: "/loginを呼ぶ。このボタンは非表示", id: "submit", typeSubmit: true, googleIconName: "login"}); %>
               </div>
             </form>
-            <p>（ログイン後に、この画面に戻ってきますが、そのまましばらくお待ちください。）</p>
+            <p class="font-bold">（ログイン後に、この画面に戻ってきますが、そのまましばらくお待ちください。）</p>
             
             <hr />
 
@@ -39,7 +39,7 @@
               初回ログイン時は、アカウントの登録手続きに進みます。<br />
               アカウントを登録することにより、以下の内容に同意したとみなされます。
               <ul>
-                <li><a href="/others/terms-of-services">利用規約</a></li>
+                <li><a href="/others/terms-of-service">利用規約</a></li>
                 <li><a href="/others/privacy-policy">プライバシーポリシー</a></li>
                 <li><a href="/others/cookie-policy">クッキーポリシー</a></li>
               </ul>

@@ -67,12 +67,14 @@ getRedirectResult(auth)
   // プライベートブラウザだと、ログアウトした後にログインしようとすると、なぜかうまくいかない。
   // 引数のresultがnullになってしまう・・。
   // ログイン・ログアウトのテストでは、プライベートブラウザを避けること。
+  // また、ifameを使って、PC上で、スマホっぽく表示されるプラグインを使っていると、うまくいかない時がある。
 
   console.log('getRedirectResult then result : ' + JSON.stringify(result));
   console.log('auth.currentUser : ' + auth.currentUser);
   console.log('window.document.referrer : ' + window.document.referrer);
+  // window.document.referrerは、Google画面から戻ってきたときのみ空になっている。
 
-  if(result == null){
+  if(result == null && window.document.referrer != ""){
     // if(auth.currentUser != null){
 
     //   await signOut(auth).then(() => {

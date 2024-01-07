@@ -8,7 +8,7 @@
           <%= comment.insertedAt.toLocaleString("ja-JP") %>
         </p>
         <% if (comment.userFirestoreDocId === userId) { %>
-          <script src="/javascripts/deleteComment.js?ver=20240107213244"></script>
+          <script src="/javascripts/deleteComment.js?ver=20240107224720"></script>
           <span class="material-symbols-outlined text-accent" onclick="return deleteComment('<%= comment.firestoreDocId %>');">
             delete
           </span>

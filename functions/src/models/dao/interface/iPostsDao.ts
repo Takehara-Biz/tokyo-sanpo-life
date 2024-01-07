@@ -17,5 +17,6 @@ export interface IPostsDao {
    */
   create(post: PostDoc): Promise<string>;
   update(post: PostDoc): Promise<void>;
+  updateForPhoto(firestoreDocId: string, photoUrl: string): Promise<void>;
   delete(id: string): Promise<boolean>;
 }
