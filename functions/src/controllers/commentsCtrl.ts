@@ -27,7 +27,7 @@ export const addCommentsRouting = ((app: Express): void => {
    * called with Ajax
    */
   app.delete(URL_PREFIX + "/:commentId", async function (req, res, next) {
-    await postLogic.delete(req.params.commentId!);
+    await commentBizLogic.delete(req.params.commentId!);
     res.json({});
   });
 });

@@ -1,4 +1,3 @@
-import { ReqLogUtil } from "../../utils/reqLogUtil";
 import { CommentDoc } from "../dao/doc/commentDoc";
 import { EmojiEvalDoc } from "../dao/doc/post/emojiEvalsDoc";
 import { PostDoc } from "../dao/doc/postDoc";
@@ -29,7 +28,7 @@ export class DocDtoConvertor {
       insertedAt: postDoc.insertedAt.toDate(),
       updatedAt: postDoc.updatedAt.toDate(),
     }
-    ReqLogUtil.debug('converted result! ' + ReqLogUtil.jsonStr(postDto));
+    //ReqLogUtil.debug('converted result! ' + ReqLogUtil.jsonStr(postDto));
     return postDto;
   }
   public static toCommentDto(commentDoc: CommentDoc, userDoc: UserDoc): CommentDto {
@@ -49,7 +48,7 @@ export class DocDtoConvertor {
       insertedAt: commentDoc.insertedAt.toDate(),
       updatedAt: commentDoc.updatedAt.toDate(),
     }
-    ReqLogUtil.debug('converted result! ' + ReqLogUtil.jsonStr(commentDto));
+    //ReqLogUtil.debug('converted result! ' + ReqLogUtil.jsonStr(commentDto));
     return commentDto;
   }
 }
