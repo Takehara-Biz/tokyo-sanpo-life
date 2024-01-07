@@ -64,7 +64,7 @@ export class PostsColDao implements IPostsDao {
       if (doc.exists) {
         result = doc.data() as PostDoc;
         // doc.data() is never undefined for query doc snapshots
-        ReqLogUtil.debug(doc.id + " => " + ReqLogUtil.jsonStr(result));
+        ReqLogUtil.debug('got => ' + doc.id);
         result.firestoreDocId = doc.id;
       } else {
         ReqLogUtil.warn('not found...');
@@ -105,7 +105,7 @@ export class PostsColDao implements IPostsDao {
 
           //firestoreDocId?: string;
           //postedFirebaseUserId: string;
-          photoUrl: newPostDoc.photoUrl,
+          //photoUrl?: string;
           lat: newPostDoc.lat,
           lng: newPostDoc.lng,
           geohash: newPostDoc.geohash,
