@@ -1,5 +1,4 @@
 import { Express } from "express";
-import { postLogic } from "../models/bizlogic/postBizLogic";
 import { CommentDto } from "../models/dto/commentDto";
 import { commentBizLogic } from "../models/bizlogic/commentBizLogic";
 
