@@ -31,7 +31,7 @@
     <div class="w-full dropdown text-right">
       <%- include('../../partials/exclusive/post-three-dots', {post: post}); %>
     </div>
-    <% const xShareHref = "https://twitter.com/intent/tweet?url=https://tokyo-sanpo-life.web.app/post/" + post.firestoreDocId + "&text=" + post.description + "&hashtags=東京散歩ライフ" %>
+    <% const xShareHref = "https://twitter.com/intent/tweet?url=https://tokyo-sanpo-life.liberty-it.biz/posts/" + post.firestoreDocId + "&text=" + post.description + "&hashtags=東京散歩ライフ" %>
         <%- include('../../partials/util/icon-link-button', {label: "Xでシェアする", href: xShareHref, googleIconName: "share"}); %>
     <%- include('../util/comments-list', {userId: user?.firebaseUserId}); %>
     <hr />
