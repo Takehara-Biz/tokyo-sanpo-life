@@ -122,19 +122,15 @@ export class PostBizLogic {
 
     const bucket = storage.bucket(firebaseConfig.storageBucket);
     const file = bucket.file(postId + ".jpg");
-
-    //const base64ImageWithoutNewlines = postDto.photoBase64.replace(/\r|\n/g, '');
-
     const buffer = Buffer.from(postDto.photoBase64.replace("data:image/jpeg;base64,",""), 'base64');
-
-    //const binaryData = atob(postDto.photoBase64);
-    //const buffer = Buffer.from(binaryData, 'binary');
 
     await file.save(buffer, {
       metadata: {
         contentType: 'image/jpeg',
       },
-      resumable: false
+      resumable: false,
+      public: true,
+      validation: 'md5'
     });
 
     console.log(`Image uploaded to ${file.name}.`);
