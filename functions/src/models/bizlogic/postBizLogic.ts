@@ -15,6 +15,8 @@ import { CommentsColDao } from "../dao/firestore/commentsColDao";
 import { EmojiEvalsSubColDao } from "../dao/firestore/post/emojiEvalsSubColDao";
 import { DocDtoConvertor } from "../dto/docDtoConvertor";
 import { UserDoc } from "../dao/doc/userDoc";
+import { Storage } from "@google-cloud/storage";
+import { firebaseConfig } from "../auth/publicEnvVarsModule";
 
 export class PostBizLogic {
   private postsDao: IPostsDao = new PostsColDao();
@@ -113,7 +115,33 @@ export class PostBizLogic {
       updatedAt: Timestamp.fromDate(postDto.updatedAt),
     }
 
-    return await this.postsDao.create(postDoc);
+    const postId =  await this.postsDao.create(postDoc);
+
+    ReqLogUtil.info("aaaaaaaaaaaaaaa1234");
+    const storage = new Storage();
+
+    const bucket = storage.bucket(firebaseConfig.storageBucket);
+    const file = bucket.file(postId + ".jpg");
+
+    //const base64ImageWithoutNewlines = postDto.photoBase64.replace(/\r|\n/g, '');
+
+    const buffer = Buffer.from(postDto.photoBase64.replace("data:image/jpeg;base64,",""), 'base64');
+
+    //const binaryData = atob(postDto.photoBase64);
+    //const buffer = Buffer.from(binaryData, 'binary');
+
+    await file.save(buffer, {
+      metadata: {
+        contentType: 'image/jpeg',
+      },
+      resumable: false
+    });
+
+    console.log(`Image uploaded to ${file.name}.`);
+    ReqLogUtil.info("bbbbbbbbbbbbbb");
+    ReqLogUtil.info('public ' + file.publicUrl());
+
+    return postId;
   }
 
   public async update(postDto: PostDto): Promise<boolean> {

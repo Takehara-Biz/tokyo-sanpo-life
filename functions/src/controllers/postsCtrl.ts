@@ -19,7 +19,6 @@ export const addPostsRouting = ((app: Express): void => {
     CtrlUtil.render(res, EJS_PREFIX + "create", { categories: PostCategory.Categories });
   });
   app.post(URL_PREFIX, async function (req, res, next) {
-
     const postCategory = PostCategory.findCategory(Number(req.body.postCategory));
 
     const now = new Date();

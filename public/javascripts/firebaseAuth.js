@@ -70,6 +70,7 @@ getRedirectResult(auth)
 
   console.log('getRedirectResult then result : ' + JSON.stringify(result));
   console.log('auth.currentUser : ' + auth.currentUser);
+  console.log('window.document.referrer : ' + window.document.referrer);
 
   if(result == null){
     // if(auth.currentUser != null){
