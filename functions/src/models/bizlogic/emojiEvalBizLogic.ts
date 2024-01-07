@@ -6,26 +6,41 @@ import { IEmojiEvalsDao } from "../dao/interface/iEmojiEvalsDao";
 import { EmojiEvalDto } from "../dto/emojiEvalDto";
 import { EmojiEvalsSubColDao } from "../dao/firestore/post/emojiEvalsSubColDao";
 
+export type EmojiEvalCreateResult = 'OK' | 'NG' | 'NO_SAME' | 'TOO_MANY';
+
 export class EmojiEvalBizLogic {
   private emojiEvalsDao: IEmojiEvalsDao = new EmojiEvalsSubColDao();
   private postsDao: IPostsDao = new PostsColDao();
-
-  public async create(postId: string, emojiEvalDto: EmojiEvalDto): Promise<boolean> {
+  
+  public async create(postId: string, emojiEvalDto: EmojiEvalDto): Promise<EmojiEvalCreateResult> {
     if(TSLThreadLocal.currentContext.loggedInUser == undefined){
       ReqLogUtil.warn('must log in at first!');
-      return false;
+      return 'NG';
     }
     const post = await this.postsDao.read(postId);
     if(post == null){
       ReqLogUtil.warn('there is no such post. post id : ' + postId);
-      return false;
+      return 'NG';
+    }
+
+    const userId = TSLThreadLocal.currentContext.identifiedFirebaseUserId!;
+    const emojiEvalDoc = await this.emojiEvalsDao.read(postId, userId, emojiEvalDto.unicode);
+    if (emojiEvalDoc !== null){
+      ReqLogUtil.warn('cannot put the same emoji again!');
+      return 'NO_SAME';
+    }
+
+    const count = await this.emojiEvalsDao.count(postId, userId);
+    if (4 <= count){
+      ReqLogUtil.warn('cannot put so many emoji!');
+      return 'TOO_MANY';
     }
 
     emojiEvalDto.insertedAt = new Date();
     emojiEvalDto.updatedAt = new Date();
 
     await this.emojiEvalsDao.create(postId, emojiEvalDto);
-    return true;
+    return 'OK';
   }
 
     /**

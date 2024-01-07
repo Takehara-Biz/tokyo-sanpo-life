@@ -27,16 +27,6 @@
         <% } %>
       </div>
       <div id="targetEvaludatedEmojiDiv"></div>
-      <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
-      <script type="module">
-        const designatedEmojiCountJson = {};
-        document.querySelector('emoji-picker').addEventListener('emoji-click', e => {
-          const emoji = e.detail.unicode
-          console.log('put ' + emoji);
-          document.getElementById('reactionDropdown').classList.remove('show');
-          createEmojiEval(emoji);
-        });
-      </script>
     </div>
     <div class="w-full dropdown text-right">
       <%- include('../../partials/exclusive/post-three-dots', {post: post}); %>

@@ -29,6 +29,7 @@ async function renderEmojiEvalCountSection(){
 async function createEmojiEval(unicode){
   TslLogUtil.debug('[BEGIN] createEmojiEval ' + unicode);
   const postIdInput = document.getElementById('postId')! as HTMLInputElement;
+
   const targetUrl = '/posts/' + postIdInput.value + '/emojiEvals';
   await fetch(targetUrl, {
     method: 'POST',
@@ -36,8 +37,15 @@ async function createEmojiEval(unicode){
       "Content-Type": "application/json",
     },
     body: '{"unicode" : "' + unicode + '" }',
-  }).then(res => {
-    console.log('put OK!');
+  }).then(async res => {
+    const result = await res.json();
+    console.log('result => ' + result);
+    const value = result['result'];
+    if (value === 'NO_SAME') {
+      alert('その絵文字は既に付けています。');
+    } else if(value === 'TOO_MANY'){
+      alert('これ以上絵文字を付けることはできません。');
+    } 
   }).catch(error => {
     console.error('error occurred!');
     console.error(error);

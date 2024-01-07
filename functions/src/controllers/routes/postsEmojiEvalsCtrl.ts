@@ -3,6 +3,7 @@ import { TSLThreadLocal } from "../../utils/tslThreadLocal";
 import { CtrlUtil } from "../ctrlUtil";
 import { emojiEvalBizLogic } from "../../models/bizlogic/emojiEvalBizLogic";
 import { EmojiEvalDto } from "../../models/dto/emojiEvalDto";
+import { ReqLogUtil } from "../../utils/reqLogUtil";
 
 /**
  * implements URL related to "posts/:id/emojiEvals" pages.
@@ -21,7 +22,7 @@ export const addPostsEmojiEvalsRouting = ((app: Express): void => {
   /**
    * call with Ajax
    */
-  app.post(URL_PREFIX, function (req, res, next) {
+  app.post(URL_PREFIX, async function (req, res, next) {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId ?? null;
     const now = new Date();
     const emojiEvalDto : EmojiEvalDto = {
@@ -30,8 +31,9 @@ export const addPostsEmojiEvalsRouting = ((app: Express): void => {
       insertedAt: now,
       updatedAt: now,
     }
-    emojiEvalBizLogic.create(req.params.postId, emojiEvalDto);
-    res.json({});
+    const result = await emojiEvalBizLogic.create(req.params.postId, emojiEvalDto);
+    ReqLogUtil.info('result => ' + result);
+    res.json({result: result});
   });
 
   /**

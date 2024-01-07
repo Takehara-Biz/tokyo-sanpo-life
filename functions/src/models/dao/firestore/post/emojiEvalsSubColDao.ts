@@ -25,6 +25,25 @@ export class EmojiEvalsSubColDao implements IEmojiEvalsDao {
     return result;
   }
 
+  async count(postId: string, userId:string): Promise<number> {
+    const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
+    const postsDocRef = await postsRef.doc(postId);
+
+    const emojiEvaluationsRef = postsDocRef.collection(EmojiEvalsSubColDao.SUB_COL_NAME);
+    const snapshot = await emojiEvaluationsRef.where('userFirestoreDocId', '==', userId).count().get();
+    return snapshot.data().count
+  }
+
+  async create(postId: string, emojiEvalDoc: EmojiEvalDoc): Promise<void> {
+    ReqLogUtil.info('createEmojiEval : ' + ReqLogUtil.jsonStr(emojiEvalDoc));
+
+    const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
+    const postsDocRef = await postsRef.doc(postId);
+
+    const emojiEvalsRef = postsDocRef.collection(EmojiEvalsSubColDao.SUB_COL_NAME);
+    await emojiEvalsRef.add(emojiEvalDoc);
+  }
+
   async list(postId: string): Promise<EmojiEvalDoc[]> {
     const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
     const postsDocRef = await postsRef.doc(postId);
@@ -41,16 +60,6 @@ export class EmojiEvalsSubColDao implements IEmojiEvalsDao {
     });
     ReqLogUtil.debug('list emoji eval length : ' + emojiEvaluationDocs.length);
     return emojiEvaluationDocs;
-  }
-
-  async create(postId: string, emojiEvalDoc: EmojiEvalDoc): Promise<void> {
-    ReqLogUtil.info('createEmojiEval : ' + ReqLogUtil.jsonStr(emojiEvalDoc));
-
-    const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
-    const postsDocRef = await postsRef.doc(postId);
-
-    const emojiEvalsRef = postsDocRef.collection(EmojiEvalsSubColDao.SUB_COL_NAME);
-    await emojiEvalsRef.add(emojiEvalDoc);
   }
 
   async delete(postId: string, userId: string, unicode: string): Promise<void> {
