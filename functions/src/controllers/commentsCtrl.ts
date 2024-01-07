@@ -1,6 +1,5 @@
 import { Express } from "express";
 import { postLogic } from "../models/bizlogic/postBizLogic";
-import { ReqLogUtil } from "../utils/reqLogUtil";
 import { CommentDto } from "../models/dto/commentDto";
 import { commentBizLogic } from "../models/bizlogic/commentBizLogic";
 
@@ -28,7 +27,7 @@ export const addCommentsRouting = ((app: Express): void => {
    * called with Ajax
    */
   app.delete(URL_PREFIX + "/:commentId", async function (req, res, next) {
-    await postLogic.delete(req.params.commentId!);
+    await commentBizLogic.delete(req.params.commentId!);
     res.json({});
   });
 });

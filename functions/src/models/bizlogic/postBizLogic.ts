@@ -15,12 +15,15 @@ import { CommentsColDao } from "../dao/firestore/commentsColDao";
 import { EmojiEvalsSubColDao } from "../dao/firestore/post/emojiEvalsSubColDao";
 import { DocDtoConvertor } from "../dto/docDtoConvertor";
 import { UserDoc } from "../dao/doc/userDoc";
+import { IPhotoDao } from "../dao/interface/iPhotoDao";
+import { StoragePhotoDao } from "../dao/storage/StoragePhotoDao";
 
 export class PostBizLogic {
   private postsDao: IPostsDao = new PostsColDao();
   private usersDao: IUsersDao = new UsersColDao();
   private commentsDao: ICommentsDao = new CommentsColDao();
   private emojiEvalsDao: IEmojiEvalsDao = new EmojiEvalsSubColDao();
+  private photoDao: IPhotoDao = new StoragePhotoDao();
 
   public async listOrderbyInsertedAtDesc(): Promise<PostDto[]> {
     const postDocs = await this.postsDao.listOrderbyInsertedAtDesc(100, 0);
@@ -99,11 +102,11 @@ export class PostBizLogic {
     return commentDtos;
   }
 
-  public async create(postDto: PostDto): Promise<string> {
+  public async create(postDto: PostDto, imageBase64: string): Promise<string> {
+    ReqLogUtil.debug('[BEGIN] create Post');
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId!;
     const postDoc: PostDoc = {
       postedFirebaseUserId: firebaseUserId,
-      photoBase64: postDto.photoBase64,
       lat: postDto.lat,
       lng: postDto.lng,
       geohash: geohashForLocation([postDto.lat, postDto.lng]),
@@ -113,7 +116,17 @@ export class PostBizLogic {
       updatedAt: Timestamp.fromDate(postDto.updatedAt),
     }
 
-    return await this.postsDao.create(postDoc);
+    const postId =  await this.postsDao.create(postDoc);
+    ReqLogUtil.debug('(1/3) created Post');
+    const publicUrl = await this.photoDao.upload(postId, imageBase64);
+    ReqLogUtil.debug('(2/3) uploaded Photo');
+    postDoc.firestoreDocId = postId;
+    postDoc.photoUrl = publicUrl;
+    await this.postsDao.update(postDoc);
+    ReqLogUtil.debug('(3/3) updated Post');
+
+    ReqLogUtil.debug('[  END] create Post');
+    return postId;
   }
 
   public async update(postDto: PostDto): Promise<boolean> {
@@ -129,7 +142,7 @@ export class PostBizLogic {
       // only some properties will be update!
       firestoreDocId: postDto.firestoreDocId!, //never updated!
       postedFirebaseUserId: postDto.postedFirebaseUserId, //never updated!
-      photoBase64: postDto.photoBase64, //never updated!
+      //photoBase64: //never updated!
       lat: postDto.lat,
       lng: postDto.lng,
       geohash: geohashForLocation([postDto.lat, postDto.lng]),
@@ -154,7 +167,10 @@ export class PostBizLogic {
       ReqLogUtil.warn('can not delete the post created by another user!');
       return false;
     }
+    const result = await this.photoDao.delete(postDoc.photoUrl!);
+    ReqLogUtil.debug('(1/2) deleted Photo from storage. result => ' + result);
     await this.postsDao.delete(reqParamPostId);
+    ReqLogUtil.debug('(2/2) deleted Photo from firestore.');
     return true;
   }
 }

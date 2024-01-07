@@ -64,7 +64,7 @@ export class PostsColDao implements IPostsDao {
       if (doc.exists) {
         result = doc.data() as PostDoc;
         // doc.data() is never undefined for query doc snapshots
-        ReqLogUtil.debug(doc.id + " => " + ReqLogUtil.jsonStr(result));
+        ReqLogUtil.debug('got => ' + doc.id);
         result.firestoreDocId = doc.id;
       } else {
         ReqLogUtil.warn('not found...');
@@ -105,7 +105,7 @@ export class PostsColDao implements IPostsDao {
 
           //firestoreDocId?: string;
           //postedFirebaseUserId: string;
-          //photoBase64: string;
+          //photoUrl?: string;
           lat: newPostDoc.lat,
           lng: newPostDoc.lng,
           geohash: newPostDoc.geohash,
@@ -122,20 +122,24 @@ export class PostsColDao implements IPostsDao {
     });
   }
 
-  async delete(firestoreDocId: string): Promise<void> {
+  async delete(firestoreDocId: string): Promise<boolean> {
     ReqLogUtil.info('deletePost post id : ' + firestoreDocId);
     const postsRef = FirebaseAdminManager.db.collection(PostsColDao.COL_NAME);
     const postsDocRef = await postsRef.doc(firestoreDocId);
-    postsDocRef.get().then((doc) => {
+    const result = postsDocRef.get().then(async (doc) => {
       if (doc.exists) {
         // doc.data() is never undefined for query doc snapshots
         ReqLogUtil.debug(doc.id + " => " + ReqLogUtil.jsonStr(doc.data()));
-        doc.ref.delete();
+        await doc.ref.delete();
+        return true;
       } else {
         ReqLogUtil.warn('not found...');
+        return false;
       }
     }).catch((error) => {
       ReqLogUtil.error('error occurred! ' + error);
+      return false;
     });
+    return result;
   }
 }

@@ -5,9 +5,15 @@ import { Timestamp } from "firebase-admin/firestore";
  * 紐づくデータを持たない。
  */
 export type PostDoc = {
+  /**
+   * before creating, it has no value.
+   */
   firestoreDocId?: string;
   postedFirebaseUserId: string;
-  photoBase64: string;
+  /**
+   * At first, it has no value.
+   */
+  photoUrl?: string;
   lat: number;
   lng: number;
   /**

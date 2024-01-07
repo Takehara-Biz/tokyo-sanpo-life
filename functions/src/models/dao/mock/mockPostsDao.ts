@@ -40,8 +40,9 @@ export class MockPostsDao implements IPostsDao {
     dummyDataKeeper.idAndPostMap.set(post.firestoreDocId!, post);
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: string): Promise<boolean> {
     const result = dummyDataKeeper.idAndPostMap.delete(id);
     ReqLogUtil.info('deleted post ' + id + ', and the result is ' + result);
+    return true;
   }
 }

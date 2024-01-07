@@ -1,6 +1,6 @@
 <div onclick="location.href='/posts/<%= post.firestoreDocId %>'" class="w-full p-1 flex items-center border-b">
   <div style="max-width: 50%;">
-    <img width="100%" src="<%= post.photoBase64 %>" style="border: 1px solid; " />
+    <img width="100%" src="<%= post.photoUrl %>" style="border: 1px solid; " />
   </div>
   <div class="p-1" style="width:50%;">
     <%- include('../util/user-icon-name-s', {imageSrc: post.user.userIconBase64, userName: post.user.userName}) %>

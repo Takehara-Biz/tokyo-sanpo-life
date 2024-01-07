@@ -59,51 +59,69 @@ CategoryIdAndMarkerTypeDefMap.set(PostCategory.Shrine.getId(), {iconKeyWord: "te
 CategoryIdAndMarkerTypeDefMap.set(PostCategory.Building.getId(), {iconKeyWord: "location_city", glyphColor: "#0000ff", bgColor: "#99ffff"});
 CategoryIdAndMarkerTypeDefMap.set(PostCategory.Other.getId(), {iconKeyWord: "lightbulb", glyphColor: "#ff3300", bgColor: "#ffffcc"});
 
-interface IUser {
-  id: string,
-  userName: string,
-  userIconBase64: string,
+type UserDto = {
+  /** never changed. desginated by firebase authentication */
+  firebaseUserId: string;
+  loggedIn: boolean;
+  userName: string;
+  userIconBase64: string;
   selfIntroduction: string;
   xProfileLink: string;
   instagramProfileLink: string;
+  insertedAt: Date;
+  updatedAt: Date;
 }
 
 /**
  * 投稿に対するコメント
  */
-interface IPostComment {
-  id: string;
-  user: IUser;
+type CommentDto = {
+  firestoreDocId: string;
+  postFirestoreDocId: string;
+  userFirestoreDocId: string;
+  /**
+   * コメント一覧表示時に、ユーザ名とユーザアイコンの表示が必要。
+   */
+  commentUserDto?: CommentUserDto;
   comment: string;
-  commentDate: Date;
+  insertedAt: Date;
+  updatedAt: Date;
+}
+
+type CommentUserDto = {
+  firebaseUserId: string,
+  userName: string;
+  userIconBase64: string;
 }
 
 /**
  * 投稿
  */
-interface IPost {
-  id: string,
-  user: IUser,
-  imageUrl: string;
+type PostDto = {
+  firestoreDocId: string;
+  user: UserDto;
+  postedFirebaseUserId: string;
+  photoUrl: string;
   lat: number;
   lng: number;
   postCategory: PostCategory;
   description: string;
-  insertDate: Date;
-  postComments: IPostComment[];
-  emojiEvaluations: IEmojiEvaluation[];
+  postComments: CommentDto[];
+  emojiEvals: EmojiEvalDto[];
+  insertedAt: Date;
+  updatedAt: Date;
 }
 
 /**
  * 絵文字評価
  */
-interface IEmojiEvaluation {
-
-  evaludatedPostId: string;
+type EmojiEvalDto = {
+  firestoreDocId: string;
+  userFirestoreDocId: string;
   /**
    * the type of emoji
    */
   unicode: string;
-
-  evaluatingUserId: string;
+  insertedAt: Date;
+  updatedAt: Date;
 }

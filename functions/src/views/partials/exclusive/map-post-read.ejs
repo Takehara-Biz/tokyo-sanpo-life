@@ -1,10 +1,11 @@
 <div id="content">
+  <input id="postId" type="hidden" value="<%= post.firestoreDocId %>" />
   <div id="bodyContent" class="flex justify-between">
-    <img src='<%= post.imageUrl %>' width='50%' />
+    <img src='<%= post.photoUrl %>' width='50%' />
     <div class="w-1/2 p-2">
-      <%- include('../util/user-icon-name-s', {imageSrc: post.user.iconUrl, userName: post.user.userName}) %>
+      <%- include('../util/user-icon-name-s', {imageSrc: post.user.userIconBase64, userName: post.user.userName}) %>
       <p class="text-sm">
-        <%= post.insertDate.toLocaleString("ja-JP") %>
+        <%= post.insertedAt.toLocaleString("ja-JP") %>
       </p>
     </div>
   </div>
@@ -12,10 +13,7 @@
     <p class="w-full break-words">
       <%= post.description %>
     </p>
-    <div>
-      <p class="m-2 text-center text-sm">コメント</p>
-      <%- include('../util/comments-list', {userId: user.firebaseUserId}); %>
-    </div>
+    <%- include('../util/comments-list', {userId: user?.firebaseUserId}); %>
     <hr />
     <%- include('../util/add-comment-section', {postId: post.firestoreDocId, commentsLength: post.postComments.length}); %>
   </div>

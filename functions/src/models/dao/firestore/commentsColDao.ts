@@ -58,11 +58,11 @@ export class CommentsColDao implements ICommentsDao {
     ReqLogUtil.info('deleteComment comment id : ' + commentFirestoreDocId);
     const commentsRef = FirebaseAdminManager.db.collection(CommentsColDao.COL_NAME);
     const commentsDocRef = await commentsRef.doc(commentFirestoreDocId);
-    commentsDocRef.get().then((doc) => {
+    await commentsDocRef.get().then(async (doc) => {
       if (doc.exists) {
         // doc.data() is never undefined for query doc snapshots
         ReqLogUtil.debug(doc.id + " => " + ReqLogUtil.jsonStr(doc.data()));
-        doc.ref.delete();
+        await doc.ref.delete();
       } else {
         ReqLogUtil.warn('not found...');
       }

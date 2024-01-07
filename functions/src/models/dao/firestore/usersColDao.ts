@@ -22,7 +22,7 @@ export class UsersColDao implements IUsersDao {
       const userDoc = doc.data() as UserDoc;
       idAndUserDocMap.set(userDoc.firebaseUserId, userDoc);
     });
-    ReqLogUtil.debug('list result : ' + ReqLogUtil.jsonStr(idAndUserDocMap));
+    ReqLogUtil.debug('list result length : ' + idAndUserDocMap.size);
     return idAndUserDocMap;
   }
 
@@ -30,14 +30,14 @@ export class UsersColDao implements IUsersDao {
     
     const usersRef = FirebaseAdminManager.db.collection(UsersColDao.COL_NAME);
     const usersSnapshot = await usersRef.where(UsersColDao.FIREBASE_USER_ID, "==", userId).get();
-    let userDoc = null;
+    let userDoc : UserDoc | null = null;
     usersSnapshot.forEach((doc) => {
       userDoc = doc.data() as UserDoc;
       // doc.data() is never undefined for query doc snapshots
-      ReqLogUtil.debug(doc.id + " => " + ReqLogUtil.jsonStr(userDoc));
+      //ReqLogUtil.debug(doc.id + " => " + ReqLogUtil.jsonStr(userDoc));
       
     });
-    ReqLogUtil.debug('find result : ' + ReqLogUtil.jsonStr(userDoc));
+    ReqLogUtil.debug('find result : ' + userDoc);
     return userDoc;
   }
 
@@ -54,7 +54,7 @@ export class UsersColDao implements IUsersDao {
     
     await usersSnapshot.forEach(async (doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", ReqLogUtil.jsonStr(doc.data()));
+      //console.log(doc.id, " => ", ReqLogUtil.jsonStr(doc.data()));
       await doc.ref.update({
         userName: user.userName,
         userIconBase64: user.userIconBase64,

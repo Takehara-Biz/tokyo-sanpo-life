@@ -1,6 +1,6 @@
 const ReadPostPage = {
 
-  async initMap(post: IPost): Promise<void> {
+  async initMap(post: PostDto): Promise<void> {
     console.debug('lat ' + post.lat + ", lng " + post.lng);
     position = { lat: post.lat, lng: post.lng };
 
