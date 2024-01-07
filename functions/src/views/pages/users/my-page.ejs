@@ -10,28 +10,22 @@
   <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
     <%- include('../../partials/common/header'); %>
       <!-- Main Body -->
-      <div class="grow overflow-y-scroll">
+      <div class="grow overflow-y-scroll flex flex-col">
         <%- include('../../partials/common/page-title', {title: 'マイページ' }); %>
           <% if (user === undefined) { %>
-            <div class="grow flex justify-center items-center">
-              <div>
-                <p class="text-center">🥳この機能は、<br />ログインしたら使えるようになります〜。</p>
-                <p class="text-center">ログインまたは新規登録を行うには、<br />右上のユーザアイコンをクリックしてください。</p>
-              </div>
-            </div>
+            <%- include('../../partials/common/urge-login'); %>
             <% } else { %>
               <div class="p-1">
-                <h2>あなたの情報</h2>
                 <dl>
-                  <dt>ID</dt>
+                  <dt>ユーザID</dt>
                   <dd>
-                    <%- include('../../partials/util/printable-user-id', {id: user.id}) %>
+                    <%- include('../../partials/util/printable-user-id', {id: user.firebaseUserId}) %>
                   </dd>
                 </dl>
                 <dl>
                   <dt>アイコンとユーザ名</dt>
                   <dd>
-                    <%- include('../../partials/util/user-icon-name-s', {iconUrl: user.userIconBase64, userName: user.userName}) %>
+                    <%- include('../../partials/util/user-icon-name-s', {imageSrc: user.userIconBase64, userName: user.userName}) %>
                   </dd>
                 </dl>
                 <dl>
@@ -41,20 +35,11 @@
                   </dd>
                 </dl>
                 <%- include('../../partials/util/icon-link-button', {label: "ユーザ情報編集", href: "/users/update", googleIconName: "manage_accounts"}); %>
-                <%- include('../../partials/util/icon-link-button', {label: "ユーザアイコンの変更", googleIconName: "face", href: "/user/update-user-icon"}) %>
+                <%- include('../../partials/util/icon-link-button', {label: "ユーザアイコンの変更", googleIconName: "face", href: "/users/update-user-icon"}) %>
                 
-                <form action="/users/logout" method="post" onsubmit="return confirm('ログアウトしてよろしいですか？');">
-                  <%- include('../../partials/util/icon-button', {label: "ダミーログアウト", typeSubmit: true, onSubmitCode: "return confirm('ログアウトしてよろしいですか？');", googleIconName: "logout"}); %>
+                <form action="/users/logout" method="post" onsubmit="return logout();">
+                  <%- include('../../partials/util/icon-button', {label: "ログアウト", googleIconName: "logout"}); %>
                 </form>
-
-                <%- include('../../partials/util/icon-button', {label: "ログアウト2", onClickCode: "logout();", googleIconName: "logout"}); %>
-
-                <button class="mt-3 btn text-white w-full h-12" style="background-color:#ff0000; height: 48px;" onclick="return confirm('本当にアカウントを削除してもよろしいですか？');">
-                  <span class="material-symbols-outlined align-[-6px]" data-bs-toggle="dropdown" aria-expanded="false">
-                    person_remove
-                  </span>
-                  アカウント削除
-                </button>
               </div>
               <% } %>
       </div>

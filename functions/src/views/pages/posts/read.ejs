@@ -7,12 +7,14 @@
     <!-- prettier-ignore -->
     <script>(g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })
         ({ key: googleMapsAPIKey, v: "weekly" });</script>
-    <script src="/javascripts/tslDef.js?ver=20240104010809"></script>
+    <script src="/javascripts/tslDef.js?ver=20240108040720"></script>
     <script>
       var targetPost = JSON.parse('<%- JSON.stringify(post) %>');
     </script>
-    <script src="/javascripts/tslGMapUtil.js?ver=20240104010809"></script>
-    <script src="/javascripts/readPostPage.js?ver=20240104010809"></script>
+    <script src="/javascripts/tslGMapUtil.js?ver=20240108040720"></script>
+    <script src="/javascripts/readPostPage.js?ver=20240108040720"></script>
+    <script src="/javascripts/deleteComment.js?ver=20240108040720"></script>
+    <script src="/javascripts/emojiEval.js?ver=20240108040720"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 </head>
 
@@ -21,13 +23,13 @@
     <%- include('../../partials/common/header', {showBack2: showBack}); %>
       <!-- Main Body -->
       <div class="grow overflow-y-scroll p-2">
-        <input id="postId" type="hidden" value="<%= post.id %>" />
-        <input id="myUserId" type="hidden" value="<%= post.user.id %>" />
-        <img width="100%" height="80px" src="<%= post.imageUrl %>" style="border: 1px solid; " />
+        <input id="postId" type="hidden" value="<%= post.firestoreDocId %>" />
+        <input id="myUserId" type="hidden" value="<%= post.user.firebaseUserId %>" />
+        <img width="100%" height="80px" src="<%= post.photoUrl %>" style="border: 1px solid; " />
         <div class="flex justify-between mt-1 items-center">
-          <%- include('../../partials/util/user-icon-name-s', {iconUrl: post.user.userIconBase64, userName: post.user.userName}) %>
+          <%- include('../../partials/util/user-icon-name-s', {imageSrc: post.user.userIconBase64, userName: post.user.userName}) %>
             <span class="text-sm ml-5">
-              <%= post.insertDate.toLocaleString("ja-JP") %>
+              <%= post.insertedAt.toLocaleString("ja-JP") %>
             </span>
         </div>
         <p class="w-full break-words">
@@ -37,7 +39,7 @@
           <!-- リアクションアイコン -->
           <div class="w-full dropdown text-right">
             <% if (user !== undefined) { %>
-            <span class="material-symbols-outlined" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+            <span class="material-symbols-outlined text-accent" data-bs-toggle="dropdown" data-bs-auto-close="outside"
               aria-expanded="false">
               add_reaction
             </span>
@@ -52,138 +54,27 @@
             const designatedEmojiCountJson = {};
             document.querySelector('emoji-picker').addEventListener('emoji-click', e => {
               const emoji = e.detail.unicode
-              console.log(emoji);
+              console.log('put ' + emoji);
               document.getElementById('reactionDropdown').classList.remove('show');
+              createEmojiEval(emoji);
             });
-          </script>
-          <script>
-            addEventListener('load', async function () {
-              console.log('onload!');
-              renderEmojiEvaluationCountSection();
-            });
-            async function renderEmojiEvaluationCountSection(){
-              const postIdInput = document.getElementById('postId');
-              const targetUrl = '/posts/' + postIdInput.value + '/emojiEvaluations';
-              const resultHTML = await fetch(targetUrl, {
-                method: 'GET'
-              }).then(res => {
-                console.info('[BEGIN] fetch then');
-                return res.text();
-              }).catch(error => {
-                alert(error);
-                console.error('fetch Error!!', error);
-                return null;
-              });
-              const targetEvaludatedEmojiDiv = document.getElementById('targetEvaludatedEmojiDiv');
-              if(resultHTML != null) {
-                targetEvaludatedEmojiDiv.innerHTML = resultHTML;
-              } else {
-                targetEvaludatedEmojiDiv.innerHTML = 'サーバ側でエラーが発生しました。';
-              }
-              
-              console.log('updated targetEvaludatedEmojiDiv!');
-            }
-            async function putEmojiEvaluation(unicode){
-              console.log('[BEGIN] putEmojiEvaluation');
-              const postIdInput = document.getElementById('postId');
-              const targetUrl = '/posts/' + postIdInput.value + '/emojiEvaluation/' + unicode;
-              await fetch(targetUrl, {
-                method: 'POST'
-              }).then(res => {
-                console.log('put OK!');
-              }).catch(error => {
-                console.error('error occurred!');
-                console.error(error);
-              });
-              renderEmojiEvaluationCountSection();
-            };
-            async function removeEmojiEvaluation(unicode){
-              console.log('[BEGIN] deleteEmojiEvaluation');
-              const postIdInput = document.getElementById('postId');
-              const targetUrl = '/posts/' + postIdInput.value + '/emojiEvaluation/' + unicode;
-              await fetch(targetUrl, {
-                method: 'DELETE'
-              }).then(res => {
-                console.log('remove OK!');
-              }).catch(error => {
-                console.error('error occurred!');
-                console.error(error);
-              });
-              renderEmojiEvaluationCountSection();
-            };
           </script>
         </div>
-        <div>
-          <a class="mt-3 btn text-white bg-accent" style="background-color:#ff0099;" role="button"
-            href="https://twitter.com/intent/tweet?url=https://tokyo-sanpo-life.web.app/post/<%= post.id %>&text=<%= post.description %>&hashtags=東京散歩ライフ">
-            <span class="material-symbols-outlined align-[-6px]">
-              share
-            </span>
-            Xでシェアする
-          </a>
-          <% if (user !== undefined && user.id === post.user.id) { %>
-            <!-- ログイン済み、かつ、投稿したユーザなら、編集と削除が可能。 -->
-
-            <div class="w-full dropdown text-right">
-              <span class="material-symbols-outlined" data-bs-toggle="dropdown" aria-expanded="false">
-                more_horiz
-              </span>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="/edit-post">
-                    <span class="text-accent">
-                      <span class="material-symbols-outlined align-[-6px]">
-                        edit
-                      </span>
-                      編集
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li>
-                  <a class="dropdown-item bg-acccent text-white" style="background-color: #ff0000;"
-                    href="javascript:void(0)" onclick="return deletePost();">
-                    <span class="bg-red text-white" style="background-color: #ff0000;">
-                      <span class="material-symbols-outlined align-[-6px]">
-                        delete
-                      </span>
-                      削除
-                    </span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <script>
-              function deletePost() {
-                if (!(confirm('本当に削除して良いですか？'))) {
-                  return;
-                }
-
-                fetch('/posts/<%= post.id %>', {
-                  method: 'DELETE',
-                }).then((response) => {
-                  window.location = '/posts/new-list?deletedToast=true';
-                }).catch((error) => {
-                  console.error(error);
-                  window.location = '/500';
-                })
-              }
-            </script>
-            <% } %>
+        <div class="w-full dropdown text-right">
+            <%- include('../../partials/exclusive/post-three-dots', {post: post}); %>
         </div>
         <div class="flex justify-center items-center">
           <div id="map" class="w-[90%] h-[200px] border"></div>
         </div>
-        <%- include('../../partials/util/comments-list'); %>
-          <hr />
-          <%- include('../../partials/util/add-comment-section'); %>
+        <% const xShareHref = "https://twitter.com/intent/tweet?url=https://tokyo-sanpo-life.liberty-it.biz/posts/" + post.firestoreDocId + "&text=" + post.description + "&hashtags=東京散歩ライフ" %>
+        <%- include('../../partials/util/icon-link-button', {label: "Xでシェアする", href: xShareHref, googleIconName: "share"}); %>
+        <%- include('../../partials/util/comments-list', {userId: user?.firebaseUserId}); %>
+        <hr />
+        <%- include('../../partials/util/add-comment-section', {postId: post.firestoreDocId, commentsLength: post.postComments.length}); %>
       </div>
       <%- include('../../partials/common/footer', {currentMenu: 2}); %>
-        <!-- Toast -->
-        <%- include('../../partials/util/toast', {message: "" }); %>
+      <!-- Toast -->
+      <%- include('../../partials/util/toast', {message: "" }); %>
   </div>
 </body>
 

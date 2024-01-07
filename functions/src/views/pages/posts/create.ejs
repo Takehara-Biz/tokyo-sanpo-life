@@ -7,15 +7,10 @@
     <!-- prettier-ignore -->
     <script>(g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })
         ({ key: googleMapsAPIKey, v: "weekly" });</script>
-    <script src="/javascripts/tslDef.js?ver=20240104010809"></script>
-    <script src="/javascripts/tslGMapUtil.js?ver=20240104010809"></script>
-    <script src="/javascripts/createPostPage.js?ver=20240104010809"></script>
+    <script src="/javascripts/tslDef.js?ver=20240108040720"></script>
+    <script src="/javascripts/tslGMapUtil.js?ver=20240108040720"></script>
+    <script src="/javascripts/createPostPage.js?ver=20240108040720"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <style>
-      ul {
-        list-style-type: disc;
-      }
-    </style>
 </head>
 
 <body>
@@ -34,69 +29,23 @@
               "個人を特定できる情報は書かないこと。",
               "公序良俗に反する投稿は行わないこと。",
               "著作権・肖像権に注意すること。",
+              "画像ファイルは、リサイズ（圧縮）されて送信されます。ファイルサイズが小さくなり、データ通信量が軽減されますが、画質が劣化する場合があります。",
             ] %>
             <%- include('../../partials/util/warning-accordion', {title: "投稿前の注意事項", warningList: warningList}); %>
-            <!-- <div class="accordion mt-3" id="accordionExample">
-              <div class="accordion-item">
-                <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <span class="material-symbols-outlined text-accent">
-                      warning
-                    </span>
-                    <span class="text-accent">投稿前の注意事項</span>
-                  </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse visible" data-bs-parent="#accordionExample">
-                  <div class="accordion-body">
-                    <ul>
-                      <li>後からいつでも削除できます。</li>
-                      <li>個人を特定できる情報は書かないこと。</li>
-                      <li>公序良俗に反する投稿は行わないこと。</li>
-                      <li>著作権・肖像権に注意すること。</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div> -->
             <form action="/posts" method="POST" onSubmit="return validate()">
               <div class="mt-3">
                 <label for="formFile" class="form-label">写真選択</label>
                 <input class="form-control" type="file" id="uploadPhoto" name="uploadPhoto" required
-                  accept=".jpg, .jpeg, .png" />
+                  accept=".jpg, .jpeg, .png" onchange="adjustUploadPhoto(event);" />
               </div>
               <div class="mt-3">
                 <div id="printPhoto" class="border rounded h-40 flex justify-center items-center">
                   <img src="/images/empty-photo.svg" class="h-40">
                 </div>
-                <script>
-                  let uploadPhotoInput = document.getElementById('uploadPhoto');
-                  uploadPhotoInput.addEventListener('change', function (e) {
-                    let file = e.srcElement.files[0];
-
-                    let fr = new FileReader();
-                    fr.addEventListener('load', function () {
-                      let url = fr.result;
-
-                      // Imageオブジェクトをつくり
-                      let img = new Image();
-                      // srcにurlを指定する
-                      img.src = url;
-                      // そのままだとでかすぎるのでサイズ調整して
-                      //img.height = 200;
-                      img.classList.add('h-40');
-
-                      // 追加する
-                      let printPhotoDiv = document.getElementById('printPhoto');
-                      printPhotoDiv.innerHTML = '';
-                      printPhotoDiv.appendChild(img);
-                    });
-                    fr.readAsDataURL(file);
-                  });
-                </script>
+                <input id="postPhotoBase64" name="postPhotoBase64" type="hidden" />
               </div>
               <div class="mt-3">
-                <label class="form-label">カテゴリ</label>
+                <label class="form-label">カテゴリを選んでください</label>
                 <select id="postCategory" name="postCategory" class="form-select" aria-label="Default select example">
                   <% for (let category of categories) { %>
                     <option value="<%= category.getId() %>">
@@ -110,26 +59,22 @@
                 <div class="flex justify-center items-center">
                   <div id="map" class="w-[90%] h-[200px]"></div>
                 </div>
-                <input id="markerLat" type="hidden" name="markerLat" />
-                <input id="markerLng" type="hidden" name="markerLng" />
+                <input id="lat" type="hidden" name="lat" />
+                <input id="lng" type="hidden" name="lng" />
               </div>
               <div class="mt-3">
-                <label for="exampleFormControlTextarea1" class="form-label">見どころ</label>
-                <textarea name="comment" required class="form-control" id="exampleFormControlTextarea1" maxlength="100"
+                <label for="description" class="form-label">見どころを教えてください😊</label>
+                <textarea name="description" required class="form-control" id="description" maxlength="100"
                   rows="3" placeholder="晴れている時は富士山が見えます！&#10;4月が満開の時期です〜&#10;コーヒーが美味しいですよ、など"></textarea>
               </div>
               <br />
-              <button type="submit" class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;">
-                <span class="material-symbols-outlined align-[-6px]">
-                  upload
-                </span>
-                投稿
-              </button>
+              <%- include('../../partials/util/icon-button', {label: "投稿" , typeSubmit: true,
+                    googleIconName: "upload" }); %>
               <script>
                 function validate() {
-                  const markerLat = document.getElementById("markerLat");
+                  const markerLat = document.getElementById("lat");
                   const latValue = markerLat.getAttribute("value");
-                  let markerLng = document.getElementById("markerLng");
+                  let markerLng = document.getElementById("lng");
                   const lngValue = markerLng.getAttribute("value");
                   console.log(latValue + "    " + lngValue);
                   if (latValue == null || lngValue == null) {

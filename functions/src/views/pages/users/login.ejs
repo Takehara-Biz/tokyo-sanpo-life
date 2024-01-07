@@ -12,7 +12,7 @@
       list-style-type: disc;
     }
   </style>
-  <script type="module" src="/javascripts/firebaseAuth.js"></script>
+  <script type="module" src="/javascripts/firebaseAuth.js?ver=20240108040720"></script>
 </head>
 
 <body>
@@ -23,31 +23,28 @@
         <%- include('../../partials/common/page-title', {title: 'ログイン（新規登録）' }); %>
           <div class="p-1">
             <p>ログインすると、散歩情報を投稿できるようになります。</p>
+            <%- include('../../partials/util/icon-button', {label: "Googleでログイン（新規登録）", onClickCode: "loginWithGoogle();", googleIconName: "login"}); %>
             <form action="/users/login" method="post">
-              <%- include('../../partials/util/icon-button', {label: "ダミーログイン", typeSubmit: true, googleIconName: "login"}); %>
-            </form>
-            <%- include('../../partials/util/icon-button', {label: "Googleでログイン", onClickCode: "loginWithGoogle();", googleIconName: "login"}); %>
-            <!-- <button class="mt-3 btn text-white w-full bg-accent" style="background-color:#ff0099;" onclick="loginWithTwitter();">
-              <span class="material-symbols-outlined align-[-6px]">
-                login
-              </span>
-              X(Twitter)でログイン
-            </button> -->
-            <form action="/users/login2" method="post">
               <input type="hidden" id="idToken" name="idToken" />
-              <%- include('../../partials/util/icon-button', {label: "/login2を呼ぶ。後で非表示にする", id: "submit", typeSubmit: true, onClickCode: "loginWithGoogle();", googleIconName: "login"}); %>
+              <div class="hidden">
+                <!-- javascriptでクリックさせる -->
+              <%- include('../../partials/util/icon-button', {label: "/loginを呼ぶ。このボタンは非表示", id: "submit", typeSubmit: true, googleIconName: "login"}); %>
+              </div>
             </form>
-
+            <p class="font-bold">（ログイン後に、この画面に戻ってきますが、そのまましばらくお待ちください。）</p>
+            
             <hr />
 
             <small>
               初回ログイン時は、アカウントの登録手続きに進みます。<br />
               アカウントを登録することにより、以下の内容に同意したとみなされます。
               <ul>
-                <li><a href="/others/terms-of-services">利用規約</a></li>
+                <li><a href="/others/terms-of-service">利用規約</a></li>
                 <li><a href="/others/privacy-policy">プライバシーポリシー</a></li>
                 <li><a href="/others/cookie-policy">クッキーポリシー</a></li>
               </ul>
+              Googleのアカウント情報は、本サービスの認証のためだけに使用するものであり、<br />
+              あなたがお使いの、GメールやGoogleカレンダー、GoogleMapなどのデータを読み書きすることはありません。
             </small>
           </div>
       </div>
