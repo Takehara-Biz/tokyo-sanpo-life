@@ -2,10 +2,17 @@
   <hr />
   <div class="w-full px-4 py-2">
     <div style="display:flex; justify-content:space-between;">
-      <%- include('./user-icon-name-s', {iconUrl: post.user.userIconBase64, userName: post.user.userName}) %>
-      <span style="font-size: small; margin-left:20px;">
-        <%= comment.commentDate.toLocaleString("ja-JP") %>
-      </span>
+      <%- include('./user-icon-name-s', {imageSrc: comment.commentUserDto.userIconBase64, userName: comment.commentUserDto.userName}) %>
+      <div class="text-right">
+        <p style="font-size: small; margin-left:20px;">
+          <%= comment.insertedAt.toLocaleString("ja-JP") %>
+        </p>
+        <% if (comment.userFirestoreDocId === userId) { %>
+          <span class="material-symbols-outlined text-accent" onclick="return deleteComment('<%= comment.firestoreDocId %>');">
+            delete
+          </span>
+        <% } %>
+      </div>
     </div>
     <p class="w-full break-words">
       <%= comment.comment %>

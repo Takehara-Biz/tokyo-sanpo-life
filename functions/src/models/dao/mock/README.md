@@ -1,0 +1,1 @@
+pretends to access to Firestore, and return some dummy data.

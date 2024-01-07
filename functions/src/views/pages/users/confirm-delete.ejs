@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../../partials/common/head'); %>
+  <script type="module" src="/javascripts/firebaseAuth.js"></script>
+</head>
+
+<body>
+  <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
+    <%- include('../../partials/common/header'); %>
+      <!-- Main Body -->
+      <div class="grow overflow-y-scroll">
+        <%- include('../../partials/common/page-title', {title: 'アカウント削除確認' }); %>
+          <div class="p-1 pb-10">
+            <p>削除処理の前に、本ページの内容をご確認ください。</p>
+            <dl>
+              <dt>削除対象データ</dt>
+              <dd>
+                本サービス上で入力された、以下の情報を削除します。
+                <ul>
+                  <li>ユーザ名</li>
+                  <li>ユーザアイコンの画像</li>
+                  <li>自己紹介文</li>
+                </ul>
+              </dd>
+            </dl>
+            <dl>
+              <dt>残るデータ</dt>
+              <dd>
+                本サービス上で入力された、以下の情報は削除対象外ですが、投稿者が「退会済みユーザ」に変わります。
+                <ul>
+                  <li>散歩情報（投稿）</li>
+                  <li>散歩情報（投稿）に対するコメント</li>
+                  <li>散歩情報（投稿）に付けた絵文字</li>
+                </ul>
+              </dd>
+            </dl>
+
+            <p>ご利用ありがとうございました。🙇‍♂️</p>
+            <%- include('../../partials/util/icon-button', {label: "アカウントを削除する" , googleIconName: "person_remove" ,
+              important: true, onClickCode: "deleteUser();" }); %>
+              <script>
+                function deleteUser() {
+                  TslLogUtil.debug('[BEGIN] deleteUser');
+                  if (!confirm('これが最後の確認です🙇‍♂️。本当に削除してもよろしいですか？')) {
+                    return;
+                  }
+
+                  fetch('/users/<%= user.firebaseUserId %>', {
+                    method: 'DELETE',
+                  }).then(async (response) => {
+                    console.log('fetch then');
+                    await forceLogOut();
+                    window.location.href = '/users/login';
+                  }).catch((error) => {
+                    console.log('fetch error');
+                    console.error(error);
+                    window.location.href = '/errors/500';
+                  })
+                }
+              </script>
+          </div>
+      </div>
+      <%- include('../../partials/common/footer', {currentMenu: null}); %>
+  </div>
+</body>
+
+</html>

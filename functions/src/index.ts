@@ -19,20 +19,21 @@
 // });
 
 const functions = require("firebase-functions");
-// Expressの読み込み
 const express = require("express");
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
-import {routing} from "./controllers/routes";
-import {TslLogUtil} from "./utils/tslLogUtil";
-import {Request, Response, NextFunction} from "express";
+import { addMiddleware } from "./controllers/middleware";
+import { routing } from "./controllers/routes";
+import { FirebaseAdminManager } from "./models/firebase/firebaseAdminManager";
 
 const app = express();
 // const port = 3000
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(bodyParser.json());
 
 app.set("view engine", "ejs");
 app.set("views", "./src/views");
@@ -43,14 +44,10 @@ app.use(express.static("public"));
 // const favicon = require("serve-favicon");
 // app.use(favicon("./src/kkrn_icon_kirakira_2.svg"));
 
-app.use(function(req: Request, res: Response, next: NextFunction) {
-  //TslLogUtil.debug("[BEGIN] " + req.url + ", req.params=" + JSON.stringify(req.params) + ", req.cookies=" + JSON.stringify(req.cookies) + ", req.body=" + JSON.stringify(req.body));
-  TslLogUtil.info("[BEGIN] " + req.url + ",\nreq.params=" + JSON.stringify(req.params) + ",\nreq.body=" + JSON.stringify(req.body));
-  //TslLogUtil.debug("req.cookies=" + JSON.stringify(req.cookies));
-  next();
-  TslLogUtil.info("[  END] " + req.url);
-  //TslLogUtil.debug("res.cookie=" + res.get('Set-Cookie'));
-});
+addMiddleware(app);
+
+FirebaseAdminManager.initialize();
+//FirebaseManager.initialize();
 
 routing(app);
 

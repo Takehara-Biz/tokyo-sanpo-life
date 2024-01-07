@@ -1,6 +1,6 @@
-const RenderPostOnGMap = {
+const ReadPostPage = {
 
-  async initMap(post: IPost): Promise<void> {
+  async initMap(post: PostDto): Promise<void> {
     console.debug('lat ' + post.lat + ", lng " + post.lng);
     position = { lat: post.lat, lng: post.lng };
 
@@ -36,5 +36,4 @@ const RenderPostOnGMap = {
 
 // come from ejs
 // @ts-ignore
-window.onload = (() => RenderPostOnGMap.initMap(targetPost));
-
+window.onload = (() => ReadPostPage.initMap(targetPost));

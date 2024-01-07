@@ -1,30 +1,38 @@
 import { Express } from "express";
-import { postLogic } from "../models/bizlogic/postLogic";
-import { userLogic } from "../models/bizlogic/userLogic";
-import { addUsersRouting } from "./users";
-import { addOthersRouting } from "./others";
-import { addErrorsRouting } from "./errors";
-import { addPostsRouting } from "./posts";
-import { addPostsEmojiEvalulationsRouting } from "./posts-emoji-evaluations";
+import { postLogic } from "../models/bizlogic/postBizLogic";
+import { addUsersRouting } from "./routes/usersCtrl";
+import { addOthersRouting } from "./routes/othersCtrl";
+import { addErrorsRouting } from "./routes/errorsCtrl";
+import { addPostsRouting } from "./routes/postsCtrl";
+import { addPostsEmojiEvalsRouting } from "./routes/postsEmojiEvalsCtrl";
+import { CtrlUtil } from "./ctrlUtil";
+import { addCommentsRouting } from "./routes/commentsCtrl";
+import { addAuthRouting } from "./routes/authCtrl";
 
 export const routing = ((app: Express): void => {
 
   app.get("/how-to-use", function (req, res, next) {
-    res.render("pages/how-to-use", { user: userLogic.getLoggedInUser() });
+    CtrlUtil.render(res, "pages/how-to-use");
   });
 
-  app.get("/map", function (req, res, next) {
-    const targetPosts = postLogic.findPosts();
-    res.render("pages/map", { user: userLogic.getLoggedInUser(), targetPosts: targetPosts });
+  app.get("/map", async function (req, res, next) {
+    
+    // TODO このコードは違う。
+    // mapのページを初期表示するのと、mapの表示状態に応じて、マーカー一覧をダウンロードするHTTPのAPIは分けるべき。
+    // マーカー一覧をダウンロードする方は、ajaxで呼び出される想定。
+    const targetPosts = await postLogic.listOrderbyInsertedAtDesc();
+    CtrlUtil.render(res, "pages/map", {targetPosts: targetPosts});
   });
 
   app.get("/add-record", function (req, res, next) {
-    res.render("pages/add-record", { user: userLogic.getLoggedInUser() });
+    CtrlUtil.render(res, "pages/add-record");
   });
 
   addUsersRouting(app);
+  addAuthRouting(app);
   addPostsRouting(app);
-  addPostsEmojiEvalulationsRouting(app);
+  addCommentsRouting(app);
+  addPostsEmojiEvalsRouting(app);
   addOthersRouting(app);
 
   // this must be called at last definitely!
