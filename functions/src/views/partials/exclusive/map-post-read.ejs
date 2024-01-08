@@ -5,7 +5,7 @@
     <div class="w-1/2 p-2">
       <%- include('../util/user-icon-name-s', {imageSrc: post.user.userIconBase64, userName: post.user.userName}) %>
       <p class="text-sm">
-        <%= post.insertedAt.toLocaleString("ja-JP") %>
+        <%= post.insertedAt.toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' }) %>
       </p>
     </div>
   </div>

@@ -7,7 +7,7 @@
     <p class="truncate"><%= post.description %></p>
     <p><%= post.postCategory.getEmoji() %>&nbsp;<%= post.postCategory.getLabel() %></p>
     <span class="text-sm">
-      <%= post.insertedAt.toLocaleString("ja-JP") %><br />
+      <%= post.insertedAt.toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' }) %><br />
     </span>
   </div>
 </div>
