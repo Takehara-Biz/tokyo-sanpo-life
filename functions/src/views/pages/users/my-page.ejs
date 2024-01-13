@@ -30,9 +30,7 @@
                 </dl>
                 <dl>
                   <dt>自己紹介</dt>
-                  <dd>
-                    <%= user.selfIntroduction %>
-                  </dd>
+                  <dd class="w-full whitespace-pre-wrap"><%= user.selfIntroduction %></dd>
                 </dl>
                 <%- include('../../partials/util/icon-link-button', {label: "ユーザ情報編集", href: "/users/update", googleIconName: "manage_accounts"}); %>
                 <%- include('../../partials/util/icon-link-button', {label: "ユーザアイコンの変更", googleIconName: "face", href: "/users/update-user-icon"}) %>
