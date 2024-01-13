@@ -5,7 +5,7 @@ export class TslUtil {
   private static dateFormat = new Intl.DateTimeFormat(
     "ja-JP",
     {
-      year: "numeric",
+      year: "2-digit",
       month: "2-digit",
       day: "2-digit",
       hour: "2-digit",
@@ -15,11 +15,7 @@ export class TslUtil {
     }
   );
 
-  /**
-   * GCPのコンソールで日本の日付が出力されているため、不要っぽい。
-   * @returns
-   */
-  public static dateStr(): string {
-    return this.dateFormat.format(new Date());
+  public static yyMMddHHmmss(date: Date): string {
+    return this.dateFormat.format(date).replace(/[\/\s:]/g, '');
   }
 }

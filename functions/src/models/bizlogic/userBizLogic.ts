@@ -73,7 +73,7 @@ class UserBizLogic {
       return false;
     }
     user.userIconUrl = await this.photoDao.uploadUserIcon(user.firebaseUserId, newUserIconBase64);
-    user.userIconUrl += "?ver=" + TslUtil.dateStr(); // add cache buster
+    user.userIconUrl += "?ver=" + TslUtil.yyMMddHHmmss(new Date()); // add cache buster
     return await this.updateUser(user);
   }
 
