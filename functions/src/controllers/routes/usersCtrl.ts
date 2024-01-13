@@ -6,7 +6,6 @@ import { ReqLogUtil } from "../../utils/reqLogUtil";
 import { CtrlUtil } from "../ctrlUtil";
 import { TSLThreadLocal } from "../../utils/tslThreadLocal";
 import { UserDto } from "../../models/dto/userDto";
-import { BasicUserIconUtil } from "../../models/dao/basicUserIconBase64";
 
 /**
  * implements URL related to user except authentication
@@ -28,7 +27,7 @@ export const addUsersRouting = ((app: Express): void => {
       firebaseUserId: firebaseUserId!,
       loggedIn: true,
       userName: req.body.userName,
-      userIconBase64: BasicUserIconUtil.defaultUserIconBase64,
+      userIconUrl: "set in biz logic",
       selfIntroduction: req.body.selfIntroduction ?? "",
       xProfileLink: req.body.xProfileURL ?? "",
       instagramProfileLink: req.body.instaProfileURL ?? "",
@@ -53,7 +52,7 @@ export const addUsersRouting = ((app: Express): void => {
    * called with Ajax
    */
   app.put(URL_PREFIX + ":id/icon", async function (req, res, next) {
-    const result = await userLogic.updateUserIconBase64(req.params.id, req.body.newUserIconBase64);
+    const result = await userLogic.updateUserIcon(req.params.id, req.body.newUserIconBase64);
     ReqLogUtil.debug('result : ' + result);
     res.json({});
   });

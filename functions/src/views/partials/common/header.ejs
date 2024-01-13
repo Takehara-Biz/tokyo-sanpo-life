@@ -13,7 +13,7 @@
   <a class="nav-link flex flex-col items-center"
     href="/users/<% if (user === undefined) { %>login<% } else { %>my-page<% } %>">
     <img width="40px" height="40px"
-      src="<% if (user === undefined) { %>/images/user-icon/kkrn_icon_user_11.svg<% } else { %><%= user.userIconBase64 %><% } %>"
+      src="<% if (user === undefined) { %>/images/user-icon/kkrn_icon_user_11.svg<% } else { %><%= user.userIconUrl %><% } %>"
       style="border: 2px solid #ff0099; border-radius:50%;" />
   </a>
 </nav>

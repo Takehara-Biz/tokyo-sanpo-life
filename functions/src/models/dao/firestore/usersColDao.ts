@@ -58,7 +58,7 @@ export class UsersColDao implements IUsersDao {
       //console.log(doc.id, " => ", ReqLogUtil.jsonStr(doc.data()));
       await doc.ref.update({
         userName: user.userName,
-        userIconBase64: user.userIconBase64,
+        userIconUrl: user.userIconUrl,
         selfIntroduction: user.selfIntroduction,
         xProfileLink: user.xProfileLink,
         instagramProfileLink: user.instagramProfileLink,
