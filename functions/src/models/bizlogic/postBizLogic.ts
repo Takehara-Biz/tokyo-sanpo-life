@@ -125,7 +125,7 @@ export class PostBizLogic {
 
     const postId =  await this.postsDao.create(postDoc);
     ReqLogUtil.debug('(1/3) created Post');
-    const publicUrl = await this.photoDao.upload(postId, imageBase64);
+    const publicUrl = await this.photoDao.uploadPostPhoto(postId, imageBase64);
     ReqLogUtil.debug('(2/3) uploaded Photo');
     await this.postsDao.updateForPhoto(postId, publicUrl);
     ReqLogUtil.debug('(3/3) updated Post');
@@ -147,7 +147,7 @@ export class PostBizLogic {
       // only some properties will be update!
       firestoreDocId: postDto.firestoreDocId!, //never updated!
       postedFirebaseUserId: postDto.postedFirebaseUserId, //never updated!
-      //photoBase64: //never updated!
+      //photoUrl: //never updated!
       lat: postDto.lat,
       lng: postDto.lng,
       geohash: geohashForLocation([postDto.lat, postDto.lng]),
@@ -172,7 +172,7 @@ export class PostBizLogic {
       ReqLogUtil.warn('can not delete the post created by another user!');
       return false;
     }
-    const result = await this.photoDao.delete(postDoc.photoUrl!);
+    const result = await this.photoDao.deletePhoto(postDoc.photoUrl!);
     ReqLogUtil.debug('(1/2) deleted Photo from storage. result => ' + result);
     await this.postsDao.delete(reqParamPostId);
     ReqLogUtil.debug('(2/2) deleted Photo from firestore.');

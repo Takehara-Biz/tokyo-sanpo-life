@@ -64,7 +64,7 @@ type UserDto = {
   firebaseUserId: string;
   loggedIn: boolean;
   userName: string;
-  userIconBase64: string;
+  userIconUrl: string;
   selfIntroduction: string;
   xProfileLink: string;
   instagramProfileLink: string;
@@ -91,7 +91,7 @@ type CommentDto = {
 type CommentUserDto = {
   firebaseUserId: string,
   userName: string;
-  userIconBase64: string;
+  userIconUrl: string;
 }
 
 /**

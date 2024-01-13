@@ -1,12 +1,18 @@
 import { ReqLogUtil } from "../../utils/reqLogUtil"
 import { TSLThreadLocal } from "../../utils/tslThreadLocal";
+import { TslUtil } from "../../utils/tslUtil";
+import { BasicUserIconUtil } from "../dao/basicUserIconUtil";
 import { UsersColDao } from "../dao/firestore/usersColDao";
+import { IPhotoDao } from "../dao/interface/iPhotoDao";
 import { IUsersDao } from "../dao/interface/iUsersDao";
+import { StoragePhotoDao } from "../dao/storage/StoragePhotoDao";
 import { UserDto } from "../dto/userDto";
 
 class UserBizLogic {
   //private usersDao: UserDtosDao = new MockUsersDao();
   private usersDao: IUsersDao = new UsersColDao();
+  private photoDao: IPhotoDao = new StoragePhotoDao();
+
 
   public async logout(): Promise<void> {
     ReqLogUtil.info('called logout');
@@ -32,6 +38,7 @@ class UserBizLogic {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId!;
     user.firebaseUserId = firebaseUserId;
     user.loggedIn = true;
+    user.userIconUrl = BasicUserIconUtil.defaultUserIconUrl;
     const now = new Date();
     user.insertedAt = now;
     user.updatedAt = now;
@@ -51,7 +58,7 @@ class UserBizLogic {
     return true;
   }
 
-  public async updateUserIconBase64(paramUserId: string, newUserIconBase64: string): Promise<boolean> {
+  public async updateUserIcon(paramUserId: string, newUserIconBase64: string): Promise<boolean> {
     const firebaseUserId = TSLThreadLocal.currentContext.identifiedFirebaseUserId!;
     if(paramUserId !== firebaseUserId){
       ReqLogUtil.warn("cannot update other's user icon! ");
@@ -65,8 +72,8 @@ class UserBizLogic {
       ReqLogUtil.warn('no such user! ' + paramUserId);
       return false;
     }
-    user.userIconBase64 = newUserIconBase64;
-    user.updatedAt = new Date();
+    user.userIconUrl = await this.photoDao.uploadUserIcon(user.firebaseUserId, newUserIconBase64);
+    user.userIconUrl += "?ver=" + TslUtil.yyMMddHHmmss(new Date()); // add cache buster
     return await this.updateUser(user);
   }
 

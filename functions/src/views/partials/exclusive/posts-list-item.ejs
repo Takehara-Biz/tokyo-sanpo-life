@@ -1,13 +1,17 @@
-<div onclick="location.href='/posts/<%= post.firestoreDocId %>'" class="w-full p-1 flex items-center border-b">
-  <div style="max-width: 50%;">
+<div class="w-full p-1 flex items-center border-b">
+  <div style="max-width: 50%;" onclick="location.href='/posts/<%= post.firestoreDocId %>'">
     <img width="100%" src="<%= post.photoUrl %>" style="border: 1px solid; " />
   </div>
-  <div class="p-1" style="width:50%;">
-    <%- include('../util/user-icon-name-s', {imageSrc: post.user.userIconBase64, userName: post.user.userName}) %>
-    <p class="truncate"><%= post.description %></p>
-    <p><%= post.postCategory.getEmoji() %>&nbsp;<%= post.postCategory.getLabel() %></p>
-    <span class="text-sm">
-      <%= post.insertedAt.toLocaleString("ja-JP") %><br />
+  <div class="h-full p-1" style="width: 50%;">
+    <span onclick="location.href='/users/<%= post.postedFirebaseUserId %>/public-page'">
+      <%- include('../util/user-icon-name-s', {imageSrc: post.user.userIconUrl, userName: post.user.userName}) %>
     </span>
+    <div onclick="location.href='/posts/<%= post.firestoreDocId %>'">
+      <p class="line-clamp-3"><%= post.description %></p>
+      <p><%= post.postCategory.getEmoji() %></p>
+      <div class="text-sm text-right">
+        <%= post.insertedAt.toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' }) %><br />
+      </div>
+    </div>
   </div>
 </div>

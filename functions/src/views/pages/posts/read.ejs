@@ -7,14 +7,18 @@
     <!-- prettier-ignore -->
     <script>(g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })
         ({ key: googleMapsAPIKey, v: "weekly" });</script>
-    <script src="/javascripts/tslDef.js?ver=20240108040720"></script>
-    <script>
-      var targetPost = JSON.parse('<%- JSON.stringify(post) %>');
+    <script src="/javascripts/tslDef.js?ver=20240113192357"></script>
+  <script>
+      // JSON.parse can not support new-line...
+      // Uncaught SyntaxError: Bad control character in string literal in JSON
+      var jsonStr = '<%- JSON.stringify(post).replaceAll('\\n', '\\\\n').replaceAll('"', '\\"').replaceAll("'", "\\'"); %>';
+      console.log(jsonStr);
+      var targetPost = JSON.parse(jsonStr);
     </script>
-    <script src="/javascripts/tslGMapUtil.js?ver=20240108040720"></script>
-    <script src="/javascripts/readPostPage.js?ver=20240108040720"></script>
-    <script src="/javascripts/deleteComment.js?ver=20240108040720"></script>
-    <script src="/javascripts/emojiEval.js?ver=20240108040720"></script>
+    <script src="/javascripts/tslGMapUtil.js?ver=20240113192357"></script>
+    <script src="/javascripts/readPostPage.js?ver=20240113192357"></script>
+    <script src="/javascripts/deleteComment.js?ver=20240113192357"></script>
+    <script src="/javascripts/emojiEval.js?ver=20240113192357"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 </head>
 
@@ -25,16 +29,14 @@
       <div class="grow overflow-y-scroll p-2">
         <input id="postId" type="hidden" value="<%= post.firestoreDocId %>" />
         <input id="myUserId" type="hidden" value="<%= post.user.firebaseUserId %>" />
-        <img width="100%" height="80px" src="<%= post.photoUrl %>" style="border: 1px solid; " />
+        <img width="100%" height="auto" src="<%= post.photoUrl %>" style="border: 1px solid; " />
         <div class="flex justify-between mt-1 items-center">
-          <%- include('../../partials/util/user-icon-name-s', {imageSrc: post.user.userIconBase64, userName: post.user.userName}) %>
+          <%- include('../../partials/util/user-icon-name-s', {imageSrc: post.user.userIconUrl, userName: post.user.userName}) %>
             <span class="text-sm ml-5">
-              <%= post.insertedAt.toLocaleString("ja-JP") %>
+              <%= post.insertedAt.toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' }) %>
             </span>
         </div>
-        <p class="w-full break-words">
-          <%= post.description %>
-        </p>
+        <p class="w-full whitespace-pre-wrap"><%= post.description %></p>
         <div>
           <!-- リアクションアイコン -->
           <div class="w-full dropdown text-right">
@@ -52,12 +54,14 @@
           <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
           <script type="module">
             const designatedEmojiCountJson = {};
+            <% if (user !== undefined) { %>
             document.querySelector('emoji-picker').addEventListener('emoji-click', e => {
               const emoji = e.detail.unicode
               console.log('put ' + emoji);
               document.getElementById('reactionDropdown').classList.remove('show');
               createEmojiEval(emoji);
             });
+            <% } %>
           </script>
         </div>
         <div class="w-full dropdown text-right">

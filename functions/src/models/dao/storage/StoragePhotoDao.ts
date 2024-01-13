@@ -4,12 +4,20 @@ import { IPhotoDao } from "../interface/iPhotoDao";
 import { Storage } from "@google-cloud/storage";
 
 export class StoragePhotoDao implements IPhotoDao {
-  async upload(postId: string, imageBase64: string): Promise<string> {
+  async uploadPostPhoto(postId: string, imageBase64: string): Promise<string> {
     ReqLogUtil.info("[BEGIN] upload Photo : post id => " + postId);
-    const storage = new Storage();
+    return this.upload("posts/" + postId + ".jpg", imageBase64);
+  }
 
+  async uploadUserIcon(userId: string, imageBase64: string): Promise<string> {
+    ReqLogUtil.info("[BEGIN] upload Photo : user id => " + userId);
+    return this.upload("users/icons/" + userId + ".jpg", imageBase64);
+  }
+
+  private async upload(filePath: string, imageBase64: string): Promise<string>{
+    const storage = new Storage();
     const bucket = storage.bucket(firebaseConfig.storageBucket);
-    const file = bucket.file(postId + ".jpg");
+    const file = bucket.file(filePath);
 
     // If having「data:image/jpeg;base64,」, you cannot open and see the image file...
     const buffer = Buffer.from(imageBase64.replace("data:image/jpeg;base64,", ""), 'base64');
@@ -28,7 +36,7 @@ export class StoragePhotoDao implements IPhotoDao {
     return publicUrl;
   }
 
-  async delete(photoUrl: string): Promise<boolean> {
+  async deletePhoto(photoUrl: string): Promise<boolean> {
     ReqLogUtil.info("[BEGIN] delete Photo : photoUrl => " + photoUrl);
 
     const storage = new Storage();
