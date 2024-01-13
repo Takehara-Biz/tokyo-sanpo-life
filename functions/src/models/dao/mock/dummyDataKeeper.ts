@@ -2,7 +2,7 @@ import { geohashForLocation } from "geofire-common";
 import { PostCategory } from "../../postCategory";
 import { PostDoc } from "../doc/postDoc";
 import { EmojiEvalDoc } from "../doc/post/emojiEvalsDoc";
-import { BasicUserIconUtil } from "../basicUserIconBase64";
+import { BasicUserIconUtil } from "../basicUserIconUtil";
 import { Timestamp } from "firebase-admin/firestore";
 import { CommentDoc } from "../doc/commentDoc";
 import { UserDoc } from "../doc/userDoc";
@@ -34,7 +34,7 @@ class DummyDataKeeper {
         firebaseUserId: i.toString(),
         loggedIn: true,
         userName: DummyDataKeeper.generateRandomString(3, 12),
-        userIconBase64: BasicUserIconUtil.defaultUserIconBase64,
+        userIconUrl: BasicUserIconUtil.defaultUserIconUrl,
         selfIntroduction: "こんにちは〜。" + DummyDataKeeper.generateRandomString(1, 50),
         xProfileLink: "https://www.yahoo.co.jp",
         instagramProfileLink: "https://www.yahoo.co.jp",

@@ -20,5 +20,5 @@ export type CommentDto = {
 export type CommentUserDto = {
   firebaseUserId: string,
   userName: string;
-  userIconBase64: string;
+  userIconUrl: string;
 }

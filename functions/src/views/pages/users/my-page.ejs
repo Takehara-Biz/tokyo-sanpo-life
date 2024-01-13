@@ -25,14 +25,12 @@
                 <dl>
                   <dt>アイコンとユーザ名</dt>
                   <dd>
-                    <%- include('../../partials/util/user-icon-name-s', {imageSrc: user.userIconBase64, userName: user.userName}) %>
+                    <%- include('../../partials/util/user-icon-name-l', {imageSrc: user.userIconUrl, userName: user.userName}) %>
                   </dd>
                 </dl>
                 <dl>
                   <dt>自己紹介</dt>
-                  <dd>
-                    <%= user.selfIntroduction %>
-                  </dd>
+                  <dd class="w-full whitespace-pre-wrap"><%= user.selfIntroduction %></dd>
                 </dl>
                 <%- include('../../partials/util/icon-link-button', {label: "ユーザ情報編集", href: "/users/update", googleIconName: "manage_accounts"}); %>
                 <%- include('../../partials/util/icon-link-button', {label: "ユーザアイコンの変更", googleIconName: "face", href: "/users/update-user-icon"}) %>
@@ -43,7 +41,7 @@
               </div>
               <% } %>
       </div>
-      <%- include('../../partials/common/footer', {currentMenu: 5}); %>
+      <%- include('../../partials/common/footer', {currentMenu: null}); %>
         <!-- Toast -->
         <%- include('../../partials/util/toast', {message: "ログインに成功しました"}); %>
         <script>

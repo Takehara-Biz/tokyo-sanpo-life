@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css"
       integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA=="
       crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="/javascripts/updateUserIconPage.js?ver=20240108040720"></script>
+    <script src="/javascripts/updateUserIconPage.js?ver=20240113192357"></script>
     <style>
       /* 下記は円形にするなら必須です。 */
       .cropper-view-box,
@@ -45,17 +45,17 @@
                     <div>
                       大きいサイズ
                       <img id='preview1' class="rounded-full w-[110px] h-[110px]" width="110" height="110"
-                        style="border: 2px solid #ff0099;" src="<%= user.userIconBase64 %>">
+                        style="border: 2px solid #ff0099;" src="<%= user.userIconUrl %>">
                     </div>
                     <div class="ml-1">
                       小さいサイズ
                       <img id='preview2' class="rounded-full w-[40px] h-[40px]" width="40" height="40"
-                        style="border: 2px solid #ff0099;" src="<%= user.userIconBase64 %>">
+                        style="border: 2px solid #ff0099;" src="<%= user.userIconUrl %>">
                     </div>
                   </div>
                   <%- include('../../partials/util/icon-button', {label: "初期設定に戻す" , id: "useDefaultIconButton" ,
                     googleIconName: "reset_image" }); %>
-                    <img id="defaultIconImg" src="/images/user-icon/kkrn_icon_user_9.svg" class="hidden" />
+                    <img id="defaultIconImg" src="/images/user-icon/kkrn_icon_user_9.jpg" class="hidden" />
                     <form action="" onSubmit="return updateUserIcon(event);">
                       <input id="newUserIconBase64" name="newUserIconBase64" type="hidden" />
                       <%- include('../../partials/util/icon-button', {label: "保存" , typeSubmit: true,
@@ -66,6 +66,11 @@
                         event.preventDefault();
                         const form = document.querySelector('form');
                         if (form.checkValidity()) {
+                          const newUserIconBase64Input = document.getElementById('newUserIconBase64');
+                          if (newUserIconBase64Input.value == ""){
+                            alert('アイコン画像を指定してください。');
+                            return;
+                          }
                           if (!(confirm('本当に変更して良いですか？'))) {
                             return;
                           }

@@ -26,12 +26,12 @@ const UpdateUserIconPage = {
       context.drawImage(img, 0, 0);
   
       //　mime_typeを指定してBase64化する
-      const base64String = cvs.toDataURL("image/png");
+      const base64String = cvs.toDataURL("image/jpeg", 0.5);
 
       // @ts-ignore
-      TslLogUtil.debug(base64String);
+      //TslLogUtil.debug(base64String);
       // @ts-ignore
-      TslLogUtil.debug("base64length : " + base64String.length);
+      //TslLogUtil.debug("base64length : " + base64String.length);
   
       const preview1 = document.getElementById('preview1')! as HTMLImageElement;
       // previewにセットする
@@ -103,9 +103,9 @@ const UpdateUserIconPage = {
       // canvasをbase64に変換
       const data = canvas.toDataURL("image/jpeg", 0.5);
       // @ts-ignore
-      TslLogUtil.debug(data);
+      //TslLogUtil.debug(data);
       // @ts-ignore
-      TslLogUtil.debug("base64length : " + data.length);
+      //TslLogUtil.debug("base64length : " + data.length);
 
       const preview1 = document.getElementById('preview1')! as HTMLImageElement;
       // previewにセットする

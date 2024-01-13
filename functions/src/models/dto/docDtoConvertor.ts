@@ -42,7 +42,7 @@ export class DocDtoConvertor {
       commentUserDto: {
         firebaseUserId: userDoc.firebaseUserId,
         userName: userDoc.userName,
-        userIconBase64: userDoc.userIconBase64,
+        userIconUrl: userDoc.userIconUrl,
       },
       comment: commentDoc.comment,
       insertedAt: commentDoc.insertedAt.toDate(),
