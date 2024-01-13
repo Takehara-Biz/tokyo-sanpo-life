@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <%- include('../../partials/common/head'); %>
+</head>
+
+<body>
+  <div class="flex flex-col" style="min-height: 100svh; max-height: 100svh;">
+    <%- include('../../partials/common/header'); %>
+      <!-- Main Body -->
+      <div class="grow overflow-y-scroll flex flex-col">
+        <div class="p-1">
+          <dl>
+            <dt>ユーザID</dt>
+            <dd>
+              <%- include('../../partials/util/printable-user-id', {id: user.firebaseUserId}) %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>アイコンとユーザ名</dt>
+            <dd>
+              <%- include('../../partials/util/user-icon-name-l', {imageSrc: user.userIconUrl, userName: user.userName}) %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>自己紹介</dt>
+            <dd class="w-full whitespace-pre-wrap"><%= user.selfIntroduction %></dd>
+          </dl>
+        </div>
+      </div>
+      <%- include('../../partials/common/footer', {currentMenu: null}); %>
+  </div>
+</body>
+
+</html>

@@ -44,6 +44,11 @@ export const addUsersRouting = ((app: Express): void => {
     CtrlUtil.render(res, EJS_PREFIX + "my-page", { toast: toast });
   });
 
+  app.get(URL_PREFIX + ":userId/public-page", async function (req, res, next) {
+    const user = await userLogic.findUser(req.params.userId);
+    CtrlUtil.render(res, EJS_PREFIX + "public-page", { user: user, showBack: true });
+  });
+
   app.get(URL_PREFIX + "update-user-icon", function (req, res, next) {
     CtrlUtil.render(res, EJS_PREFIX + "update-user-icon", {showBack: true});
   });
