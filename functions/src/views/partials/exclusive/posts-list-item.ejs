@@ -2,12 +2,12 @@
   <div style="max-width: 50%;">
     <img width="100%" src="<%= post.photoUrl %>" style="border: 1px solid; " />
   </div>
-  <div class="p-1" style="width:50%;">
+  <div class="h-full p-1" style="width: 50%;">
     <%- include('../util/user-icon-name-s', {imageSrc: post.user.userIconUrl, userName: post.user.userName}) %>
-    <p class="truncate"><%= post.description %></p>
-    <p><%= post.postCategory.getEmoji() %>&nbsp;<%= post.postCategory.getLabel() %></p>
-    <span class="text-sm">
+    <p class="line-clamp-3"><%= post.description %></p>
+    <p><%= post.postCategory.getEmoji() %></p>
+    <div class="text-sm text-right">
       <%= post.insertedAt.toLocaleString("ja-JP", { timeZone: 'Asia/Tokyo' }) %><br />
-    </span>
+    </div>
   </div>
 </div>
